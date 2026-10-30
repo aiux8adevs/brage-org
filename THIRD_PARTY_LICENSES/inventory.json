@@ -1,0 +1,41 @@
+{
+  "generated": "2026-10-30T12:20:53+01:00",
+  "notes": [
+    "no project venv found (.venv/venv) – Python deps not scanned"
+  ],
+  "items": [
+    {
+      "ecosystem": "vendored",
+      "name": "IBM Plex Mono (Fontsource build, latin subset)",
+      "version": "5.2.7",
+      "license": "OFL-1.1",
+      "scope": "runtime",
+      "source": "https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@5.2.7/",
+      "status": "ok",
+      "why": "permissive: keep the licence text and copyright notice",
+      "license_texts": []
+    },
+    {
+      "ecosystem": "vendored",
+      "name": "IBM Plex Sans (Fontsource build, latin subset)",
+      "version": "5.2.8",
+      "license": "OFL-1.1",
+      "scope": "runtime",
+      "source": "https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.8/",
+      "status": "ok",
+      "why": "permissive: keep the licence text and copyright notice",
+      "license_texts": []
+    },
+    {
+      "ecosystem": "vendored",
+      "name": "Source Serif 4 (Fontsource build, latin subset)",
+      "version": "5.2.9",
+      "license": "OFL-1.1",
+      "scope": "runtime",
+      "source": "https://cdn.jsdelivr.net/npm/@fontsource/source-serif-4@5.2.9/",
+      "status": "ok",
+      "why": "permissive: keep the licence text and copyright notice",
+      "license_texts": []
+    }
+  ]
+}

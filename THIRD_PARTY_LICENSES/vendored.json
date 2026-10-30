@@ -1,0 +1,26 @@
+{
+  "_help": "Third-party files copied into the repo (JS/CSS libs, fonts, icons, images, 3D models). One object per item: name, version, license, source_url, files.",
+  "items": [
+    {
+      "name": "IBM Plex Sans (Fontsource build, latin subset)",
+      "version": "5.2.8",
+      "license": "OFL-1.1",
+      "source_url": "https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5.2.8/",
+      "files": ["site/assets/fonts/plex-sans-400.woff2", "site/assets/fonts/plex-sans-500.woff2", "site/assets/fonts/plex-sans-600.woff2", "site/assets/fonts/OFL-ibm-plex.txt"]
+    },
+    {
+      "name": "IBM Plex Mono (Fontsource build, latin subset)",
+      "version": "5.2.7",
+      "license": "OFL-1.1",
+      "source_url": "https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@5.2.7/",
+      "files": ["site/assets/fonts/plex-mono-400.woff2", "site/assets/fonts/plex-mono-500.woff2", "site/assets/fonts/OFL-ibm-plex.txt"]
+    },
+    {
+      "name": "Source Serif 4 (Fontsource build, latin subset)",
+      "version": "5.2.9",
+      "license": "OFL-1.1",
+      "source_url": "https://cdn.jsdelivr.net/npm/@fontsource/source-serif-4@5.2.9/",
+      "files": ["site/assets/fonts/source-serif-4-500.woff2", "site/assets/fonts/source-serif-4-600.woff2", "site/assets/fonts/OFL-source-serif-4.txt"]
+    }
+  ]
+}

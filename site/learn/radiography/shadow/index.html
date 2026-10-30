@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Interactive simulator: magnification, penumbra, motion blur and superimposition in radiography.">
+  <meta name="theme-color" content="#0A0E18">
+  <title>When the shadow lies | Oliver Brage</title>
+  <link rel="stylesheet" href="shadow.css">
+</head>
+<body>
+<div class="wrap">
+  <a class="back" id="t-back" href="../../"></a>
+  <header>
+    <div>
+      <h1 id="t-title">Når skyggen snyder</h1>
+      <p class="sub" id="t-sub"></p>
+    </div>
+    <div class="toggles">
+      <div class="seg" role="group" aria-label="Sprog / language">
+        <button id="lang-da" aria-pressed="true">Dansk</button><button id="lang-en" aria-pressed="false">English</button>
+      </div>
+      <div class="seg" role="group" id="level-group">
+        <button id="lvl-grund" aria-pressed="true"></button><button id="lvl-deep" aria-pressed="false"></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div class="box">
+      <h2 id="t-setup"></h2>
+      <canvas id="geo"></canvas>
+      <h2 id="t-zoom" class="mt"></h2>
+      <canvas id="zoom"></canvas>
+      <p class="note" id="t-scale"></p>
+    </div>
+    <div class="right">
+      <div class="box">
+        <h2 id="t-image"></h2>
+        <canvas id="img"></canvas>
+        <p class="note" id="t-truth"></p>
+        <p class="note" id="t-oval"></p>
+        <h2 id="t-loupe" class="mt"></h2>
+        <canvas id="loupe"></canvas>
+      </div>
+      <div class="box readout">
+        <div class="metric mag"><div class="k" id="k-m"></div><div class="v" id="v-m"></div><div class="f" id="f-m"></div></div>
+        <div class="metric err"><div class="k" id="k-u"></div><div class="v" id="v-u"></div><div class="f" id="f-u"></div></div>
+        <div class="metric err"><div class="k" id="k-b"></div><div class="v" id="v-b"></div><div class="f" id="f-b"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box controls" id="controls"></div>
+
+  <section class="tasks">
+    <h3 id="t-tasks"></h3>
+    <div id="task-list" class="tasks"></div>
+  </section>
+
+  <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
+</div>
+
+<script src="shadow.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+RewriteEngine On
+
+# Subdomains (ai, learn, test ...) have no certificate; send them to the main site
+RewriteCond %{HTTP_HOST} !^(www\.)?brage\.org$ [NC]
+RewriteRule ^ https://brage.org%{REQUEST_URI} [R=301,L]
+
+# Send all plain-HTTP traffic to HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# Never serve hidden files (.git, .env, backups and the like)
+RewriteRule (^|/)\.(?!well-known/) - [F]
+
+Options -Indexes
+
+<IfModule mod_headers.c>
+  # HTTPS only for a year; subdomains left out until they have certificates
+  Header always set Strict-Transport-Security "max-age=31536000"
+  # Only this site's own files may load; nothing may embed the site in a frame elsewhere
+  Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+</IfModule>
