@@ -1,7 +1,7 @@
 @import url("../../../assets/fonts/fonts.css");
-/* Layout: a light box. Geometry on the left, "what the detector saw" on the right,
-   the controls underneath like a console, tasks at the bottom. Dark on purpose,
-   the same world as the video. */
+/* Layout: a light box. On a normal screen everything fits without scrolling: controls on the left,
+   the setup in the middle, "what the detector saw" on the right, tasks below. On narrow screens
+   the parts stack, with the controls under the drawings. Dark on purpose, the same world as the video. */
 :root {
   --bg: #0A0E18;        /* the video's background */
   --panel: #121A2B;
@@ -38,12 +38,13 @@ h1 { font-family: var(--display); font-weight: 600; font-size: clamp(26px, 4vw, 
 .seg button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
 
 .stage { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; }
+.stage .controls { order: 3; grid-column: 1 / -1; }
 @media (max-width: 780px) { .stage { grid-template-columns: minmax(0, 1fr); } }
 .box { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; min-width: 0; }
 .box h2 { font: 600 12px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
 canvas { display: block; width: 100%; }
-#geo { aspect-ratio: 1 / 0.9; }
-#zoom { aspect-ratio: 2 / 1; }
+#geo { aspect-ratio: 1.5 / 1; }
+@media (max-width: 780px) { #geo { aspect-ratio: 1 / 1; } }
 #img { aspect-ratio: 1 / 1; max-width: 300px; margin: 0 auto; }
 #loupe { aspect-ratio: 3 / 1; margin-top: 10px; }
 .right { display: grid; gap: 12px; align-content: start; }
@@ -80,3 +81,30 @@ h3 { font-family: var(--display); font-weight: 600; font-size: 22px; margin: 6px
 details.answer { border: 0; padding: 6px 0 0; background: none; }
 footer { color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
 footer a { color: var(--muted); }
+
+/* Normal screens (laptop and up): three columns that together fill the window height. */
+@media (min-width: 1100px) and (min-height: 600px) {
+  body { padding-block: 12px 40px; }
+  .wrap { max-width: 1680px; gap: 12px; }
+  header { align-items: center; }
+  .wrap { grid-template-rows: auto auto; }
+  .back { margin-bottom: -8px; }
+  h1 { font-size: 26px; }
+  .sub { font-size: 13px; margin-top: 0; max-width: none; }
+  .stage {
+    grid-template-columns: 250px minmax(0, 1.4fr) minmax(0, 1fr);
+    height: calc(100svh - 128px); min-height: 480px;
+  }
+  .stage .controls {
+    order: 0; grid-column: auto; grid-template-columns: minmax(0, 1fr);
+    gap: 9px; overflow-y: auto; align-content: start;
+  }
+  .ctl label { font-size: 12.5px; }
+  .setup { display: flex; flex-direction: column; min-height: 0; }
+  #geo { aspect-ratio: auto; flex: 1; min-height: 0; }
+  .right { min-height: 0; grid-template-rows: minmax(0, 1fr) auto; }
+  .right > .box:first-child { min-height: 0; overflow: hidden; }
+  #img { width: min(100%, 34svh); }
+  #loupe { aspect-ratio: 4 / 1; }
+  .metric .v { font-size: 15px; }
+}

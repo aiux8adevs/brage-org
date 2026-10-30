@@ -3,11 +3,11 @@ const T = {
   da: {
     sub: "Flyt fokus, objekt og detektor, og se hvad der sker med skyggen. Tallene er regnet i rigtige centimeter og millimeter.",
     grund: "Grund", deep: "Fordybelse",
-    setup: "Opstilling, set fra siden", zoom: "Udsnit omkring objektet",
+    setup: "Opstilling, set fra siden", zoom: "Udsnit",
     image: "Det detektoren så", loupe: "Lup på kanten",
-    scale: "Begge tegninger er i rigtige proportioner. Udsnittet er forstørret, og den gule ramme i opstillingen viser, hvor det er taget. Fokus er tegnet større end virkeligt.",
+    scale: "Til venstre hele opstillingen, til højre den orange ramme forstørret. Begge er i rigtige proportioner. Fokus er tegnet større end virkeligt.",
     truth: "Stiplet: objektets sande størrelse, til sammenligning. Den er ikke en del af billedet.",
-    oval: "Længde / bredde på billedet",
+    oval: "Længde / bredde på billedet", trueW: "Sand bredde",
     focus: "fokus", detector: "detektor", lesion: "læsion", near: "nær ende", far: "fjern ende",
     km: "Forstørrelse", ku: "Halvskygge", kb: "Bevægelsesspor", nearFar: "nær / fjern ende",
     ctl: {
@@ -30,7 +30,7 @@ const T = {
       ["Overlejring", "Der ligger en lille læsion bag det runde objekt. Find den på billedet.",
        "Skift til 90°-projektionen. I 0° ligger læsionen i samme stråle som objektet og forsvinder i dens skygge."],
       ["Rundt bliver ovalt", "Vælg det runde objekt og sæt rørets vinkling til 30°. Hvad sker der med formen på billedet? Hvad sker der, hvis du i stedet sætter vinklingen til 0° og flytter objektet ud fra midten?",
-       "Med vinkling bliver skyggen oval, trukket ud i den retning røret er vinklet. Det er elongation: strålen rammer skråt, så skyggen strækkes. Ude fra midten sker det samme, men meget mindre, fordi strålen dér kun er lidt skrå. Midt i en lodret stråle forbliver objektet rundt. Slå fordybelse til for at se tallet."],
+       "Med vinkling bliver skyggen oval, trukket ud i den retning røret er vinklet. Det er elongation: strålen rammer skråt, så skyggen strækkes. Ude fra midten sker det samme, men meget mindre, fordi strålen dér kun er lidt skrå. Midt i en lodret stråle forbliver objektet rundt. Se tallet under billedet. Se også i udsnittet, at læsionens orange stråle flytter sig væk fra objektets midte, når objektet flyttes ud fra midten. For et rundt objekt er forvrængningen lille, mens ting i forskellig højde forskydes mere i forhold til hinanden."],
     ],
     answer: "Vis svar", dec: ",",
     back: "← Læring", foot: "© 2026 Oliver Brage. Alle rettigheder forbeholdes.", privacy: "Privatliv",
@@ -38,11 +38,11 @@ const T = {
   en: {
     sub: "Move the focal spot, the object and the detector, and watch what happens to the shadow. The numbers are worked out in real centimeters and millimeters.",
     grund: "Basic", deep: "Deeper level",
-    setup: "Setup, side view", zoom: "Close-up around the object",
+    setup: "Setup, side view", zoom: "Close-up",
     image: "What the detector saw", loupe: "Loupe on the edge",
-    scale: "Both drawings are true to proportion. The close-up is magnified, and the yellow frame in the setup shows where it is taken. The focal spot is drawn larger than life.",
+    scale: "On the left the whole setup, on the right the orange frame magnified. Both are true to proportion. The focal spot is drawn larger than life.",
     truth: "Dashed: the object's true size, for comparison. It is not part of the image.",
-    oval: "Length / width in the image",
+    oval: "Length / width in the image", trueW: "True width",
     focus: "focal spot", detector: "detector", lesion: "lesion", near: "near end", far: "far end",
     km: "Magnification", ku: "Penumbra", kb: "Motion trace", nearFar: "near / far end",
     ctl: {
@@ -65,7 +65,7 @@ const T = {
       ["Superimposition", "A small lesion lies behind the round object. Find it in the image.",
        "Switch to the 90° projection. At 0° the lesion lies in the same ray as the object and disappears in its shadow."],
       ["Round turns oval", "Choose the round object and set the tube angle to 30°. What happens to the shape in the image? What happens if you set the angle back to 0° and move the object off center instead?",
-       "With an angled tube the shadow turns oval, stretched in the direction of the angle. That is elongation: the beam hits at a slant, so the shadow is drawn out. Off center the same happens, but much less, because the beam there is only slightly slanted. In the middle of a vertical beam the object stays round. Switch on the deeper level to see the number."],
+       "With an angled tube the shadow turns oval, stretched in the direction of the angle. That is elongation: the beam hits at a slant, so the shadow is drawn out. Off center the same happens, but much less, because the beam there is only slightly slanted. In the middle of a vertical beam the object stays round. See the number under the image. Notice also in the close-up that the lesion's orange ray moves away from the middle of the object when the object moves off center. For a round object the distortion is small, while things at different heights shift more relative to each other."],
     ],
     answer: "Show answer", dec: ".",
     back: "← Learn", foot: "© 2026 Oliver Brage. All rights reserved.", privacy: "Privacy",
@@ -151,38 +151,51 @@ function arrow(ctx, x, ya, yb, lbl) {   // a vertical distance marker with its l
 
 // what the close-up must contain, in cm: the object, its lesion and its shadow on the detector
 function zoomBox() {
-  const F = focusC(), C = objC(), xs = [], ys = [0];
-  if (S.obj === "circle") {
-    const s = circleShadow(C, R), Lc = lesionC();
-    xs.push(C[0] - R, C[0] + R, s.ul, s.ur, Lc[0] - LES_R, Lc[0] + LES_R); ys.push(C[1] + R, Lc[1] + LES_R);
-  } else {
-    for (const p of rodEnds()) { xs.push(p[0] - ROD_W, p[0] + ROD_W, proj(F, p)); ys.push(p[1] + ROD_W); }
+  // The box covers every bone tilt and both projections, so the close-up keeps one scale while
+  // the tilt or projection changes. Otherwise the bone would seem to change length and thickness.
+  const keep = [S.objAngle, S.proj], xs = [], ys = [0];
+  for (const ang of [0, 15, 30, 45, 60]) for (const pr of [0, 90]) {
+    S.objAngle = ang; S.proj = pr;
+    const F = focusC(), C = objC();
+    if (S.obj === "circle") {
+      const sh = circleShadow(C, R), Lc = lesionC();
+      xs.push(C[0] - R, C[0] + R, sh.ul, sh.ur, Lc[0] - LES_R, Lc[0] + LES_R); ys.push(C[1] + R, Lc[1] + LES_R);
+    } else {
+      for (const p of rodEnds()) { xs.push(p[0] - ROD_W, p[0] + ROD_W, proj(F, p) - ROD_W, proj(F, p) + ROD_W); ys.push(p[1] + ROD_W); }
+    }
   }
+  [S.objAngle, S.proj] = keep;
   return { x0: Math.min(...xs) - 1.5, x1: Math.max(...xs) + 1.5, y1: Math.max(...ys) + 1.5 };
 }
 
 function drawGeo() {
+  // One canvas: the whole setup on the left, the orange frame around the object magnified on the right,
+  // joined by two orange lines so it is clear which is which. Both use one scale in both directions.
   const L = T[S.lang], [ctx, W, H] = fit(document.getElementById("geo"));
-  const [zctx, ZW, ZH] = fit(document.getElementById("zoom"));
-  ctx.clearRect(0, 0, W, H); zctx.clearRect(0, 0, ZW, ZH);
+  ctx.clearRect(0, 0, W, H);
   const F = focusC(), C = objC(), ends = focusEnds();
   const signal = css("--signal"), hot = css("--hot"), bone = css("--bone"), amber = css("--amber"), fg = css("--fg");
 
-  // the close-up: one scale for both directions, so lengths and angles are true
-  const zb = zoomBox(), zpad = 22;
-  const z = Math.min((ZW - 70) / (zb.x1 - zb.x0), (ZH - zpad - 18) / zb.y1);
-  const zmid = (zb.x0 + zb.x1) / 2;
-  const ZX = x => ZW / 2 - 25 + (x - zmid) * z, ZY = y => ZH - zpad - y * z, ZP = p => [ZX(p[0]), ZY(p[1])];
-  const zview = { x0: zmid - (ZW / 2 - 25) / z, x1: zmid + (ZW / 2 + 25) / z, y0: -zpad / z, y1: (ZH - zpad) / z };
+  // layout: overview strip on the left, close-up box on the right
+  const OW = Math.max(120, Math.min(W * 0.36, 260)), gap = 34;
+  const box = { x: OW + gap, y: 6, w: W - OW - gap - 6, h: H - 12 };
 
-  // the overview: also one scale for both directions
+  // close-up scale and the area it shows, in cm
+  const zb = zoomBox(), zpad = 26, right = 46;     // room under the detector and for the OID marker
+  const z = Math.min((box.w - right - 16) / (zb.x1 - zb.x0), (box.h - zpad - 28) / zb.y1);
+  const zmid = (zb.x0 + zb.x1) / 2, zcx = box.x + (box.w - right) / 2;
+  const ZX = x => zcx + (x - zmid) * z, ZY = y => box.y + box.h - zpad - y * z, ZP = p => [ZX(p[0]), ZY(p[1])];
+  const zview = { x0: zmid - (zcx - box.x) / z, x1: zmid + (box.x + box.w - zcx) / z, y0: -zpad / z, y1: (box.h - zpad) / z };
+
+  // overview scale
   const top = 18, bot = H - 34;
   const xs = [-21.5, 21.5, F[0] - 3, F[0] + 3, zview.x0, zview.x1];
   const span = Math.max(...xs) - Math.min(...xs), mid = (Math.max(...xs) + Math.min(...xs)) / 2;
-  const s = Math.min((bot - top) / (S.sid + 5), (W - 110) / span);
-  const X = x => (W - 70) / 2 + (x - mid) * s, Y = y => bot - y * s, P = p => [X(p[0]), Y(p[1])];
+  const s = Math.min((bot - top) / (S.sid + 5), (OW - 70) / span);
+  const X = x => (OW - 40) / 2 + 12 + (x - mid) * s, Y = y => bot - y * s, P = p => [X(p[0]), Y(p[1])];
 
-  // overview: detector, focal spot, central ray, the object as it really looks at this scale
+  // --- overview -------------------------------------------------------------
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, OW, H); ctx.clip();
   ctx.fillStyle = "rgba(255,255,255,.25)"; ctx.fillRect(X(-21.5), Y(0), 43 * s, 4);
   text(ctx, L.detector, X(-21.5), Y(0) + 20, css("--muted"));
   const hit = S.obj === "circle" ? proj(F, C) : (proj(F, rodEnds()[0]) + proj(F, rodEnds()[1])) / 2;
@@ -194,35 +207,53 @@ function drawGeo() {
   }
   const fw = Math.max(S.focus / 10 * 20 * s, 4);   // focal spot drawn 20x wider than life
   ctx.fillStyle = fg; ctx.fillRect(X(F[0]) - fw / 2, Y(F[1]) - 3, fw, 6);
-  text(ctx, L.focus, X(F[0]) - fw / 2 - 6, Y(F[1]) + 4, fg, "right");
-  ctx.strokeStyle = amber; ctx.lineWidth = 1.2;      // where the close-up is taken
-  ctx.strokeRect(X(zview.x0), Y(zview.y1), (zview.x1 - zview.x0) * s, (zview.y1 - zview.y0) * s);
-  arrow(ctx, W - 14, Y(S.sid), Y(0), `SID ${fmt(S.sid, 0)}`);
+  ctx.font = `12px ${css("--body")}`;                  // label left of the focal spot, or right if there is no room
+  if (X(F[0]) - fw / 2 - 8 - ctx.measureText(L.focus).width > 2) text(ctx, L.focus, X(F[0]) - fw / 2 - 6, Y(F[1]) + 4, fg, "right");
+  else text(ctx, L.focus, X(F[0]) + fw / 2 + 6, Y(F[1]) + 4, fg, "left");
+  arrow(ctx, OW - 8, Y(S.sid), Y(0), `SID ${fmt(S.sid, 0)}`);
+  ctx.restore();
 
-  // close-up: rays, object, shadow on the detector, true size dashed underneath
-  zctx.fillStyle = "rgba(255,255,255,.25)"; zctx.fillRect(Math.max(0, ZX(-21.5)), ZY(0), Math.min(ZW, ZX(21.5)) - Math.max(0, ZX(-21.5)), 5);
+  // --- the frame, the joining lines and the close-up box ----------------------
+  const fr = { x: X(zview.x0), y: Y(zview.y1), w: (zview.x1 - zview.x0) * s, h: (zview.y1 - zview.y0) * s };
+  ctx.save(); ctx.strokeStyle = amber; ctx.globalAlpha = .55; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(fr.x + fr.w, fr.y); ctx.lineTo(box.x, box.y);
+  ctx.moveTo(fr.x + fr.w, fr.y + fr.h); ctx.lineTo(box.x, box.y + box.h); ctx.stroke(); ctx.restore();
+  ctx.strokeStyle = amber; ctx.lineWidth = 1.5; ctx.strokeRect(fr.x, fr.y, fr.w, fr.h);
+  text(ctx, L.zoom, fr.x - 4, fr.y - 4, amber, "right", 11);
+  ctx.fillStyle = "rgba(0,0,0,.18)"; ctx.fillRect(box.x, box.y, box.w, box.h);
+  ctx.strokeStyle = amber; ctx.lineWidth = 2; ctx.strokeRect(box.x, box.y, box.w, box.h);
+
+  ctx.save(); ctx.beginPath(); ctx.rect(box.x, box.y, box.w, box.h); ctx.clip();
+  ctx.fillStyle = "rgba(255,255,255,.25)";
+  ctx.fillRect(Math.max(box.x, ZX(-21.5)), ZY(0), Math.min(box.x + box.w, ZX(21.5)) - Math.max(box.x, ZX(-21.5)), 5);
   if (S.obj === "circle") {
-    for (const E of ends) for (const x of tangents(E, C, R)) line(zctx, ZP(E), ZP([x, 0]), signal, 1, null, .55);
+    for (const E of ends) for (const x of tangents(E, C, R)) line(ctx, ZP(E), ZP([x, 0]), signal, 1, null, .55);
     const sh = circleShadow(C, R);
-    line(zctx, ZP([sh.il, 0]), ZP([sh.ir, 0]), bone, 5);
-    line(zctx, ZP([sh.ul, 0]), ZP([sh.il, 0]), hot, 5); line(zctx, ZP([sh.ir, 0]), ZP([sh.ur, 0]), hot, 5);
-    zctx.save(); zctx.fillStyle = "rgba(232,232,232,.45)"; zctx.strokeStyle = bone;
-    zctx.beginPath(); zctx.arc(ZX(C[0]), ZY(C[1]), R * z, 0, 7); zctx.fill(); zctx.stroke(); zctx.restore();
+    line(ctx, ZP([sh.il, 0]), ZP([sh.ir, 0]), bone, 5);
+    line(ctx, ZP([sh.ul, 0]), ZP([sh.il, 0]), hot, 5); line(ctx, ZP([sh.ir, 0]), ZP([sh.ur, 0]), hot, 5);
+    ctx.save(); ctx.fillStyle = "rgba(232,232,232,.45)"; ctx.strokeStyle = bone;
+    ctx.beginPath(); ctx.arc(ZX(C[0]), ZY(C[1]), R * z, 0, 7); ctx.fill(); ctx.stroke(); ctx.restore();
     const Lc = lesionC();
-    for (const x of tangents(F, Lc, LES_R)) line(zctx, ZP(F), ZP([x, 0]), amber, 1, null, .45);
-    zctx.fillStyle = "#AEB4C2"; zctx.beginPath(); zctx.arc(ZX(Lc[0]), ZY(Lc[1]), LES_R * z, 0, 7); zctx.fill();
-    text(zctx, L.lesion, ZX(Lc[0]) + LES_R * z + 6, ZY(Lc[1]) + 4, amber);
-    line(zctx, [ZX(C[0] - R), ZY(0) + 12], [ZX(C[0] + R), ZY(0) + 12], fg, 1.5, [4, 3]);
+    for (const x of tangents(F, Lc, LES_R)) line(ctx, ZP(F), ZP([x, 0]), amber, 1, null, .45);
+    ctx.fillStyle = "#AEB4C2"; ctx.beginPath(); ctx.arc(ZX(Lc[0]), ZY(Lc[1]), LES_R * z, 0, 7); ctx.fill();
+    text(ctx, L.lesion, ZX(Lc[0]) + LES_R * z + 6, ZY(Lc[1]) + 4, amber);
+    line(ctx, [ZX(C[0] - R), ZY(0) + 12], [ZX(C[0] + R), ZY(0) + 12], fg, 1.5, [4, 3]);
   } else {
-    const [p1, p2] = rodEnds(), x1 = proj(F, p1), x2 = proj(F, p2);
-    line(zctx, ZP(F), ZP([x1, 0]), signal, 1, null, .55); line(zctx, ZP(F), ZP([x2, 0]), signal, 1, null, .55);
-    line(zctx, ZP(p1), ZP(p2), bone, ROD_W * z, null, .8, "round");   // keeps its real length when tilted
-    line(zctx, ZP([x1, 0]), ZP([x2, 0]), bone, 5);
-    text(zctx, L.near, ZX(p1[0]), ZY(p1[1]) - ROD_W * z / 2 - 6, css("--muted"), "center", 11);
-    text(zctx, L.far, ZX(p2[0]), ZY(p2[1]) - ROD_W * z / 2 - 6, css("--muted"), "center", 11);
-    line(zctx, [ZX(C[0] - ROD / 2), ZY(0) + 12], [ZX(C[0] + ROD / 2), ZY(0) + 12], fg, 1.5, [4, 3]);
+    const [p1, p2] = rodEnds(), a = S.objAngle * Math.PI / 180, e = [Math.cos(a) * ROD_W / 2, Math.sin(a) * ROD_W / 2];
+    const t1 = [p1[0] - e[0], p1[1] - e[1]], t2 = [p2[0] + e[0], p2[1] + e[1]];   // the bone's outer tips
+    const x1 = proj(F, t1), x2 = proj(F, t2);
+    line(ctx, ZP(F), ZP([x1, 0]), signal, 1, null, .55); line(ctx, ZP(F), ZP([x2, 0]), signal, 1, null, .55);
+    line(ctx, ZP(p1), ZP(p2), bone, ROD_W * z, null, .8, "round");   // keeps its real length when tilted
+    line(ctx, ZP([x1, 0]), ZP([x2, 0]), bone, 5);
+    text(ctx, L.near, ZX(p1[0]), ZY(p1[1]) - ROD_W * z / 2 - 6, css("--muted"), "center", 11);
+    text(ctx, L.far, ZX(p2[0]), ZY(p2[1]) - ROD_W * z / 2 - 6, css("--muted"), "center", 11);
+    line(ctx, [ZX(C[0] - ROD / 2), ZY(0) + 12], [ZX(C[0] + ROD / 2), ZY(0) + 12], fg, 1.5, [4, 3]);
   }
-  arrow(zctx, ZW - 12, ZY(C[1]), ZY(0), `OID ${fmt(C[1], 0)}`);
+  arrow(ctx, box.x + box.w - 10, ZY(C[1]), ZY(0), `OID ${fmt(C[1], 0)}`);
+  ctx.restore();
+  // label inside the box, with how much it is magnified compared with the overview
+  ctx.fillStyle = css("--panel"); ctx.fillRect(box.x + 2, box.y + 2, 118, 20);
+  text(ctx, `${L.zoom} ×${fmt(z / s, 0)}`, box.x + 8, box.y + 16, amber, "left", 12);
 }
 
 function drawImage() {
@@ -254,11 +285,12 @@ function drawImage() {
     if (Math.abs(off) > (sh.ur - sh.ul) / 2 * k - lr * .3) {
       ctx.fillStyle = "#AEB4C2"; ctx.beginPath(); ctx.arc(cx + off, cy, lr, 0, 7); ctx.fill();
     }
-    ctx.save(); ctx.setLineDash([5, 4]); ctx.strokeStyle = css("--fg"); ctx.lineWidth = 1.2;
+    ctx.save(); ctx.setLineDash([5, 4]); ctx.strokeStyle = css("--bg"); ctx.lineWidth = 1.5;   // dark, so it shows on the light shadow
     ctx.beginPath(); ctx.arc(cx, cy, R * k, 0, 7); ctx.stroke(); ctx.restore();
   } else {
     // each end has its own magnification, so the shadow is wider at the far end
-    const k = W / 26, [p1, p2] = rodEnds(), x1 = proj(F, p1), x2 = proj(F, p2), m = (x1 + x2) / 2;
+    const [p1, p2] = rodEnds(), x1 = proj(F, p1), x2 = proj(F, p2), m = (x1 + x2) / 2;
+    const k = W / Math.max(ROD, Math.abs(x2 - x1) + 2 * ROD_W) / 1.15;   // the longer of bone and shadow fills the field
     const h1 = ROD_W / 2 * n[0].M, h2 = ROD_W / 2 * n[1].M, X = x => cx + (x - m) * k;
     smearCopies(1, dy => {
       const y = cy + dy * k;
@@ -269,8 +301,16 @@ function drawImage() {
       ctx.arc(X(x1), y, h1 * k, Math.PI / 2, 3 * Math.PI / 2);
       ctx.fill();
     });
-    ctx.save(); ctx.setLineDash([5, 4]); ctx.strokeStyle = css("--fg");
+    ctx.save(); ctx.setLineDash([5, 4]); ctx.strokeStyle = css("--bg"); ctx.lineWidth = 1.5;
     roundRect(ctx, cx - ROD / 2 * k, cy - ROD_W / 2 * k, ROD * k, ROD_W * k, ROD_W / 2 * k); ctx.stroke(); ctx.restore();
+    // width markers: the shadow's width at each end, and the bone's true width for comparison
+    const amber = css("--amber"), L = T[S.lang];
+    for (const [x, h, lbl] of [[x1, h1, L.near], [x2, h2, L.far]]) {
+      line(ctx, [X(x), cy - h * k], [X(x), cy + h * k], amber, 2);
+      text(ctx, `${fmt(2 * h, 1)} cm`, X(x), cy + h * k + 16, amber, "center", 12);
+      text(ctx, lbl, X(x), cy + h * k + 30, css("--fg"), "center", 11);
+    }
+    text(ctx, `${L.trueW}: ${fmt(ROD_W, 1)} cm`, cx, cy - ROD_W / 2 * k - 12, css("--fg"), "center", 11);
   }
 }
 function roundRect(ctx, x, y, w, h, r) {
@@ -322,7 +362,7 @@ function readouts() {
   set("f-b", deep ? "v·t·M = " + n.map(e => `${fmt(S.speed, 0)}·${fmt(S.time / 1000, 2)}·${fmt(e.M)}`).join(" · ") : "");
   // how oval the round object has become (deeper level only)
   let oval = "";
-  if (deep && !rod) {
+  if (!rod) {
     const sh = circleShadow(objC(), R), w = ((sh.ur - sh.ul) + (sh.ir - sh.il)) / 2;
     oval = `${L.oval}: ${fmt(w / (2 * sphereHalfHeight(objC(), R)))}`;
   }
@@ -366,7 +406,7 @@ function buildText() {
   document.getElementById("t-back").href = "../../?lang=" + S.lang;
   document.getElementById("t-foot").textContent = L.foot;
   document.getElementById("t-privacy").textContent = L.privacy;
-  for (const [id, key] of [["t-setup", "setup"], ["t-zoom", "zoom"], ["t-image", "image"], ["t-loupe", "loupe"],
+  for (const [id, key] of [["t-setup", "setup"], ["t-image", "image"], ["t-loupe", "loupe"],
                            ["t-scale", "scale"], ["t-truth", "truth"], ["t-tasks", "tasks"]])
     document.getElementById(id).textContent = L[key];
   document.getElementById("lvl-grund").textContent = L.grund;
