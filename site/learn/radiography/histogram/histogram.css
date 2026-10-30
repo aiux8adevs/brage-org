@@ -1,0 +1,114 @@
+@import url("../../../assets/fonts/fonts.css");
+/* Layout: the knee on the left, its histogram and the REX scale on the right, controls beside them on a
+   normal screen and under them on a narrow one. Shares its look with the shadow simulator.
+   Dark on purpose, the same world as the video. */
+:root {
+  --bg: #0A0E18;        /* the video's background */
+  --panel: #121A2B;
+  --line: #26304A;
+  --fg: #E6E9F0;
+  --muted: #8E97AC;
+  --signal: #5EE7DF;    /* primary photons */
+  --hot: #FF4D6D;       /* the error: penumbra, blur, wrong outline */
+  --amber: #F5A623;     /* what you adjust */
+  --bone: #E8E8E8;
+  --soft: #5A5F6B;
+  --display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+html { background: var(--bg); }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  padding-block: 20px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 20px; }
+header { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; justify-content: space-between; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(26px, 4vw, 36px); margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); margin: 4px 0 0; max-width: 62ch; }
+.toggles { display: flex; gap: 10px; flex-wrap: wrap; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button {
+  background: transparent; color: var(--muted); border: 0; padding: 6px 12px; font: 500 13px var(--body); cursor: pointer;
+}
+.seg button[aria-pressed="true"] { background: var(--line); color: var(--fg); }
+.seg button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+
+.stage { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; }
+.stage .controls { order: 3; grid-column: 1 / -1; }
+@media (max-width: 780px) { .stage { grid-template-columns: minmax(0, 1fr); } }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px; min-width: 0; }
+.box h2 { font: 600 12px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+canvas { display: block; width: 100%; }
+#knee { aspect-ratio: 1 / 1; max-width: 420px; margin: 0 auto; }
+#hist { aspect-ratio: 1.6 / 1; }
+.knee-box .note { text-align: center; }
+.right { display: grid; gap: 12px; align-content: start; }
+.note { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
+
+.readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 460px) { .readout { grid-template-columns: minmax(0, 1fr); } }
+.metric { border-left: 3px solid var(--line); padding: 2px 0 2px 10px; }
+.metric .k { color: var(--muted); font-size: 12px; }
+.metric .v { font: 500 18px var(--mono); font-variant-numeric: tabular-nums; }
+.metric .f { font: 12px var(--mono); color: var(--signal); margin-top: 2px; }
+.metric.err { border-color: var(--hot); }
+.metric.mag { border-color: var(--amber); }
+.metric.ok { border-color: var(--signal); }
+.metric .v.ok { color: var(--signal); }
+.metric .v.bad { color: var(--hot); }
+.ctl .reset { margin-top: 4px; background: transparent; color: var(--muted); border: 1px solid var(--line);
+  border-radius: 6px; padding: 6px 12px; font: 500 13px var(--body); cursor: pointer; }
+.ctl .reset:hover { color: var(--fg); }
+
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px 22px; }
+.ctl label { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+.ctl label span:last-child { font: 500 13px var(--mono); color: var(--amber); font-variant-numeric: tabular-nums; }
+.ctl input[type=range] { width: 100%; accent-color: var(--amber); }
+.ctl .seg { margin-top: 4px; }
+
+.tasks { display: grid; gap: 8px; }
+details { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; background: var(--panel); }
+summary { cursor: pointer; font-weight: 500; }
+details p { margin: 8px 0 0; color: var(--muted); }
+details .q { color: var(--fg); margin-top: 6px; }
+details .a { border-left: 3px solid var(--signal); padding-left: 10px; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 22px; margin: 6px 0 0; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* top bar back to the learning page, and the footer */
+.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+.back:hover { color: var(--fg); }
+.mt { margin-top: 10px; }
+details.answer { border: 0; padding: 6px 0 0; background: none; }
+footer { color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
+footer a { color: var(--muted); }
+
+
+/* Normal screens (laptop and up): three columns that together fill the window height. */
+@media (min-width: 1100px) and (min-height: 600px) {
+  body { padding-block: 12px 40px; }
+  .wrap { max-width: 1680px; gap: 12px; }
+  header { align-items: center; }
+  .back { margin-bottom: -8px; }
+  h1 { font-size: 26px; }
+  .sub { font-size: 13px; margin-top: 0; max-width: none; }
+  .stage {
+    grid-template-columns: 250px minmax(0, 1fr) minmax(0, 1.25fr);
+    height: calc(100svh - 128px); min-height: 480px;
+  }
+  .stage .controls {
+    order: 0; grid-column: auto; grid-template-columns: minmax(0, 1fr);
+    gap: 9px; overflow-y: auto; align-content: start;
+  }
+  .ctl label { font-size: 12.5px; }
+  .knee-box { display: flex; flex-direction: column; min-height: 0; }
+  #knee { width: min(100%, calc(100svh - 230px)); max-width: none; margin: auto; }
+  .right { min-height: 0; grid-template-rows: minmax(0, 1fr) auto; }
+  .right > .box:first-child { min-height: 0; display: flex; flex-direction: column; }
+  #hist { aspect-ratio: auto; flex: 1; min-height: 0; }
+  .metric .v { font-size: 15px; }
+}

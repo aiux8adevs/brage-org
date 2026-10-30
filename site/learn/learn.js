@@ -8,8 +8,10 @@ const TEXT = {
     radiography: "Radiography", radioIntro: "Image geometry, the digital image, noise and scatter.",
     simKind: "Simulator", shadowTitle: "When the shadow lies",
     shadowText: "Magnification, penumbra, motion blur and superimposition. Move the focal spot, the object and the detector.",
+    histTitle: "Histogram and window",
+    histText: "The histogram, exposure index (REX), automatic rescaling, LUT and WW/WL. Change the dose and collimation, and see why brightness says nothing about dose.",
     open: "Open simulator →",
-    soonTitle: "More on the way", soonText: "Simulators and videos on the digital image, noise and scatter are in production.",
+    soonTitle: "More on the way", soonText: "Videos on the digital image, and simulators on noise and scatter, are in production.",
     rights: "All rights reserved.", privacy: "Privacy", profile: "Profile", projects: "Projects",
   },
   da: {
@@ -19,8 +21,10 @@ const TEXT = {
     radiography: "Radiografi", radioIntro: "Billedgeometri, det digitale billede, støj og spredt stråling.",
     simKind: "Simulator", shadowTitle: "Når skyggen snyder",
     shadowText: "Forstørrelse, halvskygge, bevægelsesuskarphed og overlejring. Flyt fokus, objekt og detektor.",
+    histTitle: "Histogram og vindue",
+    histText: "Histogram, eksponeringsindeks (REX), automatisk skalering, LUT og WW/WL. Skru på dosis og indblænding, og se hvorfor lysheden intet siger om dosis.",
     open: "Åbn simulatoren →",
-    soonTitle: "Mere på vej", soonText: "Simulatorer og videoer om det digitale billede, støj og spredt stråling er under produktion.",
+    soonTitle: "Mere på vej", soonText: "Videoer om det digitale billede og simulatorer om støj og spredt stråling er under produktion.",
     rights: "Alle rettigheder forbeholdes.", privacy: "Privatliv", profile: "Profil", projects: "Projekter",
   },
 };
