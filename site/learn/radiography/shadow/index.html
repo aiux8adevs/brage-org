@@ -27,10 +27,14 @@
   </header>
 
   <div class="stage">
-    <div class="box controls" id="controls"></div>
+    <div class="box controls">
+      <div id="controls" class="ctls"></div>
+      <div id="taskcard" class="taskcard"></div>
+    </div>
     <div class="box setup">
       <h2 id="t-setup"></h2>
       <canvas id="geo"></canvas>
+      <div class="legend" id="geo-legend"></div>
       <p class="note" id="t-scale"></p>
     </div>
     <div class="right">
@@ -43,9 +47,10 @@
         <canvas id="loupe"></canvas>
       </div>
       <div class="box readout">
-        <div class="metric mag"><div class="k" id="k-m"></div><div class="v" id="v-m"></div><div class="f" id="f-m"></div></div>
-        <div class="metric err"><div class="k" id="k-u"></div><div class="v" id="v-u"></div><div class="f" id="f-u"></div></div>
-        <div class="metric err"><div class="k" id="k-b"></div><div class="v" id="v-b"></div><div class="f" id="f-b"></div></div>
+        <div class="metric mag"><div class="k" id="k-m"></div><div class="v" id="v-m"></div><div class="f" id="f-m"></div><div class="p" id="p-m"></div></div>
+        <div class="metric err"><div class="k" id="k-u"></div><div class="v" id="v-u"></div><div class="f" id="f-u"></div><div class="p" id="p-u"></div></div>
+        <div class="metric err"><div class="k" id="k-b"></div><div class="v" id="v-b"></div><div class="f" id="f-b"></div><div class="p" id="p-b"></div></div>
+        <div class="seen"><p><span id="t-seen"></span> <span id="seen"></span></p><button class="reset" id="pin"></button></div>
       </div>
     </div>
   </div>
@@ -55,9 +60,14 @@
     <div id="task-list" class="tasks"></div>
   </section>
 
+  <section class="model">
+    <details><summary id="t-model"></summary><div id="model-text"></div></details>
+  </section>
+
   <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
 </div>
 
+<script src="../tex.js"></script>
 <script src="shadow.js"></script>
 </body>
 </html>

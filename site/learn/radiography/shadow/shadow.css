@@ -47,6 +47,14 @@ canvas { display: block; width: 100%; }
 @media (max-width: 780px) { #geo { aspect-ratio: 1 / 1; } }
 #img { aspect-ratio: 1 / 1; max-width: 300px; margin: 0 auto; }
 #loupe { aspect-ratio: 3 / 1; margin-top: 10px; }
+/* what the lines in the setup drawing mean */
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: var(--muted); margin-top: 8px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 20px; border-top: 1.5px solid var(--signal); }
+.legend i.les { border-top-color: var(--amber); }
+.legend i.sh { border-top: 5px solid var(--bone); }
+.legend i.tr { border-top: 1.5px dashed var(--fg); }
+.legend i.zm { width: 14px; height: 10px; border: 1.5px solid var(--amber); }
 .right { display: grid; gap: 12px; align-content: start; }
 .note { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
 
@@ -59,11 +67,24 @@ canvas { display: block; width: 100%; }
 .metric.err { border-color: var(--hot); }
 .metric.mag { border-color: var(--amber); }
 
-.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px 22px; }
+.controls { display: grid; gap: 16px; align-content: start; }
+.ctls { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px 22px; }
+.ctl.off { opacity: .45; }
+.seg button:disabled { cursor: default; }
+.ctl.off label span:last-child { color: var(--muted); font: 12px var(--body); }
+
+/* one task at a time beside the controls; the full list stays at the bottom of the page */
+.taskcard { border-top: 1px solid var(--line); padding-top: 12px; font-size: 13px; }
+.tc-head { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 12px; }
+.tc-head .seg button { padding: 1px 11px; font-size: 16px; line-height: 1.3; }
+.taskcard h4 { font: 600 14px var(--body); margin: 8px 0 0; }
+.taskcard .q { margin: 4px 0 0; color: var(--fg); }
+.taskcard .a { margin: 6px 0 0; color: var(--muted); border-left: 3px solid var(--signal); padding-left: 10px; }
 .ctl label { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
 .ctl label span:last-child { font: 500 13px var(--mono); color: var(--amber); font-variant-numeric: tabular-nums; }
 .ctl input[type=range] { width: 100%; accent-color: var(--amber); }
 .ctl .seg { margin-top: 4px; }
+.ctl .help { margin: 2px 0 0; font-size: 11.5px; line-height: 1.35; color: var(--muted); }
 
 .tasks { display: grid; gap: 8px; }
 details { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; background: var(--panel); }
@@ -71,6 +92,20 @@ summary { cursor: pointer; font-weight: 500; }
 details p { margin: 8px 0 0; color: var(--muted); }
 details .q { color: var(--fg); margin-top: 6px; }
 details .a { border-left: 3px solid var(--signal); padding-left: 10px; }
+.tgroup { font: 600 12px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 10px 0 0; }
+math { font-size: 1.08em; }
+math[display="block"] { margin: 8px 0; }
+/* what you can see right now, and the button that saves the current numbers for comparison */
+.seen { grid-column: 1 / -1; display: flex; gap: 12px; align-items: center; justify-content: space-between;
+  border-top: 1px solid var(--line); padding-top: 8px; }
+.seen p { margin: 0; font-size: 13px; }
+.seen #t-seen { color: var(--amber); font-weight: 600; }
+.seen .reset { margin: 0; flex: none; background: transparent; color: var(--muted); border: 1px solid var(--line);
+  border-radius: 6px; padding: 6px 12px; font: 500 13px var(--body); cursor: pointer; }
+.seen .reset:hover { color: var(--fg); }
+.metric .p { font: 12px var(--mono); color: var(--muted); margin-top: 2px; }
+.model details { color: var(--muted); }
+.model details p { margin: 8px 0 0; }
 h3 { font-family: var(--display); font-weight: 600; font-size: 22px; margin: 6px 0 0; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
@@ -96,9 +131,9 @@ footer a { color: var(--muted); }
     height: calc(100svh - 128px); min-height: 480px;
   }
   .stage .controls {
-    order: 0; grid-column: auto; grid-template-columns: minmax(0, 1fr);
-    gap: 9px; overflow-y: auto; align-content: start;
+    order: 0; grid-column: auto; overflow-y: auto;
   }
+  .ctls { grid-template-columns: minmax(0, 1fr); gap: 9px; }
   .ctl label { font-size: 12.5px; }
   .setup { display: flex; flex-direction: column; min-height: 0; }
   #geo { aspect-ratio: auto; flex: 1; min-height: 0; }

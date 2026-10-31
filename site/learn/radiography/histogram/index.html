@@ -27,7 +27,10 @@
   </header>
 
   <div class="stage">
-    <div class="box controls" id="controls"></div>
+    <div class="box controls">
+      <div id="controls" class="ctls"></div>
+      <div id="taskcard" class="taskcard"></div>
+    </div>
     <div class="box knee-box">
       <h2 id="t-image"></h2>
       <canvas id="knee"></canvas>
@@ -40,8 +43,9 @@
         <p class="note" id="t-histnote"></p>
       </div>
       <div class="box readout">
-        <div class="metric mag" id="m-rex"><div class="k" id="k-rex"></div><div class="v" id="v-rex"></div><div class="f" id="f-rex"></div></div>
-        <div class="metric" id="m-win"><div class="k" id="k-win"></div><div class="v" id="v-win"></div><div class="f" id="f-win"></div></div>
+        <div class="metric mag" id="m-rex"><div class="k" id="k-rex"></div><div class="v" id="v-rex"></div><div class="f" id="f-rex"></div><div class="p" id="p-rex"></div></div>
+        <div class="metric" id="m-win"><div class="k" id="k-win"></div><div class="v" id="v-win"></div><div class="f" id="f-win"></div><div class="p" id="p-win"></div></div>
+        <div class="seen"><p><span id="t-seen"></span> <span id="seen"></span></p><button class="reset" id="pin"></button></div>
       </div>
     </div>
   </div>
@@ -51,9 +55,14 @@
     <div id="task-list" class="tasks"></div>
   </section>
 
+  <section class="model">
+    <details><summary id="t-model"></summary><div id="model-text"></div></details>
+  </section>
+
   <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
 </div>
 
+<script src="../tex.js"></script>
 <script src="histogram.js"></script>
 </body>
 </html>
