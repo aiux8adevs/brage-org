@@ -111,6 +111,8 @@ const T = {
       ], "deep"],
     ],
     answer: "Vis svar", dec: ",", thou: ".",
+    video: "Video: Fra tal til billede",
+    videoNote: "Videoen følger samme vej som simulatoren: histogram, REX, skalering, LUT og vindue. Sprog og niveau skifter med knapperne øverst.",
     back: "← Læring", foot: "© 2026 Oliver Brage. Alle rettigheder forbeholdes.", privacy: "Privatliv",
   },
   en: {
@@ -224,6 +226,8 @@ const T = {
       ], "deep"],
     ],
     answer: "Show answer", dec: ".", thou: ",",
+    video: "Video: From number to image",
+    videoNote: "The video follows the same path as the simulator: histogram, REX, rescaling, LUT and window. Language and level follow the buttons at the top.",
     back: "← Learn", foot: "© 2026 Oliver Brage. All rights reserved.", privacy: "Privacy",
   },
 };
@@ -583,6 +587,11 @@ function buildText() {
                            ["t-histnote", "histnote"], ["t-tasks", "tasks"], ["t-model", "model"]])
     document.getElementById(id).textContent = L[key];
   document.getElementById("model-text").innerHTML = withMath(L.modelText);
+  // the video in the chosen language and level; only reloaded when that choice changes
+  document.getElementById("t-video").textContent = L.video;
+  document.getElementById("t-videonote").textContent = L.videoNote;
+  const vid = document.getElementById("vid"), file = `video/histogram_${S.lang}_${S.level === "deep" ? "fordybelse" : "grund"}.mp4`;
+  if (vid.getAttribute("src") !== file) { vid.poster = `video/poster_${S.lang}.jpg`; vid.src = file; }
   document.getElementById("lvl-grund").textContent = L.grund;
   document.getElementById("lvl-deep").textContent = L.deep;
   document.getElementById("level-group").setAttribute("aria-label", S.lang === "da" ? "Niveau" : "Level");

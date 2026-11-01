@@ -1,1 +1,4 @@
 server-backup-*/
+
+# rendered videos: built in ~/projects/manim-studio and copied in by sync_videos.sh, not kept in git
+site/**/video/
