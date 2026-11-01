@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Video: from X-ray photon to number in the digital detector. Scintillator, fill factor, readout, ADC, bit depth, matrix and pixel.">
+  <meta name="theme-color" content="#0A0E18">
+  <title>From photon to number | Oliver Brage</title>
+  <link rel="stylesheet" href="../histogram/histogram.css">
+  <link rel="stylesheet" href="detector.css">
+</head>
+<body>
+<div class="wrap">
+  <a class="back" id="t-back" href="../../"></a>
+  <header>
+    <div>
+      <h1 id="t-title">Fra foton til tal</h1>
+      <p class="sub" id="t-sub"></p>
+    </div>
+    <div class="toggles">
+      <div class="seg" role="group" aria-label="Sprog / language">
+        <button id="lang-da" aria-pressed="true">Dansk</button><button id="lang-en" aria-pressed="false">English</button>
+      </div>
+      <div class="seg" role="group" id="level-group">
+        <button id="lvl-grund" aria-pressed="true"></button><button id="lvl-deep" aria-pressed="false"></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="video">
+    <video id="vid" controls preload="none" playsinline></video>
+    <p class="note" id="t-videonote"></p>
+  </section>
+
+  <section class="box chapters">
+    <h2 id="t-chapters"></h2>
+    <ol id="chapter-list"></ol>
+    <p class="note" id="t-next"></p>
+  </section>
+
+  <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
+</div>
+<script src="detector.js"></script>
+</body>
+</html>
