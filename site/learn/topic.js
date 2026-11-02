@@ -12,7 +12,12 @@ const SERIES = [
       da: { title: "Fra tal til billede", text: "Histogram, eksponeringsindeks (EI og REX), automatisk skalering, LUT og WW/WL. Simulatoren: skru på dosis og indblænding, og se hvorfor lysheden intet siger om dosis." },
       en: { title: "From number to image", text: "Histogram, exposure index (EI and REX), automatic rescaling, LUT and WW/WL. The simulator: change dose and collimation, and see why brightness says nothing about dose." } },
   ] },
-  { da: "Støj", en: "Noise", pages: [],
+  { da: "Støj", en: "Noise", pages: [
+    // draft: simulator only until video 2 exists and the owner has approved it
+    { path: "noise", tabs: ["simulator"], draft: true,
+      da: { title: "Støj, SNR og CNR", text: "Kvantestøj, SNR og CNR. Simulatoren: skru på dosis, kV, pixelstørrelse og detektor, og se hvilke detaljer der forsvinder i støjen." },
+      en: { title: "Noise, SNR and CNR", text: "Quantum noise, SNR and CNR. The simulator: change dose, kV, pixel size and detector, and see which details disappear in the noise." } },
+  ],
     soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
   { da: "Spredt stråling", en: "Scatter", pages: [
     // draft: shown only with ?draft=1 until the owner has approved the videos and the simulator

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Noise, SNR and CNR: a simulator with dose, kV, pixel size, detector and noise filter.">
+  <meta name="theme-color" content="#0A0E18">
+  <title>Noise | Oliver Brage</title>
+  <link rel="stylesheet" href="../histogram/histogram.css">
+  <link rel="stylesheet" href="../../topic.css">
+  <link rel="stylesheet" href="noise.css">
+</head>
+<body data-topic="noise">
+<div class="wrap">
+  <a class="back" id="t-back" href="../../"></a>
+  <header>
+    <div>
+      <h1 id="t-title">Støj, SNR og CNR</h1>
+      <p class="sub" id="t-sub"></p>
+    </div>
+    <div class="toggles">
+      <div class="seg" role="group" aria-label="Sprog / language">
+        <button id="lang-da" aria-pressed="true">Dansk</button><button id="lang-en" aria-pressed="false">English</button>
+      </div>
+      <div class="seg" role="group" id="level-group">
+        <button id="lvl-grund" aria-pressed="true"></button><button id="lvl-deep" aria-pressed="false"></button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Indhold"></nav>
+
+  <div data-tab="simulator">
+  <h2 class="simtitle" id="t-simtitle"></h2>
+  <div class="stage">
+    <div class="box controls">
+      <div id="controls" class="ctls"></div>
+      <div id="taskcard" class="taskcard"></div>
+    </div>
+    <div class="box">
+      <h2 id="t-curve"></h2>
+      <canvas id="curve"></canvas>
+      <h2 id="t-prof" class="mt"></h2>
+      <canvas id="prof"></canvas>
+      <p class="note" id="t-profnote"></p>
+    </div>
+    <div class="right">
+      <div class="box">
+        <h2 id="t-image"></h2>
+        <canvas id="img"></canvas>
+        <p class="note" id="t-imgnote"></p>
+      </div>
+      <div class="box readout" id="readout"></div>
+    </div>
+  </div>
+  <section class="tasks">
+    <h3 id="t-tasks"></h3>
+    <div id="task-list" class="tasks"></div>
+  </section>
+  <section class="model">
+    <details><summary id="t-model"></summary><div id="model-text"></div></details>
+  </section>
+  </div>
+
+  <nav class="series" id="series"></nav>
+
+  <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
+</div>
+<script src="../tex.js"></script>
+<script src="noise.js"></script>
+<script src="../../topic.js"></script>
+</body>
+</html>

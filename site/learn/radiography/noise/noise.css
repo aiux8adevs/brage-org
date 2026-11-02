@@ -1,0 +1,12 @@
+/* Noise page: the histogram page's look; only the canvases differ. */
+#curve { width: 100%; aspect-ratio: 1.6 / 1; display: block; }
+#prof { width: 100%; aspect-ratio: 3 / 1; display: block; }
+#img { width: 100%; aspect-ratio: 1 / 1; display: block; }
+@media (min-width: 1100px) and (min-height: 600px) {
+  .stage { grid-template-columns: 270px minmax(0, 1fr) minmax(0, 1.1fr); }
+  .stage .controls { order: 0; grid-column: auto; overflow-y: auto; }
+  .ctls { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+  #curve { aspect-ratio: auto; height: calc(45svh - 120px); }
+  #prof { aspect-ratio: auto; height: calc(25svh); }
+  #img { aspect-ratio: auto; height: calc(58svh - 120px); }
+}
