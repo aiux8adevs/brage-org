@@ -3,11 +3,15 @@
 #prof { width: 100%; aspect-ratio: 3 / 1; display: block; }
 #img { width: 100%; aspect-ratio: 1 / 1; display: block; }
 @media (min-width: 1100px) and (min-height: 600px) {
-  .stage { grid-template-columns: 270px minmax(0, 1fr) minmax(0, 1.1fr); }
+  /* the notes under the curves are long: let the stage grow instead of fixing it to the window height */
+  .stage { grid-template-columns: 270px minmax(0, 1fr) minmax(0, 1.1fr); height: auto !important; min-height: 0; }  /* overrides the fixed window-height layout from histogram.css and topic.css */
   .stage .controls { order: 0; grid-column: auto; overflow-y: auto; }
   .ctls { grid-template-columns: minmax(0, 1fr); gap: 9px; }
   #curve { aspect-ratio: auto; height: calc(45svh - 120px); }
   #prof { aspect-ratio: auto; height: calc(25svh); }
   #img { aspect-ratio: auto; height: calc(58svh - 120px); }
+  /* the columns may not be shorter than their text, so nothing runs under the task list */
+  .stage > *, .stage .right, .stage .right > .box { min-height: auto; }
 }
 #t-curvenote { margin-bottom: 16px; }
+.stage + section.tasks { margin-top: 28px; }
