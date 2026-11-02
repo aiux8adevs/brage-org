@@ -5,10 +5,11 @@
 
 const SERIES = [
   { da: "Det digitale billede", en: "The digital image", pages: [
-    { path: "detector", tabs: ["video", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "detektor",
+    // simulator approved 2026-11-02
+    { path: "detector", tabs: ["video", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "detektor",
       draftPodcast: [["detektor", { title: "From photon to number", minutes: 10 }]],
-      da: { title: "Fra foton til tal", text: "Hvordan røntgenfotonen bliver til et tal: scintillator, fill factor, udlæsning, ADC, bitdybde, matrix og pixel." },
-      en: { title: "From photon to number", text: "How the X-ray photon becomes a number: scintillator, fill factor, readout, ADC, bit depth, matrix and pixel." } },
+      da: { title: "Fra foton til tal", text: "Hvordan røntgenfotonen bliver til et tal: scintillator, fill factor, udlæsning, ADC, bitdybde, matrix og pixel. Simulatoren: vælg detektor, lagtykkelse, pixelstørrelse og bit." },
+      en: { title: "From photon to number", text: "How the X-ray photon becomes a number: scintillator, fill factor, readout, ADC, bit depth, matrix and pixel. The simulator: choose the detector, layer thickness, pixel size and bits." } },
     { path: "histogram", tabs: ["video", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "histogram",
       draftPodcast: [["histogram", { title: "From number to image", minutes: 10 }]],
       da: { title: "Fra tal til billede", text: "Histogram, eksponeringsindeks (EI og REX), automatisk skalering, LUT og WW/WL. Simulatoren: skru på dosis og indblænding, og se hvorfor lysheden intet siger om dosis." },
@@ -42,7 +43,13 @@ const SERIES = [
       da: { title: "Skarphed: fem måder skyggen snyder på", text: "Forstørrelse, formforvrængning, geometrisk uskarphed, bevægelsesuskarphed og overlejring. Flyt fokus, objekt og detektor." },
       en: { title: "Sharpness: five ways the shadow lies", text: "Magnification, shape distortion, focal spot blur, motion blur and superimposition. Move the focal spot, the object and the detector." } },
   ] },
-  { da: "Røntgenrøret", en: "The X-ray tube", pages: [],
+  { da: "Røntgenrøret", en: "The X-ray tube", pages: [
+    // draft until the owner approves: shown only with ?draft=1
+    { path: "tube", draft: true, tabs: ["video", "simulator", "handout"], draftTabs: ["video", "simulator", "handout"],
+      files: [["roer5a", { da: "5a Røret og strålen", en: "5a The tube and the beam" }], ["aec5b", { da: "5b Automatisk eksponering", en: "5b Automatic exposure control" }]],
+      da: { title: "Røntgenrøret", text: "Bremsestråling og karakteristisk stråling, spektret, heel-effekten, filtrering og automatisk eksponering (AEC). Simulatoren: skru på kV og filter, vend røret, og vælg ionkamre." },
+      en: { title: "The X-ray tube", text: "Bremsstrahlung and characteristic radiation, the spectrum, the heel effect, filtration and automatic exposure control (AEC). The simulator: change kV and filter, turn the tube, and choose chambers." } },
+  ],
     soon: { da: "Heel-effekt, filtrering og AEC. Under produktion.", en: "Heel effect, filtration and AEC. In production." } },
 ];
 

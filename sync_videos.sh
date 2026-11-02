@@ -20,6 +20,7 @@ live=(
 drafts=(
   "learn/radiography/shadow|4-skarphed:Uskarphed:uskarphed|"
   "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt,3b-rasteret:Raster3b:raster3b,3c-andre-veje:Tage3c:tage3c|parts"
+  "learn/radiography/tube|5a-roentgenroeret:Roer5a:roer5a,5b-automatisk-eksponering:Aec5b:aec5b|parts"
 )
 pages=("${live[@]}")
 [[ "${1:-}" == "--drafts" ]] && pages+=("${drafts[@]}")
