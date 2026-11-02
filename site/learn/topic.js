@@ -22,7 +22,7 @@ const SERIES = [
   { da: "Spredt stråling", en: "Scatter", pages: [
     // simulator live (approved 2026-11-02); videos, podcast and handout stay drafts until approved
     { path: "scatter", tabs: ["simulator"], draftTabs: ["video", "podcast", "simulator", "handout"],
-      podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 11 }]],
+      podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 9 }]],
       files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }],
               ["tage3c", { da: "3c Andre veje", en: "3c Other ways" }]],
       da: { title: "Spredt stråling", text: "Tågen over billedet: Compton-spredning, SPR, indblænding, raster og Bucky-faktor, luftspalte, kompression og virtuelt raster. Simulatoren: skru selv på felt, tykkelse, kV og raster." },
