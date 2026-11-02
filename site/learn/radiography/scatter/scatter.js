@@ -71,6 +71,9 @@ Det virtuelle raster trækker 85 % af tågens gennemsnit fra, men ikke den kvant
       ["Luftspalte", [
         ["Luftspalte i stedet", "Fjern rasteret og sæt luftspalten til 15 cm. Sammenlign med 8:1 raster. Hvad er prisen?", "Luftspalten fjerner en del af spredningen uden bly: de skrå, spredte fotoner rammer ved siden af detektoren, mens de primære stadig rammer. Prisen er forstørrelse og geometrisk uskarphed, og i praksis øges afstand eller mAs ofte."],
       ]],
+      ["Kompression", [
+        ["Pres vævet sammen", "Nulstil, og sæt tykkelsen til 24 cm. Pres den så ned til 18 cm, som når en kompressionsplade eller et bælte presser vævet sammen. Hvad sker der med SPR, kontrast og dosis?", "SPR falder fra 4,5 til 3,4, og kontrasten stiger, fordi strålen går gennem mindre væv, hvor den kan spredes. Samtidig falder dosis til under det halve, fordi flere primære fotoner kommer igennem. Kompression bruges især i mammografi, hvor den også spreder vævet ud, så mindre overlapper."],
+      ]],
       ["Virtuelt raster", [
         ["Regn tågen væk", "Nulstil, og slå virtuelt raster til. Sammenlign kontrast og CNR med 12:1 raster.", "Kontrasten kommer næsten op på rasterets niveau uden ekstra dosis. Men CNR stiger ikke, fordi kvantestøjen fra de spredte fotoner bliver. De bar ingen information, kun udsving."],
         ["Begge dele?", "Slå både 12:1 og virtuelt raster til. Hvad sker der?", "Kontrasten stiger lidt mere, men CNR bestemmes af rasteret. Softwaren kan fjerne tågen, men ikke den kvantestøj, de spredte fotoner allerede har lagt i billedet."],
@@ -138,6 +141,9 @@ The virtual grid subtracts 85 % of the fog's average, but not the quantum noise 
       ]],
       ["Air gap", [
         ["An air gap instead", "Remove the grid and set the air gap to 15 cm. Compare with an 8:1 grid. What is the price?", "The air gap removes some of the scatter without lead: the slanted scattered photons land beside the detector, while the primary photons still hit it. The price is magnification and focal spot blur, and in practice the distance or the mAs is often increased."],
+      ]],
+      ["Compression", [
+        ["Press the tissue together", "Reset, and set the thickness to 24 cm. Then press it down to 18 cm, as when a compression paddle or band presses the tissue together. What happens to the SPR, the contrast and the dose?", "The SPR falls from 4.5 to 3.4, and the contrast rises, because the beam passes through less tissue to scatter in. At the same time the dose falls to less than half, because more primary photons get through. Compression is used mainly in mammography, where it also spreads the tissue out so less of it overlaps."],
       ]],
       ["Virtual grid", [
         ["Calculate the fog away", "Reset, and switch on the virtual grid. Compare contrast and CNR with a 12:1 grid.", "The contrast comes close to the grid's without extra dose. But the CNR does not rise, because the quantum noise from the scattered photons stays. They carried no information, only fluctuation."],

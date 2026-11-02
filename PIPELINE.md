@@ -27,6 +27,8 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 8 | Danish TTS, 3a | 3a da | s1_opslug (heard "Knorren"); s3_tre re-taken, now "300 mod 250" |
 | 9 | ML folder grouping | manim-studio organize_media.py, CATALOG | my guess at course order |
 | 10 | Podcasts 1a, 1b, 2, 3b, 3c, 4 (EN) | each topic page ?draft=1#podcast; radiografi/<topic>/podcast_en.mp3 | 6–9 min each, all chunks pass Whisper |
+| 11 | Simulator 1a Fra foton til tal | detector/?draft=1#simulator | reviewed for physics; 13 tasks |
+| 12 | Scatter simulator: compression task | scatter/?draft=1#simulator | goes live with 3c or on its own |
 
 ## Open decisions
 - How "Brage" should sound: episode uses "Brah-eh"; samples Brah-eh / Braa-uh / Brawa in manim-studio media/podcast/prove/brage/ for the owner to pick.

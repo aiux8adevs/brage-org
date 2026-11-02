@@ -4,3 +4,18 @@
 .chapters { max-width: 1100px; }
 .chapters ol { margin: 0; padding-left: 22px; line-height: 1.7; }
 .chapters a { color: inherit; }
+
+/* the simulator: the noise page's layout */
+#chain { width: 100%; aspect-ratio: 2.3 / 1; display: block; }
+#wedge { width: 100%; aspect-ratio: 4 / 1; display: block; }
+#phantom { width: 100%; aspect-ratio: 3.2 / 1; display: block; }
+#prof { width: 100%; aspect-ratio: 5 / 1; display: block; }
+.box h2.mt { margin-top: 16px; }
+#t-chainnote, #t-phantomnote { margin-bottom: 4px; }
+@media (min-width: 1100px) and (min-height: 600px) {
+  .stage { grid-template-columns: 270px minmax(0, 1fr) minmax(0, 1.1fr); height: auto !important; min-height: 0; }
+  .stage .controls { order: 0; grid-column: auto; overflow-y: auto; }
+  .ctls { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+  .stage > *, .stage .right, .stage .right > .box { min-height: auto; }
+}
+.stage + section.tasks { margin-top: 28px; }

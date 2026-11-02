@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Video: from X-ray photon to number in the digital detector. Scintillator, fill factor, readout, ADC, bit depth, matrix and pixel.">
+  <meta name="description" content="From X-ray photon to number in the digital detector: a video and a simulator with scintillator, fill factor, bit depth and pixel size.">
   <meta name="theme-color" content="#0A0E18">
   <title>From photon to number | Oliver Brage</title>
   <link rel="stylesheet" href="../histogram/histogram.css">
-  <link rel="stylesheet" href="detector.css">
-  <link rel="stylesheet" href="../../topic.css">
+  <link rel="stylesheet" href="../../topic.css?v=3">
+  <link rel="stylesheet" href="detector.css?v=2">
 </head>
 <body data-topic="detector">
 <div class="wrap">
@@ -30,7 +30,7 @@
 
   <nav class="tabs" id="tabs" aria-label="Indhold"></nav>
 
-  <div data-tab="video">
+  <div data-tab="video" hidden>
   <section class="video">
     <video id="vid" controls preload="none" playsinline></video>
     <p class="note" id="t-videonote"></p>
@@ -42,13 +42,50 @@
   </section>
   </div>
 
+  <div data-tab="simulator" hidden>
+  <h2 class="simtitle" id="t-simtitle"></h2>
+  <div class="stage">
+    <div class="box controls">
+      <div id="controls" class="ctls"></div>
+      <div id="taskcard" class="taskcard"></div>
+    </div>
+    <div class="box">
+      <h2 id="t-chain"></h2>
+      <canvas id="chain"></canvas>
+      <p class="note" id="t-chainnote"></p>
+      <h2 id="t-wedge" class="mt"></h2>
+      <canvas id="wedge"></canvas>
+      <p class="note" id="t-wedgenote"></p>
+    </div>
+    <div class="right">
+      <div class="box">
+        <h2 id="t-phantom"></h2>
+        <canvas id="phantom"></canvas>
+        <p class="note" id="t-phantomnote"></p>
+        <h2 id="t-prof" class="mt"></h2>
+        <canvas id="prof"></canvas>
+        <p class="note" id="t-profnote"></p>
+      </div>
+      <div class="box readout" id="readout"></div>
+    </div>
+  </div>
+  <section class="tasks">
+    <h3 id="t-tasks"></h3>
+    <div id="task-list" class="tasks"></div>
+  </section>
+  <section class="model">
+    <details><summary id="t-model"></summary><div id="model-text"></div></details>
+  </section>
+  </div>
+
   <section class="box" data-tab="handout" id="handout-box" hidden></section>
 
   <nav class="series" id="series"></nav>
 
   <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
 </div>
-<script src="detector.js"></script>
-<script src="../../topic.js"></script>
+<script src="../tex.js"></script>
+<script src="detector.js?v=2"></script>
+<script src="../../topic.js?v=5"></script>
 </body>
 </html>

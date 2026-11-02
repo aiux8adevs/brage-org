@@ -5,7 +5,7 @@
 
 const SERIES = [
   { da: "Det digitale billede", en: "The digital image", pages: [
-    { path: "detector", tabs: ["video", "handout"], draftTabs: ["video", "podcast", "handout"], file: "detektor",
+    { path: "detector", tabs: ["video", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "detektor",
       draftPodcast: [["detektor", { title: "From photon to number", minutes: 10 }]],
       da: { title: "Fra foton til tal", text: "Hvordan røntgenfotonen bliver til et tal: scintillator, fill factor, udlæsning, ADC, bitdybde, matrix og pixel." },
       en: { title: "From photon to number", text: "How the X-ray photon becomes a number: scintillator, fill factor, readout, ADC, bit depth, matrix and pixel." } },
