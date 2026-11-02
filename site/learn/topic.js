@@ -21,8 +21,8 @@ const SERIES = [
     soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
   { da: "Spredt stråling", en: "Scatter", pages: [
     // simulator live (approved 2026-11-02); videos, podcast and handout stay drafts until approved
-    // video 3a approved 2026-11-02; 3b, 3c and the podcast stay drafts (draftFiles / draftTabs)
-    { path: "scatter", tabs: ["video", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"],
+    // video 3a and its podcast approved 2026-11-02; 3b and 3c stay drafts (draftFiles)
+    { path: "scatter", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"],
       podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 9 }]],
       files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }]],
       draftFiles: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }],
