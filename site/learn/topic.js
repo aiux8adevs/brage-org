@@ -14,11 +14,18 @@ const SERIES = [
   ] },
   { da: "Støj", en: "Noise", pages: [],
     soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
-  { da: "Spredt stråling", en: "Scatter", pages: [],
+  { da: "Spredt stråling", en: "Scatter", pages: [
+    // draft: shown only with ?draft=1 until the owner has approved the videos and the simulator
+    { path: "scatter", tabs: ["video", "simulator", "handout"], draft: true,
+      files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }],
+              ["tage3c", { da: "3c Andre veje", en: "3c Other ways" }]],
+      da: { title: "Spredt stråling", text: "Tågen over billedet: Compton-spredning, SPR, indblænding, raster og Bucky-faktor, luftspalte, kompression og virtuelt raster. Simulatoren: skru selv på felt, tykkelse, kV og raster." },
+      en: { title: "Scatter", text: "The fog over the image: Compton scatter, SPR, collimation, grids and the Bucky factor, air gap, compression and virtual grids. The simulator: change field, thickness, kV and grid yourself." } },
+  ],
     soon: { da: "Spredt stråling, raster, luftspalte, kompression og indblænding. Under produktion.", en: "Scatter, grids, air gap, compression and collimation. In production." } },
   { da: "Skarphed", en: "Sharpness", pages: [
     // the video is added to tabs once it is approved
-    { path: "shadow", tabs: ["simulator"], file: "uskarphed",
+    { path: "shadow", tabs: ["simulator"], draftTabs: ["video", "simulator", "handout"], file: "uskarphed",
       da: { title: "Skarphed: fem måder skyggen snyder på", text: "Forstørrelse, formforvrængning, geometrisk uskarphed, bevægelsesuskarphed og overlejring. Flyt fokus, objekt og detektor." },
       en: { title: "Sharpness: five ways the shadow lies", text: "Magnification, shape distortion, focal spot blur, motion blur and superimposition. Move the focal spot, the object and the detector." } },
   ] },
@@ -39,6 +46,9 @@ const WORDS = {
 
 const lang = () => (document.documentElement.lang === "da" ? "da" : "en");
 const level = () => new URLSearchParams(location.search).get("level") === "deep" ? "&level=deep" : "";
+const DRAFT = new URLSearchParams(location.search).get("draft") === "1";
+for (const g of SERIES) for (const p of g.pages) if (DRAFT && p.draftTabs) p.tabs = p.draftTabs;
+for (const g of SERIES) g.pages = g.pages.filter(p => DRAFT || !p.draft || p.path === document.body.dataset.topic);
 const pages = SERIES.flatMap(g => g.pages);
 
 // ---- the learn overview: one group per topic, in course order ----
@@ -46,10 +56,10 @@ function drawOverview(box) {
   const L = lang(), W = WORDS[L];
   box.innerHTML = SERIES.map((g, i) => {
     const cards = g.pages.map(p => `
-      <a class="card sim-card" href="radiography/${p.path}/?lang=${L}">
+      <a class="card sim-card" href="radiography/${p.path}/?lang=${L}${DRAFT ? "&draft=1" : ""}">
         <span class="kind">${p.tabs.map(t => W.kinds[t]).join(" · ")}</span>
         <h3>${p[L].title}</h3><p class="muted">${p[L].text}</p><span class="go">${W.open}</span></a>`).join("");
-    const soon = g.soon ? `<div class="card sim-card soon"><span class="kind">${W.soon}</span><p>${g.soon[L]}</p></div>` : "";
+    const soon = g.soon && !g.pages.length ? `<div class="card sim-card soon"><span class="kind">${W.soon}</span><p>${g.soon[L]}</p></div>` : "";
     return `<div class="topic-group"><h3 class="topic-head"><span>${i + 1}</span> ${g[L]}</h3>
       <div class="grid-3 track">${cards}${soon}</div></div>`;
   }).join("");
@@ -73,8 +83,9 @@ function drawTopic() {
   const ho = document.getElementById("handout-box");
   if (ho) {
     const other = L === "da" ? "en" : "da";
-    ho.innerHTML = `<p><a class="pdf" href="video/${here.file}_${L}.pdf">${W.pdf}</a></p>
-      <p class="note">${W.pdfNote}</p><p class="note"><a href="video/${here.file}_${other}.pdf">${W.pdfOther}</a></p>`;
+    const files = here.files || [[here.file, null]];
+    ho.innerHTML = files.map(([f, name]) => `<p><a class="pdf" href="video/${f}_${L}.pdf">${name ? name[L] + ": " : ""}${W.pdf}</a>
+      · <a href="video/${f}_${other}.pdf">${W.pdfOther}</a></p>`).join("") + `<p class="note">${W.pdfNote}</p>`;
   }
   const i = pages.indexOf(here), prev = pages[i - 1], next = pages[i + 1];
   const link = (p, cls, word) => p ? `<a class="${cls}" href="../${p.path}/?lang=${L}${level()}"><small>${word}</small>${p[L].title}</a>` : "<span></span>";

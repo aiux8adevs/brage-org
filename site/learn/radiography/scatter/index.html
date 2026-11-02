@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Scatter radiation: videos and a simulator with field size, thickness, kV, grid, air gap and virtual grid.">
+  <meta name="theme-color" content="#0A0E18">
+  <title>Scatter | Oliver Brage</title>
+  <link rel="stylesheet" href="../histogram/histogram.css">
+  <link rel="stylesheet" href="../../topic.css">
+  <link rel="stylesheet" href="scatter.css">
+</head>
+<body data-topic="scatter">
+<div class="wrap">
+  <a class="back" id="t-back" href="../../"></a>
+  <header>
+    <div>
+      <h1 id="t-title">Spredt stråling</h1>
+      <p class="sub" id="t-sub"></p>
+    </div>
+    <div class="toggles">
+      <div class="seg" role="group" aria-label="Sprog / language">
+        <button id="lang-da" aria-pressed="true">Dansk</button><button id="lang-en" aria-pressed="false">English</button>
+      </div>
+      <div class="seg" role="group" id="level-group">
+        <button id="lvl-grund" aria-pressed="true"></button><button id="lvl-deep" aria-pressed="false"></button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Indhold"></nav>
+
+  <div data-tab="video">
+    <section class="video">
+      <div class="seg parts" role="group" id="parts"></div>
+      <video id="vid" controls preload="none" playsinline></video>
+      <p class="note" id="t-partnote"></p>
+    </section>
+  </div>
+
+  <div data-tab="simulator" hidden>
+  <h2 class="simtitle" id="t-simtitle"></h2>
+  <div class="stage">
+    <div class="box controls">
+      <div id="controls" class="ctls"></div>
+      <div id="taskcard" class="taskcard"></div>
+    </div>
+    <div class="box">
+      <h2 id="t-geo"></h2>
+      <canvas id="geo"></canvas>
+      <h2 id="t-prof" class="mt"></h2>
+      <canvas id="prof"></canvas>
+      <p class="note" id="t-profnote"></p>
+    </div>
+    <div class="right">
+      <div class="box">
+        <h2 id="t-image"></h2>
+        <canvas id="img"></canvas>
+        <p class="note" id="t-imgnote"></p>
+      </div>
+      <div class="box readout" id="readout"></div>
+    </div>
+  </div>
+  <section class="tasks">
+    <h3 id="t-tasks"></h3>
+    <div id="task-list" class="tasks"></div>
+  </section>
+  <section class="model">
+    <details><summary id="t-model"></summary><div id="model-text"></div></details>
+  </section>
+  </div>
+
+  <section class="box" data-tab="handout" id="handout-box" hidden></section>
+
+  <nav class="series" id="series"></nav>
+
+  <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
+</div>
+<script src="../tex.js"></script>
+<script src="scatter.js"></script>
+<script src="../../topic.js"></script>
+</body>
+</html>

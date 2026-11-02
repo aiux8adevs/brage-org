@@ -622,6 +622,12 @@ function buildText() {
                            ["t-scale", "scale"], ["t-truth", "truth"], ["t-tasks", "tasks"], ["t-model", "model"]])
     document.getElementById(id).textContent = L[key];
   document.getElementById("model-text").innerHTML = withMath(L.modelText);
+  // the video in the chosen language and level; only reloaded when that choice changes
+  document.getElementById("t-videonote").textContent = S.lang === "da"
+    ? "Video 4 om skarphed: forstørrelse, formforvrængning, geometrisk uskarphed, bevægelse og overlejring. Se den først, og arbejd så med simulatoren."
+    : "Video 4 on sharpness: magnification, shape distortion, focal spot blur, motion and superimposition. Watch it first, then work with the simulator.";
+  const vid = document.getElementById("vid"), file = `video/uskarphed_${S.lang}_${S.level === "deep" ? "fordybelse" : "grund"}.mp4`;
+  if (vid.getAttribute("src") !== file) { vid.poster = `video/poster_${S.lang}.jpg`; vid.src = file; }
   document.getElementById("lvl-grund").textContent = L.grund;
   document.getElementById("lvl-deep").textContent = L.deep;
   document.getElementById("level-group").setAttribute("aria-label", S.lang === "da" ? "Niveau" : "Level");
