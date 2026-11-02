@@ -12,15 +12,15 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 1b Fra tal til billede: video (4) + simulator | 2026-11-01, outro without tool credit 2026-11-02 |
 | 4 Skarphed: simulator | before 2026-11-01 |
 | 3 Spredt stråling: simulator (air gap fixed) | 2026-11-02 |
+| 3a Spredt stråling: video (4) + PDF | 2026-11-02 |
 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
 |---|---|---|---|
-| 1 | Video 3a Spredt stråling (4) | radiografi/3a-spredt-straaling | layout fixes in (SPR formula, summary table) |
 | 2 | Video 3b Rasteret (4) | radiografi/3b-rasteret | listen: g3_bucky (Whisper heard "Borky") |
 | 3 | Video 3c Andre veje (4) | radiografi/3c-andre-veje | listen: c2_raster (heard "reststof") |
 | 4 | Video 4 Skarphed (4) | radiografi/4-skarphed | your fixes: magnification per end, zoom marker, title |
-| 5 | Noise simulator | localhost:8765/learn/radiography/noise/?draft=1 | testing; open: slider drag (which browser?) |
+| 5 | Noise simulator | localhost:8765/learn/radiography/noise/?draft=1 | testing; mAs slider in Chrome: retest after the per-frame redraw fix |
 | 6 | Podcast 3a (SoulX, conversational, 9:17) | radiografi/3a-spredt-straaling/podcast_en.mp3 | script reviewed twice; all 9 parts pass Whisper; player: localhost:8765/learn/radiography/scatter/?draft=1#podcast |
 | 7 | Six [tjek] numbers | manim-studio storyboards/spredt_straaling_raster/03_draft.md | Bucky 2–6, 25–45 lines/cm, >10 cm and >60 kV, ... |
 | 8 | Danish TTS, 3a | 3a da | s1_opslug (heard "Knorren"); s3_tre re-taken, now "300 mod 250" |

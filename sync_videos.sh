@@ -14,6 +14,7 @@ R=~/projects/manim-studio/media/brage-org/radiografi   # one folder per topic: v
 live=(
   "learn/radiography/detector|1a-fra-foton-til-tal:Detektor:detektor|"
   "learn/radiography/histogram|1b-fra-tal-til-billede:Histogram:histogram|"
+  "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt|parts"
 )
 drafts=(
   "learn/radiography/shadow|4-skarphed:Uskarphed:uskarphed|"

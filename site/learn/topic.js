@@ -21,9 +21,11 @@ const SERIES = [
     soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
   { da: "Spredt stråling", en: "Scatter", pages: [
     // simulator live (approved 2026-11-02); videos, podcast and handout stay drafts until approved
-    { path: "scatter", tabs: ["simulator"], draftTabs: ["video", "podcast", "simulator", "handout"],
+    // video 3a approved 2026-11-02; 3b, 3c and the podcast stay drafts (draftFiles / draftTabs)
+    { path: "scatter", tabs: ["video", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"],
       podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 9 }]],
-      files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }],
+      files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }]],
+      draftFiles: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }],
               ["tage3c", { da: "3c Andre veje", en: "3c Other ways" }]],
       da: { title: "Spredt stråling", text: "Tågen over billedet: Compton-spredning, SPR, indblænding, raster og Bucky-faktor, luftspalte, kompression og virtuelt raster. Simulatoren: skru selv på felt, tykkelse, kV og raster." },
       en: { title: "Scatter", text: "The fog over the image: Compton scatter, SPR, collimation, grids and the Bucky factor, air gap, compression and virtual grids. The simulator: change field, thickness, kV and grid yourself." } },
@@ -57,7 +59,10 @@ const WORDS = {
 const lang = () => (document.documentElement.lang === "da" ? "da" : "en");
 const level = () => new URLSearchParams(location.search).get("level") === "deep" ? "&level=deep" : "";
 const DRAFT = new URLSearchParams(location.search).get("draft") === "1";
-for (const g of SERIES) for (const p of g.pages) if (DRAFT && p.draftTabs) p.tabs = p.draftTabs;
+for (const g of SERIES) for (const p of g.pages) {
+  if (DRAFT && p.draftTabs) p.tabs = p.draftTabs;
+  if (DRAFT && p.draftFiles) p.files = p.draftFiles;
+}
 for (const g of SERIES) g.pages = g.pages.filter(p => DRAFT || !p.draft || p.path === document.body.dataset.topic);
 const pages = SERIES.flatMap(g => g.pages);
 
@@ -121,7 +126,7 @@ function drawTopic() {
     ho.innerHTML = files.map(([f, name]) => `<p><a class="pdf" href="video/${f}_${L}.pdf">${name ? name[L] + ": " : ""}${W.pdf}</a>
       · <a href="video/${f}_${other}.pdf">${W.pdfOther}</a></p>`).join("") + `<p class="note">${W.pdfNote}</p>`;
   }
-  if (here.podcast) drawPodcast(here, L, W);
+  if (here.podcast && here.tabs.includes("podcast")) drawPodcast(here, L, W);
   const i = pages.indexOf(here), prev = pages[i - 1], next = pages[i + 1];
   const link = (p, cls, word) => p ? `<a class="${cls}" href="../${p.path}/?lang=${L}${level()}"><small>${word}</small>${p[L].title}</a>` : "<span></span>";
   document.getElementById("series").innerHTML = link(prev, "prev", "← " + W.prev) + link(next, "next", W.next + " →");
