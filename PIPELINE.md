@@ -21,13 +21,13 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | Spredt stråling: compression task in the simulator | 2026-11-02 |
 | 1a and 1b: podcasts (EN) | 2026-11-02 |
 | 2 Støj: podcast (EN) | 2026-11-02 |
-| 4 Skarphed: podcast (EN), before the video | 2026-11-02 |
+| 4 Skarphed: podcast (EN) | 2026-11-02 |
+| 4 Skarphed: video (4) + PDF | 2026-11-02 |
 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
 |---|---|---|---|
 | 3 | Video 3c Andre veje (4) | radiografi/3c-andre-veje | listen: c2_raster (heard "reststof") |
-| 4 | Video 4 Skarphed (4) | radiografi/4-skarphed | your fixes: magnification per end, zoom marker, title |
 | 7 | Six [tjek] numbers | manim-studio storyboards/spredt_straaling_raster/03_draft.md | Bucky 2–6, 25–45 lines/cm, >10 cm and >60 kV, ... |
 | 8 | Danish TTS, 3a | 3a da | s1_opslug (heard "Knorren"); s3_tre re-taken, now "300 mod 250" |
 | 9 | ML folder grouping | manim-studio organize_media.py, CATALOG | my guess at course order |
