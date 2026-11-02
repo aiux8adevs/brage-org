@@ -17,12 +17,13 @@ const REFS = { field: 43, thick: 20, kv: 80, grid: "none", gap: 0, virt: "off" }
 
 const T = {
   da: {
-    title: "Spredt stråling", sub: "Tågen over billedet. En video om, hvor spredningen kommer fra, og en simulator, hvor du selv kan skrue på felt, tykkelse, kV, raster, luftspalte og virtuelt raster. Del 2 og 3 om rasteret og andre veje kommer.",
+    title: "Spredt stråling", sub: "Tågen over billedet. Videoer om, hvor spredningen kommer fra, og om rasteret, og en simulator, hvor du selv kan skrue på felt, tykkelse, kV, raster, luftspalte og virtuelt raster. Del 3 om andre veje kommer.",
     simTitle: "Simulator: Spredt stråling og raster",
     grund: "Grund", deep: "Fordybelse", back: "← Læring",
     parts: ["1 Spredt stråling", "2 Rasteret", "3 Andre veje"],
     partNote: "Se de tre dele i rækkefølge. Hver del er cirka fem til otte minutter.",
     partNoteOne: "Del 2 om rasteret og del 3 om andre veje kommer snart.",
+    partNoteSome: "Se delene i rækkefølge. Hver del er cirka fem til otte minutter. Del 3 om andre veje kommer snart.",
     geo: "Opstilling, set fra siden", prof: "Signal på detektoren", image: "Det detektoren så",
     profNote: "Cyan: primære fotoner. Rød: spredte fotoner, der nåede detektoren.",
     hit: (h, n) => `${h} af ${n} tegnede spredte fotoner rammer detektoren. Stiplet: forbi detektoren.`,
@@ -84,12 +85,13 @@ Det virtuelle raster trækker 85 % af tågens gennemsnit fra, men ikke dens stø
     ],
   },
   en: {
-    title: "Scatter", sub: "The fog over the image. A video on where scatter comes from, and a simulator where you can change field size, thickness, kV, grid, air gap and virtual grid. Parts 2 and 3, on the grid and other ways, are on the way.",
+    title: "Scatter", sub: "The fog over the image. Videos on where scatter comes from and on the grid, and a simulator where you can change field size, thickness, kV, grid, air gap and virtual grid. Part 3, on other ways, is on the way.",
     simTitle: "Simulator: Scatter and grids",
     grund: "Basic", deep: "Deeper level", back: "← Learn",
     parts: ["1 Scatter", "2 The grid", "3 Other ways"],
     partNote: "Watch the three parts in order. Each is about five to eight minutes.",
     partNoteOne: "Part 2 on the grid and part 3 on other ways are coming soon.",
+    partNoteSome: "Watch the parts in order. Each is about five to eight minutes. Part 3 on other ways is coming soon.",
     geo: "Set-up, seen from the side", prof: "Signal on the detector", image: "What the detector saw",
     profNote: "Cyan: primary photons. Red: scattered photons that reached the detector.",
     hit: (h, n) => `${h} of ${n} drawn scattered photons reach the detector. Dashed: beside the detector.`,
@@ -355,7 +357,7 @@ function buildControls() {
 // ---- text, tasks, video -----------------------------------------------------------
 const PART_FILES = ["spredt", "raster3b", "tage3c"];
 // the parts the owner has approved; with ?draft=1 all of them are shown
-const LIVE_PARTS = 1;
+const LIVE_PARTS = 2;
 const nParts = () => new URLSearchParams(location.search).get("draft") === "1" ? PART_FILES.length : LIVE_PARTS;
 const groups = () => T[S.lang].groups.filter(g => g[2] !== "deep" || S.level === "deep");
 let task = 0;
@@ -379,7 +381,7 @@ function buildVideo() {
   document.getElementById("parts").innerHTML = parts.length < 2 ? "" :
     parts.map((p, i) => `<button data-p="${i}" aria-pressed="${S.part === i}">${p}</button>`).join("");
   document.querySelectorAll("#parts button").forEach(b => b.onclick = () => { S.part = +b.dataset.p; buildVideo(); });
-  document.getElementById("t-partnote").textContent = parts.length < 2 ? L.partNoteOne : L.partNote;
+  document.getElementById("t-partnote").textContent = parts.length < 2 ? L.partNoteOne : parts.length < PART_FILES.length ? L.partNoteSome : L.partNote;
   const vid = document.getElementById("vid"), file = `video/${PART_FILES[S.part]}_${S.lang}_${S.level === "deep" ? "fordybelse" : "grund"}.mp4`;
   if (vid.getAttribute("src") !== file) { vid.poster = `video/poster_${PART_FILES[S.part]}_${S.lang}.jpg`; vid.src = file; }
 }

@@ -14,11 +14,11 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 3 Spredt stråling: simulator (air gap fixed) | 2026-11-02 |
 | 3a Spredt stråling: video (4) + PDF | 2026-11-02 |
 | 3a Spredt stråling: podcast (EN, 9:20) | 2026-11-02 |
+| 3b Rasteret: video (4) + PDF | 2026-11-02 |
 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
 |---|---|---|---|
-| 2 | Video 3b Rasteret (4) | radiografi/3b-rasteret | fixed after your EN-deep review (lead, moiré, strip lean, tilted grid, cut-off error name); ready to re-review. Listen: g3_bucky (DA) |
 | 3 | Video 3c Andre veje (4) | radiografi/3c-andre-veje | listen: c2_raster (heard "reststof") |
 | 4 | Video 4 Skarphed (4) | radiografi/4-skarphed | your fixes: magnification per end, zoom marker, title |
 | 5 | Noise simulator | localhost:8765/learn/radiography/noise/?draft=1 | testing; mAs slider in Chrome: retest after the per-frame redraw fix |
@@ -38,8 +38,10 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 `site/learn/topic.js` (draftTabs to tabs), and a targeted upload of that page (not the whole site:
 `deploy.sh` would also upload drafts).
 
+## In production (deadline)
+- **Støj (UV2), needed 2026-11-04**: video (storyboard first) + the noise simulator (draft, in testing).
+
 ## Not started / later
-- Video 2 Støj (UV2): only the simulator exists. The series order needs it between 1b and 3a.
 - UV5 Røntgenrøret: heel effect, filtration, AEC (video + simulator).
 - Podcasts 3b (Ben expert) and 3c (Amy expert), once 3a is approved.
 - Possibly warmer host voices designed with Qwen3-TTS.

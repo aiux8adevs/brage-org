@@ -21,10 +21,10 @@ const SERIES = [
     soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
   { da: "Spredt stråling", en: "Scatter", pages: [
     // simulator live (approved 2026-11-02); videos, podcast and handout stay drafts until approved
-    // video 3a and its podcast approved 2026-11-02; 3b and 3c stay drafts (draftFiles)
+    // 3a with its podcast and 3b approved 2026-11-02; 3c stays a draft (draftFiles)
     { path: "scatter", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"],
       podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 9 }]],
-      files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }]],
+      files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }]],
       draftFiles: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }],
               ["tage3c", { da: "3c Andre veje", en: "3c Other ways" }]],
       da: { title: "Spredt stråling", text: "Tågen over billedet: Compton-spredning, SPR, indblænding, raster og Bucky-faktor, luftspalte, kompression og virtuelt raster. Simulatoren: skru selv på felt, tykkelse, kV og raster." },
