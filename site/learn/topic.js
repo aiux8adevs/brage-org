@@ -5,13 +5,14 @@
 
 const SERIES = [
   { da: "Det digitale billede", en: "The digital image", pages: [
-    // simulator approved 2026-11-02
-    { path: "detector", tabs: ["video", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "detektor",
-      draftPodcast: [["detektor", { title: "From photon to number", minutes: 10 }]],
+    // simulator and podcast approved 2026-11-02
+    { path: "detector", tabs: ["video", "podcast", "simulator", "handout"], file: "detektor",
+      podcast: [["detektor", { title: "From photon to number", minutes: 9 }]],
       da: { title: "Fra foton til tal", text: "Hvordan røntgenfotonen bliver til et tal: scintillator, fill factor, udlæsning, ADC, bitdybde, matrix og pixel. Simulatoren: vælg detektor, lagtykkelse, pixelstørrelse og bit." },
       en: { title: "From photon to number", text: "How the X-ray photon becomes a number: scintillator, fill factor, readout, ADC, bit depth, matrix and pixel. The simulator: choose the detector, layer thickness, pixel size and bits." } },
-    { path: "histogram", tabs: ["video", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "histogram",
-      draftPodcast: [["histogram", { title: "From number to image", minutes: 10 }]],
+    // podcast approved 2026-11-02
+    { path: "histogram", tabs: ["video", "podcast", "simulator", "handout"], file: "histogram",
+      podcast: [["histogram", { title: "From number to image", minutes: 8 }]],
       da: { title: "Fra tal til billede", text: "Histogram, eksponeringsindeks (EI og REX), automatisk skalering, LUT og WW/WL. Simulatoren: skru på dosis og indblænding, og se hvorfor lysheden intet siger om dosis." },
       en: { title: "From number to image", text: "Histogram, exposure index (EI and REX), automatic rescaling, LUT and WW/WL. The simulator: change dose and collimation, and see why brightness says nothing about dose." } },
   ] },
