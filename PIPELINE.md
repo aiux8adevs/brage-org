@@ -17,7 +17,7 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
 |---|---|---|---|
-| 2 | Video 3b Rasteret (4) | radiografi/3b-rasteret | listen: g3_bucky (Whisper heard "Borky") |
+| 2 | Video 3b Rasteret (4) | radiografi/3b-rasteret | reviewed EN deep 2026-11-02: lead pronounced as metal, moiré line, focused strips lean the right way, tilted grid rotates; re-rendering. Listen: g3_bucky (DA) |
 | 3 | Video 3c Andre veje (4) | radiografi/3c-andre-veje | listen: c2_raster (heard "reststof") |
 | 4 | Video 4 Skarphed (4) | radiografi/4-skarphed | your fixes: magnification per end, zoom marker, title |
 | 5 | Noise simulator | localhost:8765/learn/radiography/noise/?draft=1 | testing; mAs slider in Chrome: retest after the per-frame redraw fix |
