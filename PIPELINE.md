@@ -26,6 +26,7 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 7 | Six [tjek] numbers | manim-studio storyboards/spredt_straaling_raster/03_draft.md | Bucky 2–6, 25–45 lines/cm, >10 cm and >60 kV, ... |
 | 8 | Danish TTS, 3a | 3a da | s1_opslug (heard "Knorren"); s3_tre re-taken, now "300 mod 250" |
 | 9 | ML folder grouping | manim-studio organize_media.py, CATALOG | my guess at course order |
+| 10 | Podcasts 1a, 1b, 2, 3b, 3c, 4 (EN) | each topic page ?draft=1#podcast; radiografi/<topic>/podcast_en.mp3 | 6–9 min each, all chunks pass Whisper |
 
 ## Open decisions
 - How "Brage" should sound: episode uses "Brah-eh"; samples Brah-eh / Braa-uh / Brawa in manim-studio media/podcast/prove/brage/ for the owner to pick.
@@ -43,11 +44,9 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 - Note for the 3c review: c2 says the scattered photons "land at random, and that gives noise". Check it against the teaching rule that noise and scatter are kept apart.
 
 ## In production
-- Podcasts 1a, 1b, 2, 3b, 3c, 4 (English, SoulX): scripts written and reviewed twice each; audio generating. Draft tabs on every topic page (?draft=1#podcast).
 - 3c video re-rendered with fog / quantum noise from the scattered photons: waiting for the owner's review.
 
 ## Not started / later
 - UV5 Røntgenrøret: heel effect, filtration, AEC (video + simulator).
-- Podcasts 3b (Ben expert) and 3c (Amy expert), once 3a is approved.
 - Possibly warmer host voices designed with Qwen3-TTS.
 - ML section on the site (English, one level).
