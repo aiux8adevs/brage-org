@@ -9,3 +9,7 @@
 .sim-card .kind{font-family:ui-monospace,monospace;color:var(--accent);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase}
 .sim-card .go{margin-top:auto;padding-top:.8rem;color:var(--accent-2);font-weight:700;font-size:.9rem}
 .soon{border-style:dashed;color:var(--muted)}
+/* topics in course order */
+.topic-group{margin-top:2rem}
+.topic-head{display:flex;align-items:center;gap:.6rem;font-size:1.15rem;margin:0}
+.topic-head span{display:inline-grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font-size:.85rem}

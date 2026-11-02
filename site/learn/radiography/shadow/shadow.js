@@ -611,9 +611,9 @@ function buildControls() {
 function buildText() {
   const L = T[S.lang];
   document.documentElement.lang = S.lang;
-  document.getElementById("t-title").textContent = S.lang === "da" ? "Når skyggen snyder" : "When the shadow lies";
+  document.getElementById("t-title").textContent = S.lang === "da" ? "Skarphed: fem måder skyggen snyder på" : "Sharpness: five ways the shadow lies";
   document.getElementById("t-sub").textContent = L.sub;
-  document.title = (S.lang === "da" ? "Når skyggen snyder" : "When the shadow lies") + " | Oliver Brage";
+  document.title = (S.lang === "da" ? "Skarphed: fem måder skyggen snyder på" : "Sharpness: five ways the shadow lies") + " | Oliver Brage";
   document.getElementById("t-back").textContent = L.back;
   document.getElementById("t-back").href = "../../?lang=" + S.lang;
   document.getElementById("t-foot").textContent = L.foot;
@@ -671,7 +671,7 @@ document.getElementById("lvl-deep").onclick = () => { S.level = "deep"; save(); 
 function save() {
   const q = new URLSearchParams(location.search);
   q.set("lang", S.lang); S.level === "deep" ? q.set("level", "deep") : q.delete("level");
-  history.replaceState(null, "", "?" + q);
+  history.replaceState(null, "", "?" + q + location.hash);
 }
 {
   const q = new URLSearchParams(location.search), l = q.get("lang");

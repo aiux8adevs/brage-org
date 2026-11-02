@@ -1,8 +1,8 @@
 // ---- text ----------------------------------------------------------------
 const T = {
   da: {
-    title: "Histogram og vindue",
-    sub: "Skru på dosis, indblænding, LUT og vindue, og se hvad der sker med billedet, histogrammet og REX. Knæet er syntetisk, så vi ved præcis, hvad der er i det.",
+    title: "Fra tal til billede", simTitle: "Simulator: Histogram og vindue",
+    sub: "Video 1b om det digitale billede: hvordan tallene fra detektoren bliver til billedet på skærmen. Se videoen først, og arbejd så med opgaverne i simulatoren.",
     grund: "Grund", deep: "Fordybelse",
     image: "Billedet på skærmen", hist: "Histogram og REX",
     synth: "Syntetisk knæ, regnet ud fra en simpel model af stråling og støj.",
@@ -116,8 +116,8 @@ const T = {
     back: "← Læring", foot: "© 2026 Oliver Brage. Alle rettigheder forbeholdes.", privacy: "Privatliv",
   },
   en: {
-    title: "Histogram and window",
-    sub: "Change the dose, collimation, LUT and window, and watch what happens to the image, the histogram and REX. The knee is synthetic, so we know exactly what is in it.",
+    title: "From number to image", simTitle: "Simulator: Histogram and window",
+    sub: "Video 1b on the digital image: how the numbers from the detector become the image on screen. Watch the video first, then work through the tasks in the simulator.",
     grund: "Basic", deep: "Deeper level",
     image: "The image on screen", hist: "Histogram and REX",
     synth: "Synthetic knee, computed from a simple model of radiation and noise.",
@@ -588,7 +588,7 @@ function buildText() {
     document.getElementById(id).textContent = L[key];
   document.getElementById("model-text").innerHTML = withMath(L.modelText);
   // the video in the chosen language and level; only reloaded when that choice changes
-  document.getElementById("t-video").textContent = L.video;
+  document.getElementById("t-simtitle").textContent = L.simTitle;
   document.getElementById("t-videonote").textContent = L.videoNote;
   const vid = document.getElementById("vid"), file = `video/histogram_${S.lang}_${S.level === "deep" ? "fordybelse" : "grund"}.mp4`;
   if (vid.getAttribute("src") !== file) { vid.poster = `video/poster_${S.lang}.jpg`; vid.src = file; }
@@ -636,7 +636,7 @@ document.getElementById("lvl-deep").onclick = () => { S.level = "deep"; save(); 
 function save() {
   const q = new URLSearchParams(location.search);
   q.set("lang", S.lang); S.level === "deep" ? q.set("level", "deep") : q.delete("level");
-  history.replaceState(null, "", "?" + q);
+  history.replaceState(null, "", "?" + q + location.hash);
 }
 {
   const q = new URLSearchParams(location.search), l = q.get("lang");

@@ -142,3 +142,4 @@ footer a { color: var(--muted); }
   #hist { aspect-ratio: auto; flex: 1; min-height: 0; }
   .metric .v { font-size: 15px; }
 }
+.simtitle { font: 600 13px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }

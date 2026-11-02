@@ -38,7 +38,6 @@ function render() {
   $("lvl-deep").textContent = L.deep;
   $("level-group").setAttribute("aria-label", S.lang === "da" ? "Niveau" : "Level");
   $("chapter-list").innerHTML = L.list.map(c => `<li>${c}</li>`).join("");
-  $("t-next").innerHTML = `<a href="../histogram/?lang=${S.lang}${S.level === "deep" ? "&level=deep" : ""}#video">${L.next}</a>`;
   // the video in the chosen language and level; only reloaded when that choice changes
   const vid = $("vid"), file = `video/detektor_${S.lang}_${S.level === "deep" ? "fordybelse" : "grund"}.mp4`;
   if (vid.getAttribute("src") !== file) { vid.poster = `video/poster_${S.lang}.jpg`; vid.src = file; }
@@ -47,7 +46,7 @@ function render() {
     $(id).setAttribute("aria-pressed", on);
   const q = new URLSearchParams(location.search);
   q.set("lang", S.lang); S.level === "deep" ? q.set("level", "deep") : q.delete("level");
-  history.replaceState(null, "", "?" + q);
+  history.replaceState(null, "", "?" + q + location.hash);
 }
 
 {

@@ -1,0 +1,22 @@
+/* Topic pages: the tabs (1 Video · 2 Simulator · 3 Glossary) and previous / next at the bottom.
+   Uses the colour variables of the page's own stylesheet. */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--line); }
+.tabs a { color: var(--muted); text-decoration: none; font: 600 14px var(--body); padding: 9px 14px;
+          border: 1px solid transparent; border-bottom: 0; border-radius: 8px 8px 0 0; margin-bottom: -1px; }
+.tabs a span { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%;
+               border: 1px solid currentColor; font-size: 11px; margin-right: 4px; }
+.tabs a:hover { color: var(--fg); }
+.tabs a[aria-current="page"] { color: var(--fg); background: var(--panel); border-color: var(--line); }
+.tabs a[aria-current="page"] span { background: var(--amber); border-color: var(--amber); color: var(--bg); }
+.tabs a:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+[data-tab][hidden] { display: none !important; }
+#handout-box a.pdf { color: var(--fg); font-weight: 600; }
+#handout-box a { color: var(--muted); }
+.series { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.series a { display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+            padding: 10px 14px; color: var(--fg); text-decoration: none; font-weight: 600; font-size: 14px; }
+.series a:hover { border-color: var(--amber); }
+.series a small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; }
+.series .next { text-align: right; grid-column: 2; }
+/* the simulators fill the window height on big screens; leave room for the tab row */
+@media (min-width: 1100px) and (min-height: 600px) { .stage { height: calc(100svh - 210px) !important; } }

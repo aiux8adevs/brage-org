@@ -8,8 +8,9 @@
   <title>From photon to number | Oliver Brage</title>
   <link rel="stylesheet" href="../histogram/histogram.css">
   <link rel="stylesheet" href="detector.css">
+  <link rel="stylesheet" href="../../topic.css">
 </head>
-<body>
+<body data-topic="detector">
 <div class="wrap">
   <a class="back" id="t-back" href="../../"></a>
   <header>
@@ -27,6 +28,9 @@
     </div>
   </header>
 
+  <nav class="tabs" id="tabs" aria-label="Indhold"></nav>
+
+  <div data-tab="video">
   <section class="video">
     <video id="vid" controls preload="none" playsinline></video>
     <p class="note" id="t-videonote"></p>
@@ -35,11 +39,16 @@
   <section class="box chapters">
     <h2 id="t-chapters"></h2>
     <ol id="chapter-list"></ol>
-    <p class="note" id="t-next"></p>
   </section>
+  </div>
+
+  <section class="box" data-tab="handout" id="handout-box" hidden></section>
+
+  <nav class="series" id="series"></nav>
 
   <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
 </div>
 <script src="detector.js"></script>
+<script src="../../topic.js"></script>
 </body>
 </html>

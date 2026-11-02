@@ -5,15 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Interactive simulator: the histogram, exposure index (EI and REX), automatic rescaling, LUT and window in digital radiography.">
   <meta name="theme-color" content="#0A0E18">
-  <title>Histogram and window | Oliver Brage</title>
+  <title>From number to image | Oliver Brage</title>
   <link rel="stylesheet" href="histogram.css">
+  <link rel="stylesheet" href="../../topic.css">
 </head>
-<body>
+<body data-topic="histogram">
 <div class="wrap">
   <a class="back" id="t-back" href="../../"></a>
   <header>
     <div>
-      <h1 id="t-title">Histogram og vindue</h1>
+      <h1 id="t-title">Fra tal til billede</h1>
       <p class="sub" id="t-sub"></p>
     </div>
     <div class="toggles">
@@ -26,6 +27,17 @@
     </div>
   </header>
 
+  <nav class="tabs" id="tabs" aria-label="Indhold"></nav>
+
+  <div data-tab="video">
+  <section class="video">
+    <video id="vid" controls preload="none" playsinline></video>
+    <p class="note" id="t-videonote"></p>
+  </section>
+  </div>
+
+  <div data-tab="simulator" hidden>
+  <h2 class="simtitle" id="t-simtitle"></h2>
   <div class="stage">
     <div class="box controls">
       <div id="controls" class="ctls"></div>
@@ -50,11 +62,6 @@
     </div>
   </div>
 
-  <section class="video" id="video">
-    <h3 id="t-video"></h3>
-    <video id="vid" controls preload="none" playsinline></video>
-    <p class="note" id="t-videonote"></p>
-  </section>
 
   <section class="tasks">
     <h3 id="t-tasks"></h3>
@@ -65,10 +72,17 @@
     <details><summary id="t-model"></summary><div id="model-text"></div></details>
   </section>
 
+  </div>
+
+  <section class="box" data-tab="handout" id="handout-box" hidden></section>
+
+  <nav class="series" id="series"></nav>
+
   <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
 </div>
 
 <script src="../tex.js"></script>
 <script src="histogram.js"></script>
+<script src="../../topic.js"></script>
 </body>
 </html>

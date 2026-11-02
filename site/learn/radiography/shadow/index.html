@@ -5,15 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Interactive simulator: magnification, penumbra, motion blur and superimposition in radiography.">
   <meta name="theme-color" content="#0A0E18">
-  <title>When the shadow lies | Oliver Brage</title>
+  <title>Sharpness: five ways the shadow lies | Oliver Brage</title>
   <link rel="stylesheet" href="shadow.css">
+  <link rel="stylesheet" href="../../topic.css">
 </head>
-<body>
+<body data-topic="shadow">
 <div class="wrap">
   <a class="back" id="t-back" href="../../"></a>
   <header>
     <div>
-      <h1 id="t-title">Når skyggen snyder</h1>
+      <h1 id="t-title">Skarphed: fem måder skyggen snyder på</h1>
       <p class="sub" id="t-sub"></p>
     </div>
     <div class="toggles">
@@ -26,6 +27,9 @@
     </div>
   </header>
 
+  <nav class="tabs" id="tabs" aria-label="Indhold"></nav>
+
+  <div data-tab="simulator">
   <div class="stage">
     <div class="box controls">
       <div id="controls" class="ctls"></div>
@@ -64,10 +68,15 @@
     <details><summary id="t-model"></summary><div id="model-text"></div></details>
   </section>
 
+  </div>
+
+  <nav class="series" id="series"></nav>
+
   <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
 </div>
 
 <script src="../tex.js"></script>
 <script src="shadow.js"></script>
+<script src="../../topic.js"></script>
 </body>
 </html>

@@ -1,0 +1,89 @@
+// The radiography series: the one place that knows the order of the topics.
+// Used by the learn overview (cards, grouped in course order) and by every topic page
+// (tabs Video / Simulator / Glossary, and previous / next at the bottom).
+// Language comes from <html lang>, which each page sets itself; when it changes, this redraws.
+
+const SERIES = [
+  { da: "Det digitale billede", en: "The digital image", pages: [
+    { path: "detector", tabs: ["video", "handout"], file: "detektor",
+      da: { title: "Fra foton til tal", text: "Hvordan røntgenfotonen bliver til et tal: scintillator, fill factor, udlæsning, ADC, bitdybde, matrix og pixel." },
+      en: { title: "From photon to number", text: "How the X-ray photon becomes a number: scintillator, fill factor, readout, ADC, bit depth, matrix and pixel." } },
+    { path: "histogram", tabs: ["video", "simulator", "handout"], file: "histogram",
+      da: { title: "Fra tal til billede", text: "Histogram, eksponeringsindeks (EI og REX), automatisk skalering, LUT og WW/WL. Simulatoren: skru på dosis og indblænding, og se hvorfor lysheden intet siger om dosis." },
+      en: { title: "From number to image", text: "Histogram, exposure index (EI and REX), automatic rescaling, LUT and WW/WL. The simulator: change dose and collimation, and see why brightness says nothing about dose." } },
+  ] },
+  { da: "Støj", en: "Noise", pages: [],
+    soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
+  { da: "Spredt stråling", en: "Scatter", pages: [],
+    soon: { da: "Spredt stråling, raster, luftspalte, kompression og indblænding. Under produktion.", en: "Scatter, grids, air gap, compression and collimation. In production." } },
+  { da: "Skarphed", en: "Sharpness", pages: [
+    // the video is added to tabs once it is approved
+    { path: "shadow", tabs: ["simulator"], file: "uskarphed",
+      da: { title: "Skarphed: fem måder skyggen snyder på", text: "Forstørrelse, formforvrængning, geometrisk uskarphed, bevægelsesuskarphed og overlejring. Flyt fokus, objekt og detektor." },
+      en: { title: "Sharpness: five ways the shadow lies", text: "Magnification, shape distortion, focal spot blur, motion blur and superimposition. Move the focal spot, the object and the detector." } },
+  ] },
+  { da: "Røntgenrøret", en: "The X-ray tube", pages: [],
+    soon: { da: "Heel-effekt, filtrering og AEC. Under produktion.", en: "Heel effect, filtration and AEC. In production." } },
+];
+
+const WORDS = {
+  da: { video: "Video", simulator: "Simulator og opgaver", handout: "Ordkort og PDF", prev: "Forrige", next: "Næste",
+        soon: "På vej", pdf: "Ordkort og transskription (PDF)", pdfOther: "Engelsk udgave (PDF)",
+        pdfNote: "Det hele, der bliver sagt i videoen, plus en dansk-engelsk ordliste til Bushong.",
+        open: "Åbn →", kinds: { video: "Video", simulator: "Simulator", handout: "Ordkort" } },
+  en: { video: "Video", simulator: "Simulator and tasks", handout: "Glossary and PDF", prev: "Previous", next: "Next",
+        soon: "On the way", pdf: "Glossary and transcript (PDF)", pdfOther: "Danish version (PDF)",
+        pdfNote: "Everything said in the video, plus a Danish-English glossary.",
+        open: "Open →", kinds: { video: "Video", simulator: "Simulator", handout: "Glossary" } },
+};
+
+const lang = () => (document.documentElement.lang === "da" ? "da" : "en");
+const level = () => new URLSearchParams(location.search).get("level") === "deep" ? "&level=deep" : "";
+const pages = SERIES.flatMap(g => g.pages);
+
+// ---- the learn overview: one group per topic, in course order ----
+function drawOverview(box) {
+  const L = lang(), W = WORDS[L];
+  box.innerHTML = SERIES.map((g, i) => {
+    const cards = g.pages.map(p => `
+      <a class="card sim-card" href="radiography/${p.path}/?lang=${L}">
+        <span class="kind">${p.tabs.map(t => W.kinds[t]).join(" · ")}</span>
+        <h3>${p[L].title}</h3><p class="muted">${p[L].text}</p><span class="go">${W.open}</span></a>`).join("");
+    const soon = g.soon ? `<div class="card sim-card soon"><span class="kind">${W.soon}</span><p>${g.soon[L]}</p></div>` : "";
+    return `<div class="topic-group"><h3 class="topic-head"><span>${i + 1}</span> ${g[L]}</h3>
+      <div class="grid-3 track">${cards}${soon}</div></div>`;
+  }).join("");
+}
+
+// ---- a topic page: tabs, the handout tab, previous / next ----
+function show(tab) {
+  const here = pages.find(p => p.path === document.body.dataset.topic);
+  if (!here.tabs.includes(tab)) tab = here.tabs[0];
+  document.querySelectorAll("[data-tab]").forEach(el => { el.hidden = el.dataset.tab !== tab; });
+  document.querySelectorAll(".tabs a").forEach(a => a.setAttribute("aria-current", a.dataset.go === tab ? "page" : "false"));
+  if (tab !== "video") document.querySelectorAll("video").forEach(v => v.pause());
+  window.dispatchEvent(new Event("resize"));     // the simulators size their canvases to what is visible
+}
+const current = () => (location.hash || "#").slice(1);
+
+function drawTopic() {
+  const L = lang(), W = WORDS[L], here = pages.find(p => p.path === document.body.dataset.topic);
+  document.getElementById("tabs").innerHTML = here.tabs.map((t, i) =>
+    `<a href="#${t}" data-go="${t}"><span>${i + 1}</span> ${W[t]}</a>`).join("");
+  const ho = document.getElementById("handout-box");
+  if (ho) {
+    const other = L === "da" ? "en" : "da";
+    ho.innerHTML = `<p><a class="pdf" href="video/${here.file}_${L}.pdf">${W.pdf}</a></p>
+      <p class="note">${W.pdfNote}</p><p class="note"><a href="video/${here.file}_${other}.pdf">${W.pdfOther}</a></p>`;
+  }
+  const i = pages.indexOf(here), prev = pages[i - 1], next = pages[i + 1];
+  const link = (p, cls, word) => p ? `<a class="${cls}" href="../${p.path}/?lang=${L}${level()}"><small>${word}</small>${p[L].title}</a>` : "<span></span>";
+  document.getElementById("series").innerHTML = link(prev, "prev", "← " + W.prev) + link(next, "next", W.next + " →");
+  show(current());
+}
+
+const overview = document.getElementById("topics");
+const draw = overview ? () => drawOverview(overview) : drawTopic;
+draw();
+new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+if (!overview) window.addEventListener("hashchange", () => show(current()));

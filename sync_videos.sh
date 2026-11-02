@@ -23,5 +23,8 @@ for p in "${pages[@]}"; do
     ffmpeg -v error -y -ss 2.6 -i "$MS/$src/1080p60/send/${cls}_${lang}_grund.mp4" -frames:v 1 \
       -vf scale=1280:-1 -q:v 4 "$out/poster_$lang.jpg"
   done
+  # the glossary and transcript PDFs, made by make_transcript_radiografi.py
+  pdf=$(echo "$src" | sed 's/_da$//')
+  for lang in da en; do cp ~/projects/manim-studio/media/handouts/${pdf}_${lang}.pdf "$out/"; done
   echo "synced $page"
 done
