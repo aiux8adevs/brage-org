@@ -232,7 +232,7 @@ const T = {
   },
 };
 
-// ---- the synthetic knee (same model as the video, manim_studio/radiografi/knee.py) ----
+// ---- the synthetic knee (same model as in the video) ----
 // Higher raw value = more radiation reached the detector; the display inverts it.
 const N = 200, MAX_VALUE = 16383, DOSE_REF = 7000, GAIN = 9, OUTSIDE = 120, REX_RIGHT = 220, BINS = 82;
 const DOSES = [0.25, 0.35, 0.5, 0.7, 1, 1.4, 2, 2.8, 4];

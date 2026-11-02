@@ -17,13 +17,14 @@ const REFS = { field: 43, thick: 20, kv: 80, grid: "none", gap: 0, virt: "off" }
 
 const T = {
   da: {
-    title: "Spredt stråling", sub: "Video 3a, 3b og 3c om tågen over billedet, og en simulator, hvor du selv kan skrue på felt, tykkelse, kV, raster, luftspalte og virtuelt raster.",
+    title: "Spredt stråling", sub: "Tågen over billedet. En simulator, hvor du selv kan skrue på felt, tykkelse, kV, raster, luftspalte og virtuelt raster. Videoerne kommer.",
     simTitle: "Simulator: Spredt stråling og raster",
     grund: "Grund", deep: "Fordybelse", back: "← Læring",
     parts: ["1 Spredt stråling", "2 Rasteret", "3 Andre veje"],
     partNote: "Se de tre dele i rækkefølge. Hver del er cirka fem til otte minutter.",
     geo: "Opstilling, set fra siden", prof: "Signal på detektoren", image: "Det detektoren så",
     profNote: "Cyan: primære fotoner. Rød: spredte fotoner, der nåede detektoren.",
+    hit: (h, n) => `${h} af ${n} tegnede spredte fotoner rammer detektoren. Stiplet: forbi detektoren.`,
     imgNote: "Syntetisk fantom: bløddel, knogle og en lille læsion. Støjen er regnet ud fra antallet af fotoner.",
     tasks: "Opgaver", answer: "Vis svar", of: "af", prev: "Forrige opgave", next: "Næste opgave",
     model: "Sådan virker modellen", foot: "© 2026 Oliver Brage. Alle rettigheder forbeholdes.", privacy: "Privatliv",
@@ -32,7 +33,7 @@ const T = {
     help: { field: "Bredden af det bestrålede felt.", thick: "Tykkelsen af det væv, strålen skal igennem.",
             kv: "Højere kV: mere går igennem, men mindre forskel mellem knogle og bløddel.",
             grid: "Skaktforholdet. Højere fanger mere spredning, men koster mere mAs.",
-            gap: "Afstand mellem patient og detektor.", virt: "Software, der regner tågen ud og trækker den fra." },
+            gap: "Afstand mellem patient og detektor. Luften bremser næsten intet; de skrå, spredte fotoner driver længere til siden og rammer oftere ved siden af detektoren.", virt: "Software, der regner tågen ud og trækker den fra." },
     k: { spr: "SPR, spredt / primær", contrast: "Kontrast", cnr: "Kontrast i forhold til støj (CNR)", mas: "mAs",
          dose: "Dosis", bucky: "Bucky-faktor", mag: "Forstørrelse", blur: "Geometrisk uskarphed" },
     f: { spr: v => v < 0.5 ? "lidt spredning" : v < 1 ? "mindre spredt end primær" : "mere spredt end primær",
@@ -42,7 +43,7 @@ const T = {
     dec: ",",
     modelText: `<p>Modellen er enkel med vilje, så du kan regne efter. Tallene er af samme størrelse som i Bushong.</p>
 <p>Primær stråling gennem patienten: $P = \\text{mAs} \\cdot (kV/70)^2 \\cdot e^{-\\mu t}$, med $\\mu = 0{,}2 \\cdot (70/kV)^{0{,}6}$ pr. cm.</p>
-<p>Spredt i forhold til primær: $\\text{SPR} = 0{,}18 \\cdot t \\cdot \\sqrt{\\text{felt}/43} \\cdot (1 + (kV-70)/250) \\cdot e^{-\\text{luftspalte}/10}$.</p>
+<p>Spredt i forhold til primær: $\\text{SPR} = 0{,}18 \\cdot t \\cdot \\sqrt{\\text{felt}/43} \\cdot (1 + (kV-70)/250) \\cdot e^{-\\text{luftspalte}/10}$. Den sidste faktor er den andel af de spredte fotoner, der stadig rammer detektoren. Luften bremser næsten intet; de spredte fotoner går skråt, så med større afstand lander flere ved siden af detektoren, og resten fordeles på et større område. De primære går lige mod detektoren og mister kun lidt (afstandskvadratloven).</p>
 <p>Rasteret lader en andel $T_p$ af de primære og $T_s$ af de spredte igennem (6:1: 0,75 og 0,25 · 8:1: 0,70 og 0,17 · 12:1: 0,65 og 0,10 · 16:1: 0,60 og 0,07).
 Bucky-faktoren er så $B = (1 + \\text{SPR}) / (T_p + T_s \\cdot \\text{SPR})$.</p>
 <p>Knoglens kontrast uden spredning er $C_0 = 0{,}35 \\cdot (70/kV)^{1{,}5}$, og med spredning $C = C_0 \\cdot P/(P+S)$. Støjen er $\\sqrt{P+S}$, så $\\text{CNR} \\propto C_0 P/\\sqrt{P+S}$.</p>
@@ -66,7 +67,7 @@ Det virtuelle raster trækker 85 % af tågens gennemsnit fra, men ikke dens stø
         ["Betaler det sig?", "Sæt tykkelsen til 8 cm og kV til 60. Sammenlign uden raster og med 8:1.", "SPR er lavt. Rasteret giver lidt mere kontrast, men mere end fordobler dosis. Under ca. 10 cm og 60 kV betaler raster sig sjældent."],
       ]],
       ["Luftspalte", [
-        ["Luftspalte i stedet", "Fjern rasteret og sæt luftspalten til 15 cm. Sammenlign med 8:1 raster. Hvad er prisen?", "Luftspalten fjerner en del af spredningen uden bly. Prisen er forstørrelse og geometrisk uskarphed, og i praksis øges afstand eller mAs ofte."],
+        ["Luftspalte i stedet", "Fjern rasteret og sæt luftspalten til 15 cm. Sammenlign med 8:1 raster. Hvad er prisen?", "Luftspalten fjerner en del af spredningen uden bly: de skrå, spredte fotoner rammer ved siden af detektoren, mens de primære stadig rammer. Prisen er forstørrelse og geometrisk uskarphed, og i praksis øges afstand eller mAs ofte."],
       ]],
       ["Virtuelt raster", [
         ["Regn tågen væk", "Nulstil, og slå virtuelt raster til. Sammenlign kontrast og CNR med 12:1 raster.", "Kontrasten kommer næsten op på rasterets niveau uden ekstra dosis. Men CNR stiger ikke, fordi støjen fra de spredte fotoner bliver."],
@@ -82,13 +83,14 @@ Det virtuelle raster trækker 85 % af tågens gennemsnit fra, men ikke dens stø
     ],
   },
   en: {
-    title: "Scatter", sub: "Videos 3a, 3b and 3c on the fog over the image, and a simulator where you can change field size, thickness, kV, grid, air gap and virtual grid.",
+    title: "Scatter", sub: "The fog over the image. A simulator where you can change field size, thickness, kV, grid, air gap and virtual grid. The videos are on the way.",
     simTitle: "Simulator: Scatter and grids",
     grund: "Basic", deep: "Deeper level", back: "← Learn",
     parts: ["1 Scatter", "2 The grid", "3 Other ways"],
     partNote: "Watch the three parts in order. Each is about five to eight minutes.",
     geo: "Set-up, seen from the side", prof: "Signal on the detector", image: "What the detector saw",
     profNote: "Cyan: primary photons. Red: scattered photons that reached the detector.",
+    hit: (h, n) => `${h} of ${n} drawn scattered photons reach the detector. Dashed: beside the detector.`,
     imgNote: "Synthetic phantom: soft tissue, bone and a small lesion. The noise is computed from the number of photons.",
     tasks: "Tasks", answer: "Show answer", of: "of", prev: "Previous task", next: "Next task",
     model: "How the model works", foot: "© 2026 Oliver Brage. All rights reserved.", privacy: "Privacy",
@@ -97,7 +99,7 @@ Det virtuelle raster trækker 85 % af tågens gennemsnit fra, men ikke dens stø
     help: { field: "The width of the irradiated field.", thick: "The thickness of tissue the beam passes through.",
             kv: "Higher kV: more gets through, but less difference between bone and soft tissue.",
             grid: "The grid ratio. Higher catches more scatter, but costs more mAs.",
-            gap: "Distance between patient and detector.", virt: "Software that estimates the fog and subtracts it." },
+            gap: "Distance between patient and detector. The air stops almost nothing; the slanted scattered photons drift further sideways and more often land beside the detector.", virt: "Software that estimates the fog and subtracts it." },
     k: { spr: "SPR, scatter / primary", contrast: "Contrast", cnr: "Contrast-to-noise (CNR)", mas: "mAs",
          dose: "Dose", bucky: "Bucky factor", mag: "Magnification", blur: "Focal spot blur" },
     f: { spr: v => v < 0.5 ? "little scatter" : v < 1 ? "less scatter than primary" : "more scatter than primary",
@@ -107,7 +109,7 @@ Det virtuelle raster trækker 85 % af tågens gennemsnit fra, men ikke dens stø
     dec: ".",
     modelText: `<p>The model is simple on purpose, so you can work it out yourself. The numbers are the size of those in Bushong.</p>
 <p>Primary through the patient: $P = \\text{mAs} \\cdot (kV/70)^2 \\cdot e^{-\\mu t}$, with $\\mu = 0.2 \\cdot (70/kV)^{0.6}$ per cm.</p>
-<p>Scatter relative to primary: $\\text{SPR} = 0.18 \\cdot t \\cdot \\sqrt{\\text{field}/43} \\cdot (1 + (kV-70)/250) \\cdot e^{-\\text{gap}/10}$.</p>
+<p>Scatter relative to primary: $\\text{SPR} = 0.18 \\cdot t \\cdot \\sqrt{\\text{field}/43} \\cdot (1 + (kV-70)/250) \\cdot e^{-\\text{gap}/10}$. The last factor is the share of the scattered photons that still reach the detector. The air stops almost nothing; scattered photons travel at a slant, so with a larger distance more of them land beside the detector and the rest are spread over a larger area. The primary photons head straight for the detector and lose only a little (the inverse square law).</p>
 <p>The grid lets a fraction $T_p$ of the primary and $T_s$ of the scatter through (6:1: 0.75 and 0.25 · 8:1: 0.70 and 0.17 · 12:1: 0.65 and 0.10 · 16:1: 0.60 and 0.07).
 The Bucky factor is then $B = (1 + \\text{SPR}) / (T_p + T_s \\cdot \\text{SPR})$.</p>
 <p>Bone contrast without scatter is $C_0 = 0.35 \\cdot (70/kV)^{1.5}$, and with scatter $C = C_0 \\cdot P/(P+S)$. Noise is $\\sqrt{P+S}$, so $\\text{CNR} \\propto C_0 P/\\sqrt{P+S}$.</p>
@@ -131,7 +133,7 @@ The virtual grid subtracts 85 % of the fog's average, but not its noise.</p>`,
         ["Is it worth it?", "Set the thickness to 8 cm and the kV to 60. Compare no grid and 8:1.", "The SPR is low. The grid gives a little more contrast but more than doubles the dose. Below about 10 cm and 60 kV a grid is rarely worth it."],
       ]],
       ["Air gap", [
-        ["An air gap instead", "Remove the grid and set the air gap to 15 cm. Compare with an 8:1 grid. What is the price?", "The air gap removes some of the scatter without lead. The price is magnification and focal spot blur, and in practice the distance or the mAs is often increased."],
+        ["An air gap instead", "Remove the grid and set the air gap to 15 cm. Compare with an 8:1 grid. What is the price?", "The air gap removes some of the scatter without lead: the slanted scattered photons land beside the detector, while the primary photons still hit it. The price is magnification and focal spot blur, and in practice the distance or the mAs is often increased."],
       ]],
       ["Virtual grid", [
         ["Calculate the fog away", "Reset, and switch on the virtual grid. Compare contrast and CNR with a 12:1 grid.", "The contrast comes close to the grid's without extra dose. But the CNR does not rise, because the noise from the scattered photons stays."],
@@ -163,7 +165,8 @@ function model(s) {
   const oid = s.gap + s.thick / 2, mag = SID / (SID - oid), blur = FOCAL * oid / (SID - oid);
   const dose = mas * Math.pow(s.kv / 70, 2);
   const bucky = s.grid === "none" ? null : (1 + spr0) / (tp + ts * spr0);
-  return { P, S, spr: S / P, c0, contrast, rel: contrast / c0, cnr, mas, dose, bucky, mag, blur, sRes };
+  const sprNoGap = spr0 * Math.exp(s.gap / 10);           // the scatter made in the patient, before the gap
+  return { P, S, spr: S / P, sprNoGap, c0, contrast, rel: contrast / c0, cnr, mas, dose, bucky, mag, blur, sRes };
 }
 const REF = model(REFS);
 
@@ -193,8 +196,8 @@ function drawGeo() {
   const L = T[S.lang], cx = W / 2, top = 18, bottom = H - 18;
   const cm = (bottom - top) / 125;                       // 125 cm of height on screen
   const cmx = (W * 0.84) / 50;                            // across: a 50 cm wide patient fills the box (not to scale with height)
-  const fy = top, detY = top + SID * cm, gridY = detY - S.gap * cm - 4;
-  const patBot = gridY - 6, patTop = patBot - S.thick * cm;
+  const fy = top, detY = top + SID * cm, gridY = detY - 4;   // the grid lies on the detector
+  const patBot = gridY - 6 - S.gap * cm, patTop = patBot - S.thick * cm;   // the air gap lifts the patient
   const half = y => (S.field / 2) * cmx * (y - fy) / (detY - fy);  // half-width of the beam at height y
   // patient
   ctx.fillStyle = "rgba(90,95,107,.45)"; ctx.fillRect(cx - W * 0.42, patTop, W * 0.84, patBot - patTop);
@@ -220,24 +223,36 @@ function drawGeo() {
     const x = cx + half(detY) * k / 4.6;
     ctx.beginPath(); ctx.moveTo(cx, fy); ctx.lineTo(x, detY); ctx.stroke();
   }
-  // scattered rays: from inside the irradiated tissue, in random directions
-  const r = rng(7 + S.field + S.thick * 3), n = Math.min(40, Math.round(6 * M.spr / Math.max(GRIDS[S.grid][1], 0.07) * 0.35 + 4));
-  const maxAng = S.grid === "none" ? 9 : Math.atan(1 / +S.grid);
-  ctx.strokeStyle = css("--hot"); ctx.globalAlpha = 0.6;
+  // scattered rays, worked out in real centimetres. Each starts somewhere in the irradiated tissue and goes
+  // straight on at a random slant. The air stops almost nothing: a larger gap only gives the slanted rays
+  // a longer way to drift sideways, so more of them land beside the detector.
+  const r = rng(7 + S.field + S.thick * 3), n = Math.min(40, Math.round(2.1 * M.sprNoGap + 6));
+  const maxAng = S.grid === "none" ? 9 : Math.atan(1 / +S.grid), toCm = y => (y - fy) / cm;
+  let hits = 0;
+  ctx.strokeStyle = css("--hot"); ctx.fillStyle = css("--hot");
   for (let i = 0; i < n; i++) {
-    const y0 = patTop + r() * (patBot - patTop), x0 = cx + (r() * 2 - 1) * half(y0) * 0.95;
-    const ang = (r() * 2 - 1) * 1.25;                      // radians from straight down
-    if (Math.abs(ang) > 1.2) continue;
-    const dy = gridY - y0, x1 = x0 + Math.tan(ang) * dy;
-    if (S.grid !== "none" && Math.abs(ang) > maxAng) {      // stopped by the lead
-      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, gridY); ctx.stroke();
-      ctx.fillStyle = css("--hot"); ctx.fillRect(x1 - 1.5, gridY - 1.5, 3, 3);
+    const y0 = patTop + r() * (patBot - patTop), y0cm = toCm(y0);
+    const x0cm = (r() * 2 - 1) * (S.field / 2) * y0cm / SID * 0.95;      // inside the beam at that depth
+    const ang = (r() * 2 - 1) * 1.15;                      // radians from straight down
+    const x2cm = x0cm + Math.tan(ang) * (SID - y0cm);      // where it reaches the detector's plane
+    const X = xc => cx + xc * cmx;
+    if (Math.abs(x2cm) > 21.5) {                           // misses the 43 cm detector: drawn faint and dashed
+      ctx.globalAlpha = 0.3; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(X(x0cm), y0); ctx.lineTo(X(x2cm), detY); ctx.stroke(); ctx.setLineDash([]);
       continue;
     }
-    const x2 = x0 + Math.tan(ang) * (detY - y0);
-    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x2, detY); ctx.stroke();
+    ctx.globalAlpha = 0.75;
+    if (S.grid !== "none" && Math.abs(ang) > maxAng) {      // lands on the detector, but the lead stops it
+      const xg = x0cm + Math.tan(ang) * (toCm(gridY) - y0cm);
+      ctx.beginPath(); ctx.moveTo(X(x0cm), y0); ctx.lineTo(X(xg), gridY); ctx.stroke();
+      ctx.fillRect(X(xg) - 1.5, gridY - 1.5, 3, 3);
+      continue;
+    }
+    hits++;
+    ctx.beginPath(); ctx.moveTo(X(x0cm), y0); ctx.lineTo(X(x2cm), detY); ctx.stroke();
   }
   ctx.globalAlpha = 1;
+  text(ctx, T[S.lang].hit(hits, n), 6, H - 6, css("--muted"), "left", 11);
 }
 
 // ---- drawing: the signal across the detector ---------------------------------------

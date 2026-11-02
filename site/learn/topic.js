@@ -20,8 +20,9 @@ const SERIES = [
   ],
     soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
   { da: "Spredt stråling", en: "Scatter", pages: [
-    // draft: shown only with ?draft=1 until the owner has approved the videos and the simulator
-    { path: "scatter", tabs: ["video", "simulator", "handout"], draft: true,
+    // simulator live (approved 2026-11-02); videos, podcast and handout stay drafts until approved
+    { path: "scatter", tabs: ["simulator"], draftTabs: ["video", "podcast", "simulator", "handout"],
+      podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 11 }]],
       files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }],
               ["tage3c", { da: "3c Andre veje", en: "3c Other ways" }]],
       da: { title: "Spredt stråling", text: "Tågen over billedet: Compton-spredning, SPR, indblænding, raster og Bucky-faktor, luftspalte, kompression og virtuelt raster. Simulatoren: skru selv på felt, tykkelse, kV og raster." },
@@ -39,14 +40,18 @@ const SERIES = [
 ];
 
 const WORDS = {
-  da: { video: "Video", simulator: "Simulator og opgaver", handout: "Ordkort og PDF", prev: "Forrige", next: "Næste",
+  da: { video: "Video", podcast: "Podcast", simulator: "Simulator og opgaver", handout: "Ordkort og PDF", prev: "Forrige", next: "Næste",
         soon: "På vej", pdf: "Ordkort og transskription (PDF)", pdfOther: "Engelsk udgave (PDF)",
         pdfNote: "Det hele, der bliver sagt i videoen, plus en dansk-engelsk ordliste til Bushong.",
-        open: "Åbn →", kinds: { video: "Video", simulator: "Simulator", handout: "Ordkort" } },
-  en: { video: "Video", simulator: "Simulator and tasks", handout: "Glossary and PDF", prev: "Previous", next: "Next",
+        podNote: "En samtale på engelsk mellem to værter, til efter videoen. Den går lidt dybere og kan høres uden skærm, fx på vej hjem. Lyden spiller videre, når skærmen slukker.",
+        podSynth: "Stemmerne er syntetiske.",
+        open: "Åbn →", kinds: { video: "Video", podcast: "Podcast", simulator: "Simulator", handout: "Ordkort" } },
+  en: { video: "Video", podcast: "Podcast", simulator: "Simulator and tasks", handout: "Glossary and PDF", prev: "Previous", next: "Next",
         soon: "On the way", pdf: "Glossary and transcript (PDF)", pdfOther: "Danish version (PDF)",
         pdfNote: "Everything said in the video, plus a Danish-English glossary.",
-        open: "Open →", kinds: { video: "Video", simulator: "Simulator", handout: "Glossary" } },
+        podNote: "A conversation in English between two hosts, for after the video. It goes a little deeper and works without a screen, on the way home for example. It keeps playing when the screen turns off.",
+        podSynth: "The voices are synthetic.",
+        open: "Open →", kinds: { video: "Video", podcast: "Podcast", simulator: "Simulator", handout: "Glossary" } },
 };
 
 const lang = () => (document.documentElement.lang === "da" ? "da" : "en");
@@ -79,6 +84,30 @@ function show(tab) {
   if (tab !== "video") document.querySelectorAll("video").forEach(v => v.pause());
   window.dispatchEvent(new Event("resize"));     // the simulators size their canvases to what is visible
 }
+// ---- the podcast tab: a plain <audio> element, because that is what phones let play on with the
+// screen off; the Media Session API puts the title and play/skip buttons on the lock screen ----
+function drawPodcast(here, L, W) {
+  let box = document.getElementById("podcast-box");
+  if (!box) {
+    box = document.createElement("section");
+    box.className = "box podcast"; box.id = "podcast-box"; box.dataset.tab = "podcast"; box.hidden = true;
+    document.getElementById("tabs").after(box);
+  }
+  if ([...box.querySelectorAll("audio")].some(a => !a.paused)) return;   // a language switch must not stop the episode
+  box.innerHTML = here.podcast.map(([f, ep]) => `<h3>${ep.title}</h3>
+    <audio controls preload="none" src="video/podcast_${f}_en.mp3" data-title="${ep.title}"></audio>
+    <p class="note">${ep.minutes} min · ${W.podNote} ${W.podSynth}</p>`).join("");
+  box.querySelectorAll("audio").forEach(a => a.addEventListener("play", () => {
+    document.querySelectorAll("video").forEach(v => v.pause());
+    if (!("mediaSession" in navigator)) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: a.dataset.title, artist: "Oliver Brage", album: "brage.org · Radiography",
+      artwork: [{ src: "video/poster_" + (here.files ? here.files[0][0] + "_" : "") + "en.jpg", sizes: "1280x720", type: "image/jpeg" }] });
+    navigator.mediaSession.setActionHandler("seekbackward", () => { a.currentTime = Math.max(0, a.currentTime - 15); });
+    navigator.mediaSession.setActionHandler("seekforward", () => { a.currentTime = Math.min(a.duration || 0, a.currentTime + 30); });
+  }));
+}
+
 const current = () => (location.hash || "#").slice(1);
 
 function drawTopic() {
@@ -92,6 +121,7 @@ function drawTopic() {
     ho.innerHTML = files.map(([f, name]) => `<p><a class="pdf" href="video/${f}_${L}.pdf">${name ? name[L] + ": " : ""}${W.pdf}</a>
       · <a href="video/${f}_${other}.pdf">${W.pdfOther}</a></p>`).join("") + `<p class="note">${W.pdfNote}</p>`;
   }
+  if (here.podcast) drawPodcast(here, L, W);
   const i = pages.indexOf(here), prev = pages[i - 1], next = pages[i + 1];
   const link = (p, cls, word) => p ? `<a class="${cls}" href="../${p.path}/?lang=${L}${level()}"><small>${word}</small>${p[L].title}</a>` : "<span></span>";
   document.getElementById("series").innerHTML = link(prev, "prev", "← " + W.prev) + link(next, "next", W.next + " →");
