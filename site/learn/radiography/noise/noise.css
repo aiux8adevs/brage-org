@@ -10,3 +10,4 @@
   #prof { aspect-ratio: auto; height: calc(25svh); }
   #img { aspect-ratio: auto; height: calc(58svh - 120px); }
 }
+#t-curvenote { margin-bottom: 16px; }

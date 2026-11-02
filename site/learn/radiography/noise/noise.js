@@ -18,8 +18,10 @@ const T = {
     title: "Støj, SNR og CNR", sub: "En simulator til støj: skru på dosis, kV, pixelstørrelse og detektor, og se hvilke detaljer der forsvinder i støjen. Video 2 kommer.",
     simTitle: "Simulator: Støj, SNR og CNR", grund: "Grund", deep: "Fordybelse", back: "← Læring",
     curve: "SNR og dosis", prof: "En linje gennem rækken med 4 % kontrast", image: "Det detektoren så",
-    profNote: "Cyan: hver pixels værdi langs linjen. Orange: gennemsnittet over 7 pixel, hvor skiverne træder frem.",
-    imgNote: "Kontrast-detalje-fantom: skiverne bliver mindre mod højre og svagere nedad. Billedet skaleres som på et DR-anlæg, så lav dosis ser kornet ud, ikke mørk.",
+    curveNote: "Kurven viser SNR for alle mAs med dine indstillinger, den grå kurve udgangspunktet (10 mAs, 70 kV, 150 µm, CsI). Den orange prik er din mAs. Trappen viser, hvad dobbelt dosis giver: SNR bliver kun 1,41 gange bedre, ikke dobbelt så god. Derfor flader kurven ud.",
+    profNote: "Linjen går gennem den orange markering i billedet. Op: flere fotoner (baggrund). Ned: færre fotoner, hvor en skive dæmper strålen. Cyan er hver enkelt pixel; den hopper op og ned, og det er støjen. Orange er gennemsnittet over 7 pixel nabo til nabo: støjen glattes ud, og skiverne træder frem som dyk. Et dyk, der ikke er større end cyan-linjens hop, kan øjet ikke skelne.",
+    profBg: "baggrund", profDisk: "skive",
+    imgNote: "Kontrast-detalje-fantom: skiverne bliver mindre mod højre og svagere nedad. De dæmper strålen og vises lyse, ligesom knogle. Cyan prik: skiven er synlig efter Rose-kriteriet (se tallet under billedet). Orange markering: linjen i kurven til venstre. Billedet skaleres som på et DR-anlæg, så lav dosis ser kornet ud, ikke mørk.",
     tasks: "Opgaver", answer: "Vis svar", of: "af", prev: "Forrige opgave", next: "Næste opgave",
     model: "Sådan virker modellen", foot: "© 2026 Oliver Brage. Alle rettigheder forbeholdes.", privacy: "Privatliv",
     ctl: { mas: "mAs", kv: "Kilovolt", px: "Pixelstørrelse", det: "Detektor", filter: "Støjfilter", csi: "CsI (nåle)", gos: "GOS (pulver)",
@@ -68,8 +70,10 @@ const T = {
     title: "Noise, SNR and CNR", sub: "A simulator for noise: change dose, kV, pixel size and detector, and see which details disappear in the noise. Video 2 is on the way.",
     simTitle: "Simulator: Noise, SNR and CNR", grund: "Basic", deep: "Deeper level", back: "← Learn",
     curve: "SNR and dose", prof: "A line through the row with 4 % contrast", image: "What the detector saw",
-    profNote: "Cyan: each pixel's value along the line. Orange: the average over 7 pixels, where the disks stand out.",
-    imgNote: "Contrast-detail phantom: the disks get smaller to the right and fainter downwards. The image is rescaled as on a DR system, so a low dose looks grainy, not dark.",
+    curveNote: "The curve shows the SNR for every mAs with your settings, the grey curve the starting point (10 mAs, 70 kV, 150 µm, CsI). The orange dot is your mAs. The step shows what double the dose gives: the SNR gets only 1.41 times better, not twice as good. That is why the curve flattens.",
+    profNote: "The line runs through the orange marks in the image. Up: more photons (background). Down: fewer photons, where a disk attenuates the beam. Cyan is each single pixel; it jumps up and down, and that is the noise. Orange is the average over 7 neighbouring pixels: the noise is smoothed and the disks stand out as dips. A dip no bigger than the cyan line's jumps cannot be told apart by eye.",
+    profBg: "background", profDisk: "disk",
+    imgNote: "Contrast-detail phantom: the disks get smaller to the right and fainter downwards. They attenuate the beam and show light, like bone. Cyan dot: the disk is visible by the Rose criterion (see the number below the image). Orange marks: the line in the curve on the left. The image is rescaled as on a DR system, so a low dose looks grainy, not dark.",
     tasks: "Tasks", answer: "Show answer", of: "of", prev: "Previous task", next: "Next task",
     model: "How the model works", foot: "© 2026 Oliver Brage. All rights reserved.", privacy: "Privacy",
     ctl: { mas: "mAs", kv: "Kilovoltage", px: "Pixel size", det: "Detector", filter: "Noise filter", csi: "CsI (needles)", gos: "GOS (powder)",
@@ -206,6 +210,11 @@ function drawImg() {
     const cx = x0 + (9 + col * 14) / FIELD_MM * sz, cy = y0 + (9 + row * 14) / FIELD_MM * sz + (SIZES[col] / 2 + 2.2) / FIELD_MM * sz;
     ctx.fillStyle = css("--signal"); ctx.beginPath(); ctx.arc(cx, cy, 2.5, 0, 7); ctx.fill();
   }
+  // orange marks at both edges: the row the line profile runs through
+  const ry = y0 + 23 / FIELD_MM * sz;
+  ctx.strokeStyle = css("--amber"); ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(x0, ry); ctx.lineTo(x0 + 14, ry); ctx.moveTo(x0 + sz - 14, ry); ctx.lineTo(x0 + sz, ry); ctx.stroke();
+  ctx.lineWidth = 1;
   ctx.font = `11px ${css("--body")}`;
   SIZES.forEach((d, col) => text(ctx, `${fmt(d, d < 1 ? 1 : 0)} mm`, x0 + (9 + col * 14) / FIELD_MM * sz, y0 + sz - 4, "rgba(10,14,24,.9)", "center", 11));
   CONTRASTS.forEach((c, row) => text(ctx, `${Math.round(c * 100)} %`, x0 + 3, y0 + (9 + row * 14) / FIELD_MM * sz + 4, "rgba(10,14,24,.9)", "left", 11));
@@ -231,17 +240,29 @@ function drawProf() {
     i === 3 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   }
   ctx.stroke(); ctx.lineWidth = 1;
+  // where the disks are, and which way is which
+  const L = T[S.lang];
+  SIZES.forEach((d, col) => text(ctx, `${fmt(d, d < 1 ? 1 : 0)} mm`, (9 + col * 14) / FIELD_MM * W, H - 3, css("--muted"), "center", 10));
+  text(ctx, `↑ ${L.profBg}`, 2, 11, css("--muted"), "left", 10);
+  text(ctx, `↓ ${L.profDisk}`, 2, H - 14, css("--muted"), "left", 10);
 }
 
 function drawCurve() {
   const [ctx, W, H] = fit(document.getElementById("curve"));
   if (W < 10) return;
   const L = T[S.lang].curveLbl, pad = 34, x0 = pad, y0 = H - 24, x1 = W - 10, y1 = 10;
-  const per = M.N / S.mas, smax = Math.sqrt(per * 40) * 1.08;
+  const per = M.N / S.mas, perRef = 90;                       // photons per pixel per mAs: now, and at the starting point
+  const smax = Math.sqrt(Math.max(per, perRef) * 40) * 1.08;
   const X = m => x0 + (m / 40) * (x1 - x0), Y = s => y0 - (s / smax) * (y0 - y1);
   ctx.strokeStyle = css("--line"); ctx.beginPath(); ctx.moveTo(x0, y1); ctx.lineTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
   text(ctx, L.x, x1, y0 - 6, css("--muted"), "right", 11); text(ctx, L.y, x0 - 6, y1 + 8, css("--muted"), "right", 11);
   for (const m of [10, 20, 30, 40]) text(ctx, String(m), X(m), y0 + 14, css("--muted"), "center", 10);
+  const step = smax > 120 ? 40 : smax > 60 ? 20 : 10;
+  for (let v = step; v < smax; v += step) text(ctx, String(v), x0 - 5, Y(v) + 3, css("--muted"), "right", 10);
+  // the starting point, in grey, so a change of detector, pixel or kV shows as a different curve
+  ctx.strokeStyle = css("--muted"); ctx.globalAlpha = 0.6; ctx.lineWidth = 1.5; ctx.beginPath();
+  for (let m = 0.5; m <= 40; m += 0.5) { const p = [X(m), Y(Math.sqrt(perRef * m))]; m === 0.5 ? ctx.moveTo(...p) : ctx.lineTo(...p); }
+  ctx.stroke(); ctx.globalAlpha = 1;
   ctx.strokeStyle = css("--signal"); ctx.lineWidth = 2; ctx.beginPath();
   for (let m = 0.5; m <= 40; m += 0.5) { const p = [X(m), Y(Math.sqrt(per * m))]; m === 0.5 ? ctx.moveTo(...p) : ctx.lineTo(...p); }
   ctx.stroke(); ctx.lineWidth = 1;
@@ -250,6 +271,7 @@ function drawCurve() {
   ctx.setLineDash([4, 4]); ctx.strokeStyle = css("--amber");
   ctx.beginPath(); ctx.moveTo(X(S.mas), Y(s)); ctx.lineTo(X(d), Y(s)); ctx.lineTo(X(d), Y(sd)); ctx.stroke(); ctx.setLineDash([]);
   ctx.fillStyle = css("--amber"); ctx.beginPath(); ctx.arc(X(S.mas), Y(s), 5, 0, 7); ctx.fill();
+  text(ctx, `SNR ${fmt(s, 0)}`, X(S.mas) - 8, Y(s) - 8, css("--amber"), "right", 11);
   if (2 * S.mas <= 40) text(ctx, L.double, X(d) + 6, (Y(s) + Y(sd)) / 2 + 4, css("--amber"), X(d) > W * 0.6 ? "right" : "left", 11);
 }
 
@@ -310,7 +332,7 @@ function buildText() {
   document.documentElement.lang = S.lang;
   document.title = L.title + " | Oliver Brage";
   for (const k of ["title", "sub", "curve", "prof", "image", "tasks", "model", "foot", "privacy"]) set("t-" + k, L[k]);
-  set("t-back", L.back); set("t-simtitle", L.simTitle); set("t-profnote", L.profNote); set("t-imgnote", L.imgNote);
+  set("t-back", L.back); set("t-simtitle", L.simTitle); set("t-profnote", L.profNote); set("t-curvenote", L.curveNote); set("t-imgnote", L.imgNote);
   document.getElementById("t-back").href = "../../?lang=" + S.lang;
   set("lvl-grund", L.grund); set("lvl-deep", L.deep);
   document.getElementById("model-text").innerHTML = withMath(L.modelText);
