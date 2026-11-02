@@ -13,14 +13,13 @@ const SERIES = [
       en: { title: "From number to image", text: "Histogram, exposure index (EI and REX), automatic rescaling, LUT and WW/WL. The simulator: change dose and collimation, and see why brightness says nothing about dose." } },
   ] },
   { da: "Støj", en: "Noise", pages: [
-    // draft: simulator only until video 2 exists and the owner has approved it
-    { path: "noise", tabs: ["simulator"], draftTabs: ["video", "simulator", "handout"], file: "stoej", draft: true,
+    // simulator approved and live 2026-11-02; the video and handout stay drafts until approved
+    { path: "noise", tabs: ["simulator"], draftTabs: ["video", "simulator", "handout"], file: "stoej",
       da: { title: "Støj, SNR og CNR", text: "Kvantestøj, SNR og CNR. Simulatoren: skru på dosis, kV, pixelstørrelse og detektor, og se hvilke detaljer der forsvinder i støjen." },
       en: { title: "Noise, SNR and CNR", text: "Quantum noise, SNR and CNR. The simulator: change dose, kV, pixel size and detector, and see which details disappear in the noise." } },
   ],
     soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
   { da: "Spredt stråling", en: "Scatter", pages: [
-    // simulator live (approved 2026-11-02); videos, podcast and handout stay drafts until approved
     // 3a with its podcast and 3b approved 2026-11-02; 3c stays a draft (draftFiles)
     { path: "scatter", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"],
       podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 9 }]],

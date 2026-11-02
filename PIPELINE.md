@@ -15,13 +15,13 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 3a Spredt stråling: video (4) + PDF | 2026-11-02 |
 | 3a Spredt stråling: podcast (EN, 9:20) | 2026-11-02 |
 | 3b Rasteret: video (4) + PDF | 2026-11-02 |
+| 2 Støj: simulator | 2026-11-02 |
 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
 |---|---|---|---|
 | 3 | Video 3c Andre veje (4) | radiografi/3c-andre-veje | listen: c2_raster (heard "reststof") |
 | 4 | Video 4 Skarphed (4) | radiografi/4-skarphed | your fixes: magnification per end, zoom marker, title |
-| 5 | Noise simulator | localhost:8765/learn/radiography/noise/?draft=1 | testing; mAs slider in Chrome: retest after the per-frame redraw fix |
 | 7 | Six [tjek] numbers | manim-studio storyboards/spredt_straaling_raster/03_draft.md | Bucky 2–6, 25–45 lines/cm, >10 cm and >60 kV, ... |
 | 8 | Danish TTS, 3a | 3a da | s1_opslug (heard "Knorren"); s3_tre re-taken, now "300 mod 250" |
 | 9 | ML folder grouping | manim-studio organize_media.py, CATALOG | my guess at course order |
