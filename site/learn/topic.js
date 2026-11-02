@@ -18,8 +18,9 @@ const SERIES = [
   ] },
   { da: "Støj", en: "Noise", pages: [
     // simulator live 2026-11-02; video and handout live 2026-11-02 (owner approved the English basic version)
-    { path: "noise", tabs: ["video", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "stoej",
-      draftPodcast: [["stoej", { title: "Noise: when there are not enough photons", minutes: 10 }]],
+    // podcast approved 2026-11-02
+    { path: "noise", tabs: ["video", "podcast", "simulator", "handout"], file: "stoej",
+      podcast: [["stoej", { title: "Noise: when there are not enough photons", minutes: 7 }]],
       da: { title: "Støj, SNR og CNR", text: "Kvantestøj, SNR og CNR. Simulatoren: skru på dosis, kV, pixelstørrelse og detektor, og se hvilke detaljer der forsvinder i støjen." },
       en: { title: "Noise, SNR and CNR", text: "Quantum noise, SNR and CNR. The simulator: change dose, kV, pixel size and detector, and see which details disappear in the noise." } },
   ],

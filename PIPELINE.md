@@ -20,6 +20,7 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 1a Fra foton til tal: simulator | 2026-11-02 |
 | Spredt stråling: compression task in the simulator | 2026-11-02 |
 | 1a and 1b: podcasts (EN) | 2026-11-02 |
+| 2 Støj: podcast (EN) | 2026-11-02 |
 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
@@ -29,7 +30,7 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 7 | Six [tjek] numbers | manim-studio storyboards/spredt_straaling_raster/03_draft.md | Bucky 2–6, 25–45 lines/cm, >10 cm and >60 kV, ... |
 | 8 | Danish TTS, 3a | 3a da | s1_opslug (heard "Knorren"); s3_tre re-taken, now "300 mod 250" |
 | 9 | ML folder grouping | manim-studio organize_media.py, CATALOG | my guess at course order |
-| 10 | Podcasts 2, 3b, 3c, 4 (EN) | each topic page ?draft=1#podcast; radiografi/<topic>/podcast_en.mp3 | 6–9 min each, all chunks pass Whisper |
+| 10 | Podcasts 3b, 3c, 4 (EN) | each topic page ?draft=1#podcast; radiografi/<topic>/podcast_en.mp3 | 6–9 min each, all chunks pass Whisper |
 
 ## Open decisions
 - How "Brage" should sound: episode uses "Brah-eh"; samples Brah-eh / Braa-uh / Brawa in manim-studio media/podcast/prove/brage/ for the owner to pick.
