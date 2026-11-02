@@ -50,7 +50,7 @@ const T = {
 Bucky-faktoren er så $B = (1 + \\text{SPR}) / (T_p + T_s \\cdot \\text{SPR})$.</p>
 <p>Knoglens kontrast uden spredning er $C_0 = 0{,}35 \\cdot (70/kV)^{1{,}5}$, og med spredning $C = C_0 \\cdot P/(P+S)$. Støjen er $\\sqrt{P+S}$, så $\\text{CNR} \\propto C_0 P/\\sqrt{P+S}$.</p>
 <p>mAs vælges, så detektoren altid får lige mange fotoner, sådan som eksponeringen sættes i praksis. Dosis er mAs gange $(kV/70)^2$, i forhold til referencen.
-Det virtuelle raster trækker 85 % af tågens gennemsnit fra, men ikke dens støj.</p>`,
+Det virtuelle raster trækker 85 % af tågens gennemsnit fra, men ikke den kvantestøj, de spredte fotoner bringer med sig.</p>`,
     groups: [
       ["Tågen", [
         ["Hvor meget er spredt?", "Nulstil. Hvad er SPR? Hvad betyder tallet?", "SPR er cirka 3,7. Der rammer næsten fire gange så mange spredte som primære fotoner detektoren. Det er typisk for maven uden raster."],
@@ -72,8 +72,8 @@ Det virtuelle raster trækker 85 % af tågens gennemsnit fra, men ikke dens stø
         ["Luftspalte i stedet", "Fjern rasteret og sæt luftspalten til 15 cm. Sammenlign med 8:1 raster. Hvad er prisen?", "Luftspalten fjerner en del af spredningen uden bly: de skrå, spredte fotoner rammer ved siden af detektoren, mens de primære stadig rammer. Prisen er forstørrelse og geometrisk uskarphed, og i praksis øges afstand eller mAs ofte."],
       ]],
       ["Virtuelt raster", [
-        ["Regn tågen væk", "Nulstil, og slå virtuelt raster til. Sammenlign kontrast og CNR med 12:1 raster.", "Kontrasten kommer næsten op på rasterets niveau uden ekstra dosis. Men CNR stiger ikke, fordi støjen fra de spredte fotoner bliver."],
-        ["Begge dele?", "Slå både 12:1 og virtuelt raster til. Hvad sker der?", "Kontrasten stiger lidt mere, men CNR bestemmes af rasteret. Softwaren kan ikke fjerne støj, der allerede er i billedet."],
+        ["Regn tågen væk", "Nulstil, og slå virtuelt raster til. Sammenlign kontrast og CNR med 12:1 raster.", "Kontrasten kommer næsten op på rasterets niveau uden ekstra dosis. Men CNR stiger ikke, fordi kvantestøjen fra de spredte fotoner bliver. De bar ingen information, kun udsving."],
+        ["Begge dele?", "Slå både 12:1 og virtuelt raster til. Hvad sker der?", "Kontrasten stiger lidt mere, men CNR bestemmes af rasteret. Softwaren kan fjerne tågen, men ikke den kvantestøj, de spredte fotoner allerede har lagt i billedet."],
       ]],
       ["Det hele samlet", [
         ["Bækken", "Bækken, 22 cm, 80 kV. Find den opstilling, der giver den bedste CNR for den laveste dosis. Begrund dit valg.", "Indblænd først. Brug så et raster på 8:1 til 12:1. Et virtuelt raster alene giver god kontrast med lav dosis, men dårligere CNR. Diskutér, hvornår det er godt nok."],
@@ -118,7 +118,7 @@ Det virtuelle raster trækker 85 % af tågens gennemsnit fra, men ikke dens stø
 The Bucky factor is then $B = (1 + \\text{SPR}) / (T_p + T_s \\cdot \\text{SPR})$.</p>
 <p>Bone contrast without scatter is $C_0 = 0.35 \\cdot (70/kV)^{1.5}$, and with scatter $C = C_0 \\cdot P/(P+S)$. Noise is $\\sqrt{P+S}$, so $\\text{CNR} \\propto C_0 P/\\sqrt{P+S}$.</p>
 <p>The mAs is chosen so the detector always gets the same number of photons, as the exposure is set in practice. Dose is mAs times $(kV/70)^2$, relative to the reference.
-The virtual grid subtracts 85 % of the fog's average, but not its noise.</p>`,
+The virtual grid subtracts 85 % of the fog's average, but not the quantum noise the scattered photons bring with them.</p>`,
     groups: [
       ["The fog", [
         ["How much is scatter?", "Reset. What is the SPR? What does the number mean?", "The SPR is about 3.7. Almost four times as many scattered as primary photons reach the detector. That is typical for the abdomen without a grid."],
@@ -140,8 +140,8 @@ The virtual grid subtracts 85 % of the fog's average, but not its noise.</p>`,
         ["An air gap instead", "Remove the grid and set the air gap to 15 cm. Compare with an 8:1 grid. What is the price?", "The air gap removes some of the scatter without lead: the slanted scattered photons land beside the detector, while the primary photons still hit it. The price is magnification and focal spot blur, and in practice the distance or the mAs is often increased."],
       ]],
       ["Virtual grid", [
-        ["Calculate the fog away", "Reset, and switch on the virtual grid. Compare contrast and CNR with a 12:1 grid.", "The contrast comes close to the grid's without extra dose. But the CNR does not rise, because the noise from the scattered photons stays."],
-        ["Both?", "Switch on both 12:1 and the virtual grid. What happens?", "The contrast rises a little more, but the CNR is set by the grid. Software cannot remove noise that is already in the image."],
+        ["Calculate the fog away", "Reset, and switch on the virtual grid. Compare contrast and CNR with a 12:1 grid.", "The contrast comes close to the grid's without extra dose. But the CNR does not rise, because the quantum noise from the scattered photons stays. They carried no information, only fluctuation."],
+        ["Both?", "Switch on both 12:1 and the virtual grid. What happens?", "The contrast rises a little more, but the CNR is set by the grid. Software can remove the fog, but not the quantum noise the scattered photons have already put into the image."],
       ]],
       ["All together", [
         ["Pelvis", "Pelvis, 22 cm, 80 kV. Find the set-up with the best CNR for the lowest dose. Explain your choice.", "Collimate first. Then use an 8:1 to 12:1 grid. A virtual grid alone gives good contrast at low dose, but a lower CNR. Discuss when that is good enough."],
