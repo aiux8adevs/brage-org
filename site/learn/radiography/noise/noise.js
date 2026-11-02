@@ -19,9 +19,9 @@ const T = {
     simTitle: "Simulator: Støj, SNR og CNR", grund: "Grund", deep: "Fordybelse", back: "← Læring",
     curve: "SNR og dosis", prof: "En linje gennem rækken med 4 % kontrast", image: "Det detektoren så",
     curveNote: "Kurven viser SNR for alle mAs med dine indstillinger, den grå kurve udgangspunktet (10 mAs, 70 kV, 150 µm, CsI). Den orange prik er din mAs. Trappen viser, hvad dobbelt dosis giver: SNR bliver kun 1,41 gange bedre, ikke dobbelt så god. Derfor flader kurven ud.",
-    profNote: "Linjen går gennem den orange markering i billedet. Op: flere fotoner (baggrund). Ned: færre fotoner, hvor en skive dæmper strålen. Cyan er hver enkelt pixel; den hopper op og ned, og det er støjen. Orange er gennemsnittet over 7 pixel nabo til nabo: støjen glattes ud, og skiverne træder frem som dyk. Et dyk, der ikke er større end cyan-linjens hop, kan øjet ikke skelne.",
+    profNote: "Grafen viser én vandret linje gennem fantomet: rækken med 4 % kontrast. Den er markeret med orange i siderne af billedet; hold musen over grafen for at se hele linjen. Jo højere grafen ligger, jo flere fotoner har pixlen fået. Hvor linjen krydser en skive, dæmper skiven strålen, så færre fotoner når igennem, og grafen får et dyk (skiven vises lys i billedet, ligesom knogle). Den tynde cyan linje er hver enkelt pixel. Den hopper op og ned hele vejen, også hvor der ingen skive er: det er støjen. Den tykke hvide linje er den samme måling glattet ud (gennemsnittet af 7 pixel ved siden af hinanden). Her kan du se dykkene. En skive kan kun ses, når dens dyk er tydeligt større end støjens hop.",
     profBg: "baggrund", profDisk: "skive",
-    imgNote: "Kontrast-detalje-fantom: skiverne bliver mindre mod højre og svagere nedad. De dæmper strålen og vises lyse, ligesom knogle. Cyan prik: skiven er synlig efter Rose-kriteriet (se tallet under billedet). Orange markering: linjen i kurven til venstre. Billedet skaleres som på et DR-anlæg, så lav dosis ser kornet ud, ikke mørk.",
+    imgNote: "Kontrast-detalje-fantom: skiverne bliver mindre mod højre og svagere nedad. De dæmper strålen og vises lyse, ligesom knogle. Cyan prik: skiven er synlig efter Rose-kriteriet (se tallet under billedet). Orange markering: linjen, som grafen til venstre viser (hold musen over grafen for at se den hele). Billedet skaleres som på et DR-anlæg, så lav dosis ser kornet ud, ikke mørk.",
     tasks: "Opgaver", answer: "Vis svar", of: "af", prev: "Forrige opgave", next: "Næste opgave",
     model: "Sådan virker modellen", foot: "© 2026 Oliver Brage. Alle rettigheder forbeholdes.", privacy: "Privatliv",
     ctl: { mas: "mAs", kv: "Kilovolt", px: "Pixelstørrelse", det: "Detektor", filter: "Støjfilter", csi: "CsI (nåle)", gos: "GOS (pulver)",
@@ -71,9 +71,9 @@ const T = {
     simTitle: "Simulator: Noise, SNR and CNR", grund: "Basic", deep: "Deeper level", back: "← Learn",
     curve: "SNR and dose", prof: "A line through the row with 4 % contrast", image: "What the detector saw",
     curveNote: "The curve shows the SNR for every mAs with your settings, the grey curve the starting point (10 mAs, 70 kV, 150 µm, CsI). The orange dot is your mAs. The step shows what double the dose gives: the SNR gets only 1.41 times better, not twice as good. That is why the curve flattens.",
-    profNote: "The line runs through the orange marks in the image. Up: more photons (background). Down: fewer photons, where a disk attenuates the beam. Cyan is each single pixel; it jumps up and down, and that is the noise. Orange is the average over 7 neighbouring pixels: the noise is smoothed and the disks stand out as dips. A dip no bigger than the cyan line's jumps cannot be told apart by eye.",
+    profNote: "The graph shows one horizontal line through the phantom: the row with 4 % contrast. It is marked in orange at the sides of the image; hover over the graph to see the whole line. The higher the graph, the more photons the pixel received. Where the line crosses a disk, the disk attenuates the beam, so fewer photons get through and the graph dips (the disk shows light in the image, like bone). The thin cyan line is each single pixel. It jumps up and down all the way, also where there is no disk: that is the noise. The thick white line is the same measurement smoothed (the average of 7 neighbouring pixels). Here you can see the dips. A disk can only be seen when its dip is clearly larger than the noise's jumps.",
     profBg: "background", profDisk: "disk",
-    imgNote: "Contrast-detail phantom: the disks get smaller to the right and fainter downwards. They attenuate the beam and show light, like bone. Cyan dot: the disk is visible by the Rose criterion (see the number below the image). Orange marks: the line in the curve on the left. The image is rescaled as on a DR system, so a low dose looks grainy, not dark.",
+    imgNote: "Contrast-detail phantom: the disks get smaller to the right and fainter downwards. They attenuate the beam and show light, like bone. Cyan dot: the disk is visible by the Rose criterion (see the number below the image). Orange marks: the line the graph on the left shows (hover over the graph to see all of it). The image is rescaled as on a DR system, so a low dose looks grainy, not dark.",
     tasks: "Tasks", answer: "Show answer", of: "of", prev: "Previous task", next: "Next task",
     model: "How the model works", foot: "© 2026 Oliver Brage. All rights reserved.", privacy: "Privacy",
     ctl: { mas: "mAs", kv: "Kilovoltage", px: "Pixel size", det: "Detector", filter: "Noise filter", csi: "CsI (needles)", gos: "GOS (powder)",
@@ -188,6 +188,12 @@ function makeImage() {
   IMG = { n, v, N, pxmm };
 }
 
+let profHover = false;
+{
+  const prof = document.getElementById("prof");
+  for (const [ev, on] of [["mouseenter", true], ["mouseleave", false], ["touchstart", true], ["touchend", false]])
+    prof.addEventListener(ev, () => { profHover = on; drawImg(); }, { passive: true });
+}
 function drawImg() {
   const [ctx, W, H] = fit(document.getElementById("img"));
   if (W < 10) return;
@@ -210,10 +216,14 @@ function drawImg() {
     const cx = x0 + (9 + col * 14) / FIELD_MM * sz, cy = y0 + (9 + row * 14) / FIELD_MM * sz + (SIZES[col] / 2 + 2.2) / FIELD_MM * sz;
     ctx.fillStyle = css("--signal"); ctx.beginPath(); ctx.arc(cx, cy, 2.5, 0, 7); ctx.fill();
   }
-  // orange marks at both edges: the row the line profile runs through
+  // orange marks at both edges: the row the line profile runs through; the whole line while the graph is hovered
   const ry = y0 + 23 / FIELD_MM * sz;
   ctx.strokeStyle = css("--amber"); ctx.lineWidth = 3;
   ctx.beginPath(); ctx.moveTo(x0, ry); ctx.lineTo(x0 + 14, ry); ctx.moveTo(x0 + sz - 14, ry); ctx.lineTo(x0 + sz, ry); ctx.stroke();
+  if (profHover) {
+    ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+    ctx.beginPath(); ctx.moveTo(x0, ry); ctx.lineTo(x0 + sz, ry); ctx.stroke(); ctx.setLineDash([]);
+  }
   ctx.lineWidth = 1;
   ctx.font = `11px ${css("--body")}`;
   SIZES.forEach((d, col) => text(ctx, `${fmt(d, d < 1 ? 1 : 0)} mm`, x0 + (9 + col * 14) / FIELD_MM * sz, y0 + sz - 4, "rgba(10,14,24,.9)", "center", 11));
@@ -233,7 +243,7 @@ function drawProf() {
   }
   ctx.stroke();
   // the same line, averaged over 7 pixels: the disks stand out as dips once the noise is smoothed
-  ctx.strokeStyle = css("--amber"); ctx.lineWidth = 2.2; ctx.beginPath();
+  ctx.strokeStyle = css("--fg"); ctx.lineWidth = 2.4; ctx.beginPath();
   for (let i = 3; i < n - 3; i++) {
     let a = 0; for (let k = -3; k <= 3; k++) a += v[row * n + i + k];
     const x = i / (n - 1) * W, y = mid + (N - a / 7) / span * (H / 2 - 4);
@@ -308,7 +318,7 @@ function buildControls() {
   });
   SLIDERS.forEach(([k, , , , f]) => {
     const el = document.getElementById(`s-${k}`);
-    el.oninput = () => { S[k] = +el.value; document.getElementById(`o-${k}`).textContent = f(S[k]); update(); };
+    el.oninput = () => { S[k] = +el.value; document.getElementById(`o-${k}`).textContent = f(S[k]); updateSoon(); };
   });
   document.getElementById("reset").onclick = () => { Object.assign(S, START); buildControls(); update(); };
 }
@@ -349,6 +359,9 @@ function setPressed() {
 }
 function render() { drawCurve(); drawProf(); drawImg(); readouts(); }
 function update() { M = model(S); makeImage(); render(); }
+// while a slider is dragged it fires many events; redraw at most once per screen frame so the thumb keeps up
+let pending = false;
+function updateSoon() { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; update(); }); } }
 function all() { setPressed(); buildText(); buildControls(); update(); }
 function save() {
   const q = new URLSearchParams(location.search);
