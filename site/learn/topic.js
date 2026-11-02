@@ -14,7 +14,7 @@ const SERIES = [
   ] },
   { da: "Støj", en: "Noise", pages: [
     // draft: simulator only until video 2 exists and the owner has approved it
-    { path: "noise", tabs: ["simulator"], draft: true,
+    { path: "noise", tabs: ["simulator"], draftTabs: ["video", "simulator", "handout"], file: "stoej", draft: true,
       da: { title: "Støj, SNR og CNR", text: "Kvantestøj, SNR og CNR. Simulatoren: skru på dosis, kV, pixelstørrelse og detektor, og se hvilke detaljer der forsvinder i støjen." },
       en: { title: "Noise, SNR and CNR", text: "Quantum noise, SNR and CNR. The simulator: change dose, kV, pixel size and detector, and see which details disappear in the noise." } },
   ],

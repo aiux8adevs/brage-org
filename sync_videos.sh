@@ -17,6 +17,7 @@ live=(
   "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt,3b-rasteret:Raster3b:raster3b|parts"
 )
 drafts=(
+  "learn/radiography/noise|2-stoej:Stoej:stoej|"
   "learn/radiography/shadow|4-skarphed:Uskarphed:uskarphed|"
   "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt,3b-rasteret:Raster3b:raster3b,3c-andre-veje:Tage3c:tage3c|parts"
 )

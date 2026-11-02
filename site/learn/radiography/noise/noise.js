@@ -15,7 +15,8 @@ const FIELD_MM = 60;                     // the phantom is 6 cm across
 
 const T = {
   da: {
-    title: "Støj, SNR og CNR", sub: "En simulator til støj: skru på dosis, kV, pixelstørrelse og detektor, og se hvilke detaljer der forsvinder i støjen. Video 2 kommer.",
+    title: "Støj, SNR og CNR", sub: "Kvantestøj, SNR og CNR. En video, og en simulator hvor du selv skruer på dosis, kV, pixelstørrelse og detektor og ser, hvilke detaljer der forsvinder i støjen.",
+    videoNote: "Se videoen først, og prøv så selv i simulatoren. Cirka seks minutter (fordybelsen otte).",
     simTitle: "Simulator: Støj, SNR og CNR", grund: "Grund", deep: "Fordybelse", back: "← Læring",
     curve: "SNR og dosis", prof: "En linje gennem rækken med 4 % kontrast", image: "Det detektoren så",
     curveNote: "Kurven viser SNR for alle mAs med dine indstillinger, den grå kurve udgangspunktet (10 mAs, 70 kV, 150 µm, CsI). Den orange prik er din mAs. Trappen viser, hvad dobbelt dosis giver: SNR bliver kun 1,41 gange bedre, ikke dobbelt så god. Derfor flader kurven ud.",
@@ -67,7 +68,8 @@ const T = {
     ],
   },
   en: {
-    title: "Noise, SNR and CNR", sub: "A simulator for noise: change dose, kV, pixel size and detector, and see which details disappear in the noise. Video 2 is on the way.",
+    title: "Noise, SNR and CNR", sub: "Quantum noise, SNR and CNR. A video, and a simulator where you change dose, kV, pixel size and detector yourself and see which details disappear in the noise.",
+    videoNote: "Watch the video first, then try it yourself in the simulator. About six minutes (the deeper level eight).",
     simTitle: "Simulator: Noise, SNR and CNR", grund: "Basic", deep: "Deeper level", back: "← Learn",
     curve: "SNR and dose", prof: "A line through the row with 4 % contrast", image: "What the detector saw",
     curveNote: "The curve shows the SNR for every mAs with your settings, the grey curve the starting point (10 mAs, 70 kV, 150 µm, CsI). The orange dot is your mAs. The step shows what double the dose gives: the SNR gets only 1.41 times better, not twice as good. That is why the curve flattens.",
@@ -351,6 +353,10 @@ function buildText() {
       `<details><summary>${h}</summary><p class="q">${withMath(q)}</p><details class="answer">` +
       `<summary>${L.answer}</summary><p class="a">${withMath(a)}</p></details></details>`).join("")).join("");
   buildCard();
+  // the video in the chosen language and level; only reloaded when that choice changes
+  document.getElementById("t-videonote").textContent = L.videoNote;
+  const vid = document.getElementById("vid"), file = `video/stoej_${S.lang}_${S.level === "deep" ? "fordybelse" : "grund"}.mp4`;
+  if (vid.getAttribute("src") !== file) { vid.poster = `video/poster_${S.lang}.jpg`; vid.src = file; }
 }
 function setPressed() {
   for (const [id, on] of [["lang-da", S.lang === "da"], ["lang-en", S.lang === "en"],

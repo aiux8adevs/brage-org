@@ -39,7 +39,8 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 `deploy.sh` would also upload drafts).
 
 ## In production (deadline)
-- **Støj (UV2), needed 2026-11-04**: video (storyboard first) + the noise simulator (draft, in testing).
+- **Støj (UV2), needed 2026-11-04**: storyboard approved 2026-11-02 (DQE checked online: CsI ≈ 0.65, GOS ≈ 0.35 fair). Video: English rendering, Danish narration generating, then Danish renders. Page: draft video + handout tabs added to the noise page. Then: owner reviews video + simulator, both go online together.
+- Note for the 3c review: c2 says the scattered photons "land at random, and that gives noise". Check it against the teaching rule that noise and scatter are kept apart.
 
 ## Not started / later
 - UV5 Røntgenrøret: heel effect, filtration, AEC (video + simulator).
