@@ -15,7 +15,7 @@ const FIELD_MM = 60;                     // the phantom is 6 cm across
 
 const T = {
   da: {
-    title: "Støj, SNR og CNR", sub: "Kvantestøj, SNR og CNR. En simulator, hvor du selv skruer på dosis, kV, pixelstørrelse og detektor og ser, hvilke detaljer der forsvinder i støjen. Videoen kommer.",
+    title: "Støj, SNR og CNR", sub: "Kvantestøj, SNR og CNR. En video, og en simulator hvor du selv skruer på dosis, kV, pixelstørrelse og detektor og ser, hvilke detaljer der forsvinder i støjen.",
     videoNote: "Se videoen først, og prøv så selv i simulatoren. Cirka seks minutter (fordybelsen otte).",
     simTitle: "Simulator: Støj, SNR og CNR", grund: "Grund", deep: "Fordybelse", back: "← Læring",
     curve: "SNR og dosis", prof: "En linje gennem rækken med 4 % kontrast", image: "Det detektoren så",
@@ -68,7 +68,7 @@ const T = {
     ],
   },
   en: {
-    title: "Noise, SNR and CNR", sub: "Quantum noise, SNR and CNR. A simulator where you change dose, kV, pixel size and detector yourself and see which details disappear in the noise. The video is on the way.",
+    title: "Noise, SNR and CNR", sub: "Quantum noise, SNR and CNR. A video, and a simulator where you change dose, kV, pixel size and detector yourself and see which details disappear in the noise.",
     videoNote: "Watch the video first, then try it yourself in the simulator. About six minutes (the deeper level eight).",
     simTitle: "Simulator: Noise, SNR and CNR", grund: "Basic", deep: "Deeper level", back: "← Learn",
     curve: "SNR and dose", prof: "A line through the row with 4 % contrast", image: "What the detector saw",

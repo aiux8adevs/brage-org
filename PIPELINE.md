@@ -16,6 +16,7 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 3a Spredt stråling: podcast (EN, 9:20) | 2026-11-02 |
 | 3b Rasteret: video (4) + PDF | 2026-11-02 |
 | 2 Støj: simulator | 2026-11-02 |
+| 2 Støj: video (4) + PDF | 2026-11-02 |
 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
@@ -39,8 +40,11 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 `deploy.sh` would also upload drafts).
 
 ## In production (deadline)
-- **Støj (UV2), needed 2026-11-04**: storyboard approved 2026-11-02 (DQE checked online: CsI ≈ 0.65, GOS ≈ 0.35 fair). Video: English rendering, Danish narration generating, then Danish renders. Page: draft video + handout tabs added to the noise page. Then: owner reviews video + simulator, both go online together.
 - Note for the 3c review: c2 says the scattered photons "land at random, and that gives noise". Check it against the teaching rule that noise and scatter are kept apart.
+
+## In production
+- Podcasts 1a, 1b, 2, 3b, 3c, 4 (English, SoulX): scripts written and reviewed twice each; audio generating. Draft tabs on every topic page (?draft=1#podcast).
+- 3c video re-rendered with fog / quantum noise from the scattered photons: waiting for the owner's review.
 
 ## Not started / later
 - UV5 Røntgenrøret: heel effect, filtration, AEC (video + simulator).

@@ -15,9 +15,9 @@ live=(
   "learn/radiography/detector|1a-fra-foton-til-tal:Detektor:detektor|"
   "learn/radiography/histogram|1b-fra-tal-til-billede:Histogram:histogram|"
   "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt,3b-rasteret:Raster3b:raster3b|parts"
+  "learn/radiography/noise|2-stoej:Stoej:stoej|"
 )
 drafts=(
-  "learn/radiography/noise|2-stoej:Stoej:stoej|"
   "learn/radiography/shadow|4-skarphed:Uskarphed:uskarphed|"
   "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt,3b-rasteret:Raster3b:raster3b,3c-andre-veje:Tage3c:tage3c|parts"
 )

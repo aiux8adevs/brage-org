@@ -5,16 +5,19 @@
 
 const SERIES = [
   { da: "Det digitale billede", en: "The digital image", pages: [
-    { path: "detector", tabs: ["video", "handout"], file: "detektor",
+    { path: "detector", tabs: ["video", "handout"], draftTabs: ["video", "podcast", "handout"], file: "detektor",
+      draftPodcast: [["detektor", { title: "From photon to number", minutes: 10 }]],
       da: { title: "Fra foton til tal", text: "Hvordan røntgenfotonen bliver til et tal: scintillator, fill factor, udlæsning, ADC, bitdybde, matrix og pixel." },
       en: { title: "From photon to number", text: "How the X-ray photon becomes a number: scintillator, fill factor, readout, ADC, bit depth, matrix and pixel." } },
-    { path: "histogram", tabs: ["video", "simulator", "handout"], file: "histogram",
+    { path: "histogram", tabs: ["video", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "histogram",
+      draftPodcast: [["histogram", { title: "From number to image", minutes: 10 }]],
       da: { title: "Fra tal til billede", text: "Histogram, eksponeringsindeks (EI og REX), automatisk skalering, LUT og WW/WL. Simulatoren: skru på dosis og indblænding, og se hvorfor lysheden intet siger om dosis." },
       en: { title: "From number to image", text: "Histogram, exposure index (EI and REX), automatic rescaling, LUT and WW/WL. The simulator: change dose and collimation, and see why brightness says nothing about dose." } },
   ] },
   { da: "Støj", en: "Noise", pages: [
-    // simulator approved and live 2026-11-02; the video and handout stay drafts until approved
-    { path: "noise", tabs: ["simulator"], draftTabs: ["video", "simulator", "handout"], file: "stoej",
+    // simulator live 2026-11-02; video and handout live 2026-11-02 (owner approved the English basic version)
+    { path: "noise", tabs: ["video", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "stoej",
+      draftPodcast: [["stoej", { title: "Noise: when there are not enough photons", minutes: 10 }]],
       da: { title: "Støj, SNR og CNR", text: "Kvantestøj, SNR og CNR. Simulatoren: skru på dosis, kV, pixelstørrelse og detektor, og se hvilke detaljer der forsvinder i støjen." },
       en: { title: "Noise, SNR and CNR", text: "Quantum noise, SNR and CNR. The simulator: change dose, kV, pixel size and detector, and see which details disappear in the noise." } },
   ],
@@ -23,6 +26,8 @@ const SERIES = [
     // 3a with its podcast and 3b approved 2026-11-02; 3c stays a draft (draftFiles)
     { path: "scatter", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"],
       podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 9 }]],
+      draftPodcast: [["spredt", { title: "3a Scatter: the fog over the image", minutes: 9 }], ["raster3b", { title: "3b The grid: how it works, and what it costs", minutes: 10 }],
+                     ["tage3c", { title: "3c Other ways: virtual grid, air gap and compression", minutes: 9 }]],
       files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }]],
       draftFiles: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }],
               ["tage3c", { da: "3c Andre veje", en: "3c Other ways" }]],
@@ -32,7 +37,8 @@ const SERIES = [
     soon: { da: "Spredt stråling, raster, luftspalte, kompression og indblænding. Under produktion.", en: "Scatter, grids, air gap, compression and collimation. In production." } },
   { da: "Skarphed", en: "Sharpness", pages: [
     // the video is added to tabs once it is approved
-    { path: "shadow", tabs: ["simulator"], draftTabs: ["video", "simulator", "handout"], file: "uskarphed",
+    { path: "shadow", tabs: ["simulator"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "uskarphed",
+      draftPodcast: [["uskarphed", { title: "Sharpness: five ways the shadow lies", minutes: 10 }]],
       da: { title: "Skarphed: fem måder skyggen snyder på", text: "Forstørrelse, formforvrængning, geometrisk uskarphed, bevægelsesuskarphed og overlejring. Flyt fokus, objekt og detektor." },
       en: { title: "Sharpness: five ways the shadow lies", text: "Magnification, shape distortion, focal spot blur, motion blur and superimposition. Move the focal spot, the object and the detector." } },
   ] },
@@ -61,6 +67,7 @@ const DRAFT = new URLSearchParams(location.search).get("draft") === "1";
 for (const g of SERIES) for (const p of g.pages) {
   if (DRAFT && p.draftTabs) p.tabs = p.draftTabs;
   if (DRAFT && p.draftFiles) p.files = p.draftFiles;
+  if (DRAFT && p.draftPodcast) p.podcast = p.draftPodcast;
 }
 for (const g of SERIES) g.pages = g.pages.filter(p => DRAFT || !p.draft || p.path === document.body.dataset.topic);
 const pages = SERIES.flatMap(g => g.pages);
