@@ -40,8 +40,9 @@ const SERIES = [
     soon: { da: "Spredt stråling, raster, luftspalte, kompression og indblænding. Under produktion.", en: "Scatter, grids, air gap, compression and collimation. In production." } },
   { da: "Skarphed", en: "Sharpness", pages: [
     // the video is added to tabs once it is approved
-    { path: "shadow", tabs: ["simulator"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "uskarphed",
-      draftPodcast: [["uskarphed", { title: "Sharpness: five ways the shadow lies", minutes: 10 }]],
+    // podcast approved 2026-11-02; the video is added to tabs once it is approved
+    { path: "shadow", tabs: ["simulator", "podcast"], draftTabs: ["video", "podcast", "simulator", "handout"], file: "uskarphed",
+      podcast: [["uskarphed", { title: "Sharpness: five ways the shadow lies", minutes: 7 }]],
       da: { title: "Skarphed: fem måder skyggen snyder på", text: "Forstørrelse, formforvrængning, geometrisk uskarphed, bevægelsesuskarphed og overlejring. Flyt fokus, objekt og detektor." },
       en: { title: "Sharpness: five ways the shadow lies", text: "Magnification, shape distortion, focal spot blur, motion blur and superimposition. Move the focal spot, the object and the detector." } },
   ] },

@@ -665,7 +665,11 @@ function buildCard() {
   document.getElementById("tc-prev").onclick = () => go(-1);
   document.getElementById("tc-next").onclick = () => go(1);
 }
-function render() { drawGeo(); drawImage(); drawLoupe(); readouts(); legend(); }
+function render() {
+  // while another tab is open the canvases have no size; the page redraws when the simulator tab is shown
+  if (document.getElementById("geo").getBoundingClientRect().width > 10) { drawGeo(); drawImage(); drawLoupe(); }
+  readouts(); legend();
+}
 function all() { setPressed(); buildText(); buildControls(); render(); }
 
 document.getElementById("lang-da").onclick = () => { S.lang = "da"; save(); all(); };
