@@ -10,16 +10,17 @@ set -euo pipefail
 cd "$(dirname "$0")"
 R=~/projects/manim-studio/media/brage-org/radiografi   # one folder per topic: videos, masters, PDFs
 
-# page folder | topic folder:scene class:file name, one or more | poster names per part?
+# page folder | topic folder:scene class:file name[:podcast], one or more | poster names per part?
+# ":podcast" marks an approved English podcast; without it the episode is not copied.
 live=(
-  "learn/radiography/detector|1a-fra-foton-til-tal:Detektor:detektor|"
-  "learn/radiography/histogram|1b-fra-tal-til-billede:Histogram:histogram|"
-  "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt,3b-rasteret:Raster3b:raster3b|parts"
-  "learn/radiography/noise|2-stoej:Stoej:stoej|"
-  "learn/radiography/shadow|4-skarphed:Uskarphed:uskarphed|"
+  "learn/radiography/detector|1a-fra-foton-til-tal:Detektor:detektor:podcast|"
+  "learn/radiography/histogram|1b-fra-tal-til-billede:Histogram:histogram:podcast|"
+  "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt:podcast,3b-rasteret:Raster3b:raster3b|parts"
+  "learn/radiography/noise|2-stoej:Stoej:stoej:podcast|"
+  "learn/radiography/shadow|4-skarphed:Uskarphed:uskarphed:podcast|"
 )
 drafts=(
-  "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt,3b-rasteret:Raster3b:raster3b,3c-andre-veje:Tage3c:tage3c|parts"
+  "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt:podcast,3b-rasteret:Raster3b:raster3b:podcast,3c-andre-veje:Tage3c:tage3c:podcast|parts"
   "learn/radiography/tube|5a-roentgenroeret:Roer5a:roer5a,5b-automatisk-eksponering:Aec5b:aec5b|parts"
 )
 pages=("${live[@]}")
@@ -30,7 +31,7 @@ for p in "${pages[@]}"; do
   out="site/$page/video"; mkdir -p "$out"
   IFS="," read -ra parts <<< "$sources"
   for part in "${parts[@]}"; do
-    IFS=":" read -r src cls name <<< "$part"
+    IFS=":" read -r src cls name pod <<< "$part"
     for lang in da en; do
       for lvl in grund fordybelse; do
         cp "$R/$src/${cls}_${lang}_${lvl}.mp4" "$out/${name}_${lang}_${lvl}.mp4"
@@ -42,8 +43,8 @@ for p in "${pages[@]}"; do
       # the glossary and transcript PDF, made by make_transcript_radiografi.py
       cp "$R/$src/${name}_${lang}.pdf" "$out/"
     done
-    # the English podcast episode, where there is one
-    if [[ -f "$R/$src/podcast_en.mp3" ]]; then cp "$R/$src/podcast_en.mp3" "$out/podcast_${name}_en.mp3"; fi
+    # the English podcast episode, only when marked approved (":podcast")
+    if [[ "$pod" == "podcast" && -f "$R/$src/podcast_en.mp3" ]]; then cp "$R/$src/podcast_en.mp3" "$out/podcast_${name}_en.mp3"; fi
   done
   echo "synced $page"
 done

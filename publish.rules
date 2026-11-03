@@ -1,0 +1,37 @@
+# What deploy.sh may upload under learn/ (rsync filter rules, first match wins).
+# A whitelist: anything under learn/ that is not let through here stays local and is not deleted on
+# the server. Add a page or a file only after the owner has approved it (see PIPELINE.md).
+# The rest of the site (front page, projects, privacy, assets) is not affected by these rules.
+
+# Approved media in the video/ folders
++ /learn/radiography/detector/video/detektor_*
++ /learn/radiography/detector/video/poster_*
++ /learn/radiography/detector/video/podcast_detektor_en.mp3
++ /learn/radiography/histogram/video/histogram_*
++ /learn/radiography/histogram/video/poster_*
++ /learn/radiography/histogram/video/podcast_histogram_en.mp3
++ /learn/radiography/noise/video/stoej_*
++ /learn/radiography/noise/video/poster_*
++ /learn/radiography/noise/video/podcast_stoej_en.mp3
++ /learn/radiography/shadow/video/uskarphed_*
++ /learn/radiography/shadow/video/poster_*
++ /learn/radiography/shadow/video/podcast_uskarphed_en.mp3
++ /learn/radiography/scatter/video/spredt_*
++ /learn/radiography/scatter/video/poster_spredt_*
++ /learn/radiography/scatter/video/podcast_spredt_en.mp3
++ /learn/radiography/scatter/video/raster3b_*
++ /learn/radiography/scatter/video/poster_raster3b_*
+- /learn/radiography/*/video/*
+
+# Approved topic pages
++ /learn/radiography/detector/***
++ /learn/radiography/histogram/***
++ /learn/radiography/noise/***
++ /learn/radiography/shadow/***
++ /learn/radiography/scatter/***
++ /learn/radiography/tex.js
+- /learn/radiography/*
+
+# Approved subjects under learn/
++ /learn/radiography/
+- /learn/*/

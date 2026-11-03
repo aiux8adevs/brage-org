@@ -1,6 +1,11 @@
 # Pipeline: what is built, what waits for review, what is live
 
 Updated whenever something changes status. Nothing goes online before the owner has approved it.
+
+**Ground rule: privacy by design.** The site is built and run on privacy-by-design principles as far
+as possible: collect nothing that is not needed, no cookies, tracking or third-party resources, data
+kept within the EU/EEA, and privacy-friendly defaults. New features and changes are checked against
+this before they go online.
 Media lives in `~/projects/manim-studio/media/brage-org/<section>/<topic>/`
 (from Windows: `\\wsl$\Ubuntu\home\aiux8\projects\manim-studio\media\brage-org\`).
 Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 8765`, then add `?draft=1`.
@@ -41,9 +46,10 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
   nevi theory videos, their storyboards and tests): commit from the session that made it, or ask me.
 
 ## On approval, publishing means
-`./sync_videos.sh` (+ move the page from `drafts` to `live` in it), the topic's tabs in
-`site/learn/topic.js` (draftTabs to tabs), and a targeted upload of that page (not the whole site:
-`deploy.sh` would also upload drafts).
+`./sync_videos.sh` (+ move the page from `drafts` to `live` in it, and add `:podcast` for an approved
+podcast), the files and page added to the whitelist in `publish.rules`, the topic's tabs in
+`site/learn/topic.js` (draftTabs to tabs), and then `./deploy.sh` (dry run) and `./deploy.sh --go`. `publish.rules` keeps drafts
+and unapproved media local, and `--checksum` skips files whose contents have not changed.
 
 ## In production (deadline)
 - Note for the 3c review: c2 says the scattered photons "land at random, and that gives noise". Check it against the teaching rule that noise and scatter are kept apart.
