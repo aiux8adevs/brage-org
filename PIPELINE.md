@@ -37,6 +37,8 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 8 | Danish TTS, 3a | 3a da | s1_opslug (heard "Knorren"); s3_tre re-taken, now "300 mod 250" |
 | 9 | ML folder grouping | manim-studio organize_media.py, CATALOG | my guess at course order |
 | 10 | Podcasts 3b, 3c (EN) | each topic page ?draft=1#podcast; radiografi/<topic>/podcast_en.mp3 | 6–9 min each, all chunks pass Whisper |
+| 11 | UV5 Røntgenrøret: videos 5a + 5b (4 each) + PDFs | tube/?draft=1 (synced to site/, local only) | rendered 2026-11-13, audio QA passed. 5b da listen by ear: a4_rex (Whisper heard "vaks"), a3_placering ("AI" for AEC), a4_1b, a5_F_kv. Same spelling of REX/AEC as the approved 1b |
+| 12 | UV5 simulator (spectrum/filter, heel, AEC; 13 tasks + 3 deeper) | tube/?draft=1#simulator | no JS errors, phone OK; ref label overlap fixed 2026-11-13. Fewer tasks than the ~18–20 target |
 
 ## Open decisions
 - How "Brage" should sound: episode uses "Brah-eh"; samples Brah-eh / Braa-uh / Brawa in manim-studio media/podcast/prove/brage/ for the owner to pick.
@@ -52,7 +54,7 @@ podcast), the files and page added to the whitelist in `publish.rules`, the topi
 and unapproved media local, and `--checksum` skips files whose contents have not changed.
 
 ## In production (deadline)
-- Note for the 3c review: c2 says the scattered photons "land at random, and that gives noise". Check it against the teaching rule that noise and scatter are kept apart.
+- Note for the 3c review: c2 now says the scattered photons "bring their own quantum noise" (checked 2026-11-13); confirm when you listen.
 
 ## In production
 - 3c video re-rendered with fog / quantum noise from the scattered photons: waiting for the owner's review.
@@ -96,6 +98,5 @@ session before touching publish.rules, deploy.sh, .htaccess, learn/topic.js or l
 `./deploy.sh --go`.
 
 ## Not started / later
-- UV5 Røntgenrøret: storyboard approved; videos 5a and 5b rendering; simulator draft at tube/?draft=1.
 - Possibly warmer host voices designed with Qwen3-TTS.
 - ML section on the site (English, one level).

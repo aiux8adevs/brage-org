@@ -301,7 +301,8 @@ function drawSpecBars() {
   line(ctx, [[0, y0], [W, y0]], css("--line"));
   const yref = y0 - (1 / vmax) * (y0 - 18);
   line(ctx, [[0, yref], [W, yref]], css("--muted"), 1, [4, 4]);
-  text(ctx, "1 = " + L.ref, 2, yref - 4, css("--muted"), "left", 10);
+  // only "×1" at the left edge: a longer label ran into the first bar's value; the note below says what 1 is
+  text(ctx, "×1", 2, yref - 4, css("--muted"), "left", 10);
   vals.forEach(([lbl, v, col], i) => {
     const cx = W / 3 * (i + 0.5), h = v / vmax * (y0 - 18);
     ctx.fillStyle = col; ctx.globalAlpha = 0.8; ctx.fillRect(cx - bw / 2, y0 - h, bw, h); ctx.globalAlpha = 1;
