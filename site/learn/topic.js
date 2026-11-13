@@ -48,7 +48,8 @@ const SERIES = [
   ] },
   { da: "Røntgenrøret", en: "The X-ray tube", pages: [
     // draft until the owner approves: shown only with ?draft=1
-    { path: "tube", draft: true, tabs: ["video", "simulator", "handout"], draftTabs: ["video", "simulator", "handout"],
+    // simulator live 2026-11-13; videos 5a/5b and their PDFs still drafts (draftTabs, ?draft=1)
+    { path: "tube", tabs: ["simulator"], draftTabs: ["video", "simulator", "handout"],
       files: [["roer5a", { da: "5a Røret og strålen", en: "5a The tube and the beam" }], ["aec5b", { da: "5b Automatisk eksponering", en: "5b Automatic exposure control" }]],
       da: { title: "Røntgenrøret", text: "Bremsestråling og karakteristisk stråling, spektret, heel-effekten, filtrering og automatisk eksponering (AEC). Simulatoren: skru på kV og filter, vend røret, og vælg ionkamre." },
       en: { title: "The X-ray tube", text: "Bremsstrahlung and characteristic radiation, the spectrum, the heel effect, filtration and automatic exposure control (AEC). The simulator: change kV and filter, turn the tube, and choose chambers." } },

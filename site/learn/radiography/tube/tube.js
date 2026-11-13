@@ -138,7 +138,7 @@ function aecModel(s) {
 
 const T = {
   da: {
-    title: "Røntgenrøret", sub: "Strålen før patienten: røret, spektret, heel-effekten, filtrering og automatisk eksponering. To videoer og en simulator.",
+    title: "Røntgenrøret", sub: "Strålen før patienten: røret, spektret, heel-effekten, filtrering og automatisk eksponering. Simulatoren er klar; to videoer er på vej.",
     grund: "Grund", deep: "Fordybelse", back: "← Læring",
     parts: ["5a Røret og strålen", "5b Automatisk eksponering"],
     partNote: "Se de to dele i rækkefølge. Hver del er cirka fem til ni minutter.",
@@ -255,7 +255,7 @@ const T = {
     ],
   },
   en: {
-    title: "The X-ray tube", sub: "The beam before the patient: the tube, the spectrum, the heel effect, filtration and automatic exposure control. Two videos and a simulator.",
+    title: "The X-ray tube", sub: "The beam before the patient: the tube, the spectrum, the heel effect, filtration and automatic exposure control. The simulator is ready; two videos are on the way.",
     grund: "Basic", deep: "Deeper level", back: "← Learn",
     parts: ["5a The tube and the beam", "5b Automatic exposure control"],
     partNote: "Watch the two parts in order. Each is about five to nine minutes.",
