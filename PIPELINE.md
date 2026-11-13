@@ -28,6 +28,8 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 2 Støj: podcast (EN) | 2026-11-02 |
 | 4 Skarphed: podcast (EN) | 2026-11-02 |
 | 4 Skarphed: video (4) + PDF | 2026-11-02 |
+| 5 Røntgenrøret: simulator (reworked, 19 tasks + formula group); page shows the simulator tab only | 2026-11-13 |
+| 2 Støj: simulator, reworked version (ed956be) | 2026-11-13 |
 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
@@ -37,9 +39,7 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 8 | Danish TTS, 3a | 3a da | s1_opslug (heard "Knorren"); s3_tre re-taken, now "300 mod 250" |
 | 9 | ML folder grouping | manim-studio organize_media.py, CATALOG | my guess at course order |
 | 10 | Podcasts 3b, 3c (EN) | each topic page ?draft=1#podcast; radiografi/<topic>/podcast_en.mp3 | 6–9 min each, all chunks pass Whisper |
-| 11 | UV5 Røntgenrøret: videos 5a + 5b (4 each) + PDFs | tube/?draft=1 (synced to site/, local only) | rendered 2026-11-13, audio QA passed. 5b da listen by ear: a4_rex (Whisper heard "vaks"), a3_placering ("AI" for AEC), a4_1b, a5_F_kv. Same spelling of REX/AEC as the approved 1b |
-| 12 | UV5 simulator, reviewed and reworked 2026-11-13 (19 tasks + 3 deeper + 6 formula tasks) | tube/?draft=1#simulator | owner 2026-11-13: geometric cut-off stays (43 cm at 12° shows cut off), model constants confirmed. Videos 5a/5b checked against the reworked model: agree (REX 833/834 middle chamber, metal over right chamber, K-peaks, heel 45 %). Waiting only for the owner's approval to publish |
-| 13 | Noise simulator reworked 2026-11-13 (ed956be): image at detector pixels, 19+1 tasks + 4 formula, new-exposure button | noise/ (LIVE page, changed locally) | WARNING: noise/ is whitelisted in publish.rules, so the next ./deploy.sh --go uploads these changes. Owner 2026-11-13 accepted: eye ~7–8 vs model 10, CNR on the 4 % row, image-first on phones (noise page only), 24 tasks at deeper level, disks in steps of four. Waiting only for 'go online' |
+| 11 | UV5 Røntgenrøret: videos 5a + 5b (4 each) + PDFs (simulator already live) | tube/?draft=1 (synced to site/, local only) | rendered 2026-11-13, audio QA passed. 5b da listen by ear: a4_rex (Whisper heard "vaks"), a3_placering ("AI" for AEC), a4_1b, a5_F_kv. Same spelling of REX/AEC as the approved 1b |
 
 ## Open decisions
 - How "Brage" should sound: episode uses "Brah-eh"; samples Brah-eh / Braa-uh / Brawa in manim-studio media/podcast/prove/brage/ for the owner to pick.
@@ -99,6 +99,7 @@ session before touching publish.rules, deploy.sh, .htaccess, learn/topic.js or l
 `./deploy.sh --go`.
 
 ## Not started / later
+- When videos 5a/5b go live: tube tabs back to video/simulator/handout in topic.js, add tube media to publish.rules and live list in sync_videos.sh, and change the tube subtitle in tube.js ("Simulatoren er klar; to videoer er på vej").
 - Noise video, line n4_kv (DA+EN): reword so it does not sound as if CNR falls with kV; the trade-off shows at the same detector dose (REX). Owner said yes 2026-11-13; do with the next video round.
 - Possibly warmer host voices designed with Qwen3-TTS.
 - ML section on the site (English, one level).
