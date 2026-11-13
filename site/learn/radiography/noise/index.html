@@ -8,7 +8,7 @@
   <title>Noise | Oliver Brage</title>
   <link rel="stylesheet" href="../histogram/histogram.css">
   <link rel="stylesheet" href="../../topic.css?v=3">
-  <link rel="stylesheet" href="noise.css?v=3">
+  <link rel="stylesheet" href="noise.css?v=4">
 </head>
 <body data-topic="noise">
 <div class="wrap">
@@ -58,7 +58,10 @@
         <canvas id="img"></canvas>
         <p class="note" id="t-imgnote"></p>
       </div>
-      <div class="box readout" id="readout"></div>
+      <div class="box readout">
+        <div class="metrics" id="readout"></div>
+        <div class="seen"><p><span id="t-seen"></span> <span id="seen"></span></p><button class="reset" id="pin"></button></div>
+      </div>
     </div>
   </div>
   <section class="tasks">
@@ -76,7 +79,7 @@
   <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
 </div>
 <script src="../tex.js"></script>
-<script src="noise.js?v=4"></script>
+<script src="noise.js?v=5"></script>
 <script src="../../topic.js?v=10"></script>
 </body>
 </html>

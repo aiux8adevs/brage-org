@@ -1,17 +1,36 @@
 /* Noise page: the histogram page's look; only the canvases differ. */
 #curve { width: 100%; aspect-ratio: 1.6 / 1; display: block; }
-#prof { width: 100%; aspect-ratio: 3 / 1; display: block; }
-#img { width: 100%; aspect-ratio: 1 / 1; display: block; }
+#prof { width: 100%; aspect-ratio: 3 / 1; display: block; touch-action: pan-y; }
+#img { width: 100%; aspect-ratio: 1 / 1.03; display: block; }   /* a square image plus the labels below it */
+/* the numbers are built by the script, inside a wrapper that leaves the two-column grid to its parent */
+.metrics { display: contents; }
+/* new exposure and reset side by side; new exposure is something you do, so it gets the colour of what you adjust */
+.ctl.buttons { display: flex; flex-wrap: wrap; gap: 0 8px; }
+.ctl.buttons .help { flex-basis: 100%; }
+.ctl .reset.shot { color: var(--amber); border-color: var(--amber); }
+.ctl .reset.shot:hover { background: var(--amber); color: var(--bg); }
 @media (min-width: 1100px) and (min-height: 600px) {
   /* the notes under the curves are long: let the stage grow instead of fixing it to the window height */
   .stage { grid-template-columns: 270px minmax(0, 1fr) minmax(0, 1.1fr); height: auto !important; min-height: 0; }  /* overrides the fixed window-height layout from histogram.css and topic.css */
   .stage .controls { order: 0; grid-column: auto; overflow-y: auto; }
   .ctls { grid-template-columns: minmax(0, 1fr); gap: 9px; }
-  #curve { aspect-ratio: auto; height: calc(45svh - 120px); }
-  #prof { aspect-ratio: auto; height: calc(25svh); }
-  #img { aspect-ratio: auto; height: calc(58svh - 120px); }
+  #curve { aspect-ratio: auto; height: calc(45svh - 120px); min-height: 220px; }
+  #prof { aspect-ratio: auto; height: 25svh; min-height: 150px; }
+  #img { aspect-ratio: auto; height: calc(58svh - 100px); min-height: 300px; }
   /* the columns may not be shorter than their text, so nothing runs under the task list */
   .stage > *, .stage .right, .stage .right > .box { min-height: auto; }
+  .stage .right { grid-template-rows: auto auto; }
+}
+/* on a phone the image comes first and the controls right under it, so you see the grain change while you drag */
+@media (max-width: 780px) {
+  .stage .right { display: contents; }
+  .stage .right > .box:first-child { order: 1; }
+  .stage .controls { order: 2; }
+  .stage .right > .readout { order: 3; }
+  .stage > .box:not(.controls) { order: 4; }
 }
 #t-curvenote { margin-bottom: 16px; }
 .stage + section.tasks { margin-top: 28px; }
+section.tasks + section.model { margin-top: 28px; }
+/* a long formula may not push the page wider than the phone */
+#model-text math[display="block"] { max-width: 100%; }
