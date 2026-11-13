@@ -57,6 +57,44 @@ and unapproved media local, and `--checksum` skips files whose contents have not
 ## In production
 - 3c video re-rendered with fog / quantum noise from the scattered photons: waiting for the owner's review.
 
+## Ultrasound module, 5th semester (plan approved 2026-11-13, not started)
+**Purpose:** the site *replaces* the physics teaching. About 12 lessons in all, at most 3 for physics; the students
+learn the physics on their own here so class time goes to clinical scanning and diagnostics. So it must cover
+everything in the current 49 slides, plus Doppler and safety (in the learning outcomes, missing from slides and videos),
+and check understanding itself (no teacher present).
+
+**Today's material (context only, nothing copied in):** 49 slides; hands-on exercise (21 points, kidney, knobology);
+5 pages of terms from Gibbs, Cole & Sassano; six English YouTube videos (What is Sound, Basic US Physics for EM,
+Sinai Ultrasound Basics, Ultrasound Podcast physics, Clarius 1 and 2). Gaps in all of them: aliasing/PRF, angle
+correction, TI/MI, and links from physics to the students' own examinations (aorta, DVT, kidneys, liver and biliary tract).
+
+**Topics** (same format as radiography: video DA/EN × 2 levels, simulator with ~18–20 tasks, PDF):
+| # | Topic | Content | Simulator |
+|---|---|---|---|
+| U1 | Lyd og ekko | sound, frequency/wavelength, 1540 m/s, pulse-echo, grey scale, echogenicity with tissue examples | pulse-echo: time → depth |
+| U2 | Lyd møder væv | impedance, reflection, scatter/speckle, refraction, absorption, attenuation, divergence | layered phantom: frequency vs depth |
+| U3 | Proben og strålen | piezo, probe types, field of view, focusing, beam profile, resolution (axial, lateral, slice thickness, contrast, temporal), harmonics | beam width, focus, frame rate |
+| U4 | Knapper og orientering | gain, TGC, depth, zoom, sector width, frequency, dynamic range, line density, focus; indicator, scan planes | virtual kidney following hands-on points 5, 8–16 |
+| U5 | Artefakter i klinikken | reverberation/comet tail, shadow, enhancement, edge shadow, mirror, side lobe, speckle, anisotropy, slice thickness, each linked to stone, cyst, fatty liver, needle, tendon | artefact lab: place cyst/stone/gas/needle |
+| U6 | Doppler og sikkerhed | Doppler effect, angle (<60°), colour/power/spectral, scale/PRF, aliasing, wall filter; compression is the primary DVT test; TI/MI, ALARA, probe hygiene | vessel + compression + TI/MI readout |
+
+Plus: own glossary (own wording, not the book's) and a self-test quiz per topic, run in the browser only, nothing stored.
+**Build order:** U4 and U5 first (most use in the lab and for diagnostics), then U6, U1–U3.
+**Rules:** own simulated images only (no real US images: licence and consent); YouTube videos as plain links at most,
+never embedded (third-party resources break privacy by design). Pages under site/learn/ultrasound/, kept local by the
+learn whitelist until staging exists.
+
+**Staging (agreed, not built):** `brage.org/staging/` behind Apache Basic Auth in `.htaccess`: one shared password,
+generic user name "preview" (no personal names in server logs), password file outside public_html, `X-Robots-Tag: noindex`,
+no cookies. Only to stop students looking early; approval itself happens in Claude sessions, not on the site.
+Go live = move from staging/ to learn/. Needs changes to publish.rules (keep `- /learn/*/`), maybe deploy.sh and
+.htaccess.
+
+**Coordination between sessions on this repo (agreed 2026-11-13):** each session commits only its own paths
+(`git add <paths>`, never `-A`); re-read PIPELINE.md before editing and keep to your own section; message the other
+session before touching publish.rules, deploy.sh, .htaccess, learn/topic.js or learn/index.html, and before any
+`./deploy.sh --go`.
+
 ## Not started / later
 - UV5 Røntgenrøret: storyboard approved; videos 5a and 5b rendering; simulator draft at tube/?draft=1.
 - Possibly warmer host voices designed with Qwen3-TTS.
