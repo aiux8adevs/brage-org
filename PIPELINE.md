@@ -38,7 +38,7 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 9 | ML folder grouping | manim-studio organize_media.py, CATALOG | my guess at course order |
 | 10 | Podcasts 3b, 3c (EN) | each topic page ?draft=1#podcast; radiografi/<topic>/podcast_en.mp3 | 6–9 min each, all chunks pass Whisper |
 | 11 | UV5 Røntgenrøret: videos 5a + 5b (4 each) + PDFs | tube/?draft=1 (synced to site/, local only) | rendered 2026-11-13, audio QA passed. 5b da listen by ear: a4_rex (Whisper heard "vaks"), a3_placering ("AI" for AEC), a4_1b, a5_F_kv. Same spelling of REX/AEC as the approved 1b |
-| 12 | UV5 simulator, reviewed and reworked 2026-11-13 (19 tasks + 3 deeper + 6 formula tasks) | tube/?draft=1#simulator | physics fixes (AEC vs kV, K-peaks, metal side), task card follows part, "Det kan du se" + save button. Owner questions: 43 cm field at 12° shows cut off; constants (5 mm focal track, chest = 10 cm water, backup 6×, 20 %/step); K-fraction ~10 % at 100 kV |
+| 12 | UV5 simulator, reviewed and reworked 2026-11-13 (19 tasks + 3 deeper + 6 formula tasks) | tube/?draft=1#simulator | owner 2026-11-13: geometric cut-off stays (43 cm at 12° shows cut off), model constants confirmed. Videos 5a/5b checked against the reworked model: agree (REX 833/834 middle chamber, metal over right chamber, K-peaks, heel 45 %). Waiting only for the owner's approval to publish |
 
 ## Open decisions
 - How "Brage" should sound: episode uses "Brah-eh"; samples Brah-eh / Braa-uh / Brawa in manim-studio media/podcast/prove/brage/ for the owner to pick.
