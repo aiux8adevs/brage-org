@@ -87,11 +87,13 @@ Plus: own glossary (own wording, not the book's) and a self-test quiz per topic,
 never embedded (third-party resources break privacy by design). Pages under site/learn/ultrasound/, kept local by the
 learn whitelist until staging exists.
 
-**Staging (agreed, not built):** `brage.org/staging/` behind Apache Basic Auth in `.htaccess`: one shared password,
-generic user name "preview" (no personal names in server logs), password file outside public_html, `X-Robots-Tag: noindex`,
-no cookies. Only to stop students looking early; approval itself happens in Claude sessions, not on the site.
-Go live = move from staging/ to learn/. Needs changes to publish.rules (keep `- /learn/*/`), maybe deploy.sh and
-.htaccess.
+**Staging (live 2026-11-13):** folders are protected where they live (no separate /staging/ path, so relative
+links stay valid). A staged folder has its own `.htaccess` with Apache Basic Auth: user "preview", one shared password
+chosen by the owner, password file `/var/www/brage.org/.htpasswd-staging` (outside public_html, untouched by
+`--delete`), `noindex`, `no-store`, no cookies. Only to stop students looking early; approval happens in Claude
+sessions, not on the site. Staged folders are listed in `staged.list`; `deploy.sh` aborts if one lacks its
+`.htaccess` and checks for 401 after `--go`. Go live = delete the folder's `.htaccess`, remove its line from
+`staged.list`, link it from the learn page. Now staged: `learn/ultrasound/` (placeholder page).
 
 **Coordination between sessions on this repo (agreed 2026-11-13):** each session commits only its own paths
 (`git add <paths>`, never `-A`); re-read PIPELINE.md before editing and keep to your own section; message the other
