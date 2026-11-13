@@ -1,0 +1,4 @@
+# Folders under site/ that are password protected (staging). One path per line, relative to site/.
+# deploy.sh aborts if a listed folder has no protecting .htaccess, and checks for HTTP 401 after --go.
+# Going live: delete the folder's .htaccess and its line here.
+learn/ultrasound

@@ -33,6 +33,9 @@
 + /learn/radiography/tex.js
 - /learn/radiography/*
 
+# Staged subjects: uploaded, but password protected by their own .htaccess (see staged.list)
++ /learn/ultrasound/***
+
 # Approved subjects under learn/
 + /learn/radiography/
 - /learn/*/

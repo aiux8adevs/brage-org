@@ -1,0 +1,13 @@
+# STAGING: this folder is password protected until the owner approves it.
+# Going live = delete this file and remove the folder's line from staged.list (repo root).
+# deploy.sh refuses to upload while a folder in staged.list lacks this file.
+AuthType Basic
+AuthName "brage.org preview"
+# Password file lives outside public_html; one shared user "preview", no accounts
+AuthUserFile /var/www/brage.org/.htpasswd-staging
+Require valid-user
+<IfModule mod_headers.c>
+  # Keep previews out of search engines and shared caches
+  Header always set X-Robots-Tag "noindex, nofollow"
+  Header always set Cache-Control "private, no-store"
+</IfModule>
