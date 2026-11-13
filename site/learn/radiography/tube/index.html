@@ -8,7 +8,7 @@
   <title>The X-ray tube | Oliver Brage</title>
   <link rel="stylesheet" href="../histogram/histogram.css">
   <link rel="stylesheet" href="../../topic.css?v=3">
-  <link rel="stylesheet" href="tube.css?v=1">
+  <link rel="stylesheet" href="tube.css?v=2">
 </head>
 <body data-topic="tube">
 <div class="wrap">
@@ -56,7 +56,10 @@
         <canvas id="side"></canvas>
         <p class="note" id="t-sidenote"></p>
       </div>
-      <div class="box readout" id="readout"></div>
+      <div class="box readout">
+        <div class="metrics" id="readout"></div>
+        <div class="seen"><p><span id="t-seen"></span> <span id="seen"></span></p><button class="reset" id="pin"></button></div>
+      </div>
     </div>
   </div>
   <section class="tasks">
@@ -75,7 +78,7 @@
   <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
 </div>
 <script src="../tex.js"></script>
-<script src="tube.js?v=2"></script>
+<script src="tube.js?v=3"></script>
 <script src="../../topic.js?v=6"></script>
 </body>
 </html>
