@@ -99,10 +99,11 @@ sessions, not on the site. Staged folders are listed in `staged.list`; `deploy.s
 | Element | Status | Where | Notes |
 |---|---|---|---|
 | Overview page U1–U6 | waiting for the owner's review | learn/ultrasound/ | U4 is the only active card; the rest say "on the way" |
-| U4 Knapper og orientering: simulator | waiting for the owner's review (built 2026-11-14) | learn/ultrasound/knobs/ | own B-mode model (model.js), long + transverse kidney, 20 tasks + 3 deeper + 5 formulas; tasks are general knobology (owner chose this over the hands-on points, adjust later) |
+| U4 Knapper og orientering: simulator | waiting for the owner's review (built 2026-11-14, reviewed 97e7ed8: physics, anatomy, texts, layout) | learn/ultrasound/knobs/ | own B-mode model (model.js), long + transverse kidney, 20 tasks + 3 deeper + 5 formulas; tasks are general knobology (owner chose this over the hands-on points, adjust later) |
 | U4 video (DA/EN × 2) and PDF | not started | | storyboard after the simulator is approved |
 
 Questions for the U4 review: is the model's look close enough to a real scanner (speckle, kidney, shadow)?
+Pyramids −12 dB and perirenal fat +3 dB (distinct enough?); kidney centre 8.7 cm deep (deep side of normal); no aorta in transverse.
 Penetration rule 70/f cm (a teaching simplification); read zoom only (write zoom described in a task); frame-rate
 numbers from 1/2/3 lines per degree. Deploying uploads to the staged folder only (behind the password).
 
