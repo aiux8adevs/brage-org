@@ -1,9 +1,26 @@
-/* Knobology page: the radiography simulators' look (histogram.css); only the canvases and the TGC block are new. */
+/* Knobology page: the radiography simulators' look (histogram.css); only the layout, the canvases and the TGC block are new. */
 #img { width: 100%; aspect-ratio: 4 / 3; display: block; background: #000; border-radius: 4px; cursor: crosshair; touch-action: pan-y; }
 #beam { width: 100%; aspect-ratio: 2.1 / 1; display: block; }
 #gaincv { width: 100%; aspect-ratio: 1.6 / 1; display: block; }
 #probe { width: 110px; height: 108px; display: block; margin: 6px auto 0; }
 .metrics { display: contents; }
+.mid { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.graphs { display: grid; gap: 14px; align-content: start; }
+.graphs > div { min-width: 0; }
+/* what you can see right now sits right under the image; its height is held so the page does not jump while you drag */
+.seenline { margin: 8px 0 0; font-size: 13px; line-height: 1.45; min-height: 4.35em; }
+.seenline #t-seen { color: var(--amber); font-weight: 600; }
+.readout .seen { justify-content: flex-end; border-top: 0; padding-top: 0; }
+.readout .seen .reset { padding: 3px 10px; font-size: 12px; }
+/* the task has a box of its own, so it is in view together with the image */
+.taskbox .taskcard { border-top: 0; padding-top: 0; }
+.tc-head b { color: var(--amber); font-weight: 600; }
+/* the controls are grouped the way the tasks are */
+.ctls .grp { grid-column: 1 / -1; font: 600 11px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--signal);
+  margin: 6px 0 -2px; padding-top: 10px; border-top: 1px solid var(--line); }
+.ctls .grp:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.ctls .last { grid-column: 1 / -1; padding-top: 8px; border-top: 1px solid var(--line); }
+.stage .controls { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 /* the TGC: eight small sliders stacked by depth, like the slide pots on a scanner */
 .ctl.tgc label { align-items: center; }
 .tgcrow { display: grid; grid-template-columns: 42px minmax(0, 1fr) 30px; align-items: center; gap: 6px; font: 11px var(--mono); color: var(--muted); }
@@ -15,19 +32,34 @@
 .stage + section.tasks { margin-top: 28px; }
 section.tasks + section.model { margin-top: 28px; }
 #model-text math[display="block"] { max-width: 100%; overflow-x: auto; }
+/* laptop and up: controls, then task and graphs, then the image with its numbers; the image and the numbers fit the window height */
 @media (min-width: 1100px) and (min-height: 600px) {
-  .stage { grid-template-columns: 270px minmax(0, 0.85fr) minmax(0, 1.3fr); height: auto !important; min-height: 0; }
-  .stage .controls { order: 0; grid-column: auto; overflow-y: auto; max-height: calc(100svh - 150px); }
+  .stage { grid-template-columns: 280px minmax(0, 0.8fr) minmax(0, 1.3fr); height: auto !important; min-height: 0; align-items: start; }
+  .stage .controls { order: 0; grid-column: auto; overflow-y: auto; max-height: calc(100svh - 24px); position: sticky; top: 12px; }
   .ctls { grid-template-columns: minmax(0, 1fr); gap: 9px; }
   .stage > *, .stage .right, .stage .right > .box { min-height: auto; }
   .stage .right { grid-template-rows: auto auto; }
-  #img { aspect-ratio: auto; height: calc(100svh - 330px); min-height: 360px; }
+  #img { aspect-ratio: auto; height: calc(100svh - 470px); min-height: 340px; }
+  .seenline { min-height: 2.9em; }
+  .readout { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-/* on a phone the image comes first and the controls right under it */
+/* tablet: image, numbers, task and graphs on the left; the controls follow along on the right */
+@media (min-width: 781px) and (max-width: 1099px) {
+  .stage { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; }
+  .stage .right { grid-column: 1; grid-row: 1; }
+  .stage .mid { grid-column: 1; grid-row: 2; }
+  .stage .controls { order: 0; grid-column: 2; grid-row: 1 / span 2; overflow-y: auto; max-height: calc(100svh - 24px); position: sticky; top: 12px; }
+  .ctls { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+}
+/* phone: the image stays at the top of the screen while you drag the controls under it */
 @media (max-width: 780px) {
-  .stage .right { display: contents; }
-  .stage .right > .box:first-child { order: 1; }
-  .stage .controls { order: 2; }
-  .stage .right > .readout { order: 3; }
-  .stage > .graphs { order: 4; }
+  .stage .right, .stage .mid { display: contents; }
+  .stage .imgbox { order: 1; position: sticky; top: 0; z-index: 2; padding: 8px; margin: 0 -8px; border-radius: 0 0 8px 8px; }
+  .stage .imgbox h2, .stage .imgbox .note { display: none; }
+  .stage .imgbox #img { aspect-ratio: 1.45 / 1; }
+  .seenline { font-size: 12.5px; margin-top: 6px; min-height: 4.35em; }
+  .stage .taskbox { order: 2; }
+  .stage .controls { order: 3; }
+  .stage .readout { order: 4; }
+  .stage .graphs { order: 5; }
 }

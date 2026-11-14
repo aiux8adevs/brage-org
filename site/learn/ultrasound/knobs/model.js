@@ -11,6 +11,8 @@
 //   noise               electronic noise 70 dB below the liver echo at the skin, so the penetration is ≈ 70 / f cm
 //   frame rate          1 / (lines · focal zones · 2 · depth / c)
 //   display             log compression: the dynamic range in dB is spread from black to white around a fixed mid grey
+//   anatomy             adult sizes: kidney 10.8 x 4.6 cm with 1.5 cm of parenchyma, its centre 8.7 cm deep; in the transverse
+//                       plane the vena cava lies on the front of the vertebral body and the kidney beside it
 
 const US = (() => {
   const C = 154000;                 // speed of sound in soft tissue, cm/s
@@ -27,8 +29,8 @@ const US = (() => {
   // tissues: echo level in dB (relative to liver) and attenuation in dB/cm/MHz (one way)
   const TISSUES = {
     skin: [6, 0.6], fat: [-14, 0.6], septum: [2, 0.6], muscle: [-9, 0.7], peritoneum: [10, 0.5],
-    liver: [0, ALPHA_LIVER], blood: [-60, 0.15], vwall: [8, 0.5], cortex: [-4, 0.5], pyramid: [-22, 0.5],
-    sinus: [7, 0.5], capsule: [10, 0.5], perifat: [1, 0.5], cyst: [-60, 0.002], cystwall: [6, 0.5],
+    liver: [0, ALPHA_LIVER], blood: [-60, 0.15], vwall: [8, 0.5], cortex: [-4, 0.5], pyramid: [-12, 0.5],
+    sinus: [7, 0.5], capsule: [10, 0.5], perifat: [3, 0.5], cyst: [-60, 0.002], cystwall: [6, 0.5],
     retro: [-2, 0.5], deepmuscle: [-6, 0.7], diaphragm: [14, 0.5], lung: [-30, 10], bowel: [-1, 0.5],
     bonesurface: [18, 20], bone: [-15, 20],
   };
@@ -39,10 +41,14 @@ const US = (() => {
   // ---- the anatomy: x across the image (cm, minus = screen left with the probe held normally), y down from the skin ----
   // Long plane: the probe lies along the body under the right ribs, marker towards the head, so minus x is towards the head.
   // Transverse plane: the probe lies across the body, marker towards the patient's right, so minus x is the patient's right.
-  const kid = (x, y, a, b, phi, cyst, hilum) => ({ x, y, a, b, c: Math.cos(phi), s: Math.sin(phi), cyst, hilum });
+  // A kidney is an ellipse with half-axes a and b (cm), turned by phi. par: how thick the parenchyma (cortex plus
+  // pyramids) is at the ends of the two axes; the sinus fills the rest. wedges: how many pyramids go round.
+  const kid = (x, y, a, b, phi, par, wedges, cyst, hilum) => ({ x, y, a, b, c: Math.cos(phi), s: Math.sin(phi), par, wedges, cyst, hilum });
+  const CORTEX = 0.7;               // thickness of the cortex outside the pyramids, cm
   const KIDNEY = {
-    long: kid(0.6, 8.6, 5.4, 2.3, -0.2, [-3.3, -1.0, 0.8], false),   // cyst: local u, v and radius, in the upper pole's front cortex
-    trans: kid(-1.0, 8.8, 2.7, 2.3, -0.3, null, true),              // the hilum opens towards the midline
+    // 10.8 cm long and 4.6 cm thick; the upper pole lies deeper than the lower. cyst: local u, v and radius, in the upper pole's front cortex
+    long: kid(0.6, 8.6, 5.4, 2.3, -0.2, [2.3, 1.5], 9, [-3.3, -1.0, 0.8], false),
+    trans: kid(-1.0, 8.8, 2.7, 2.3, -0.3, [1.5, 1.5], 5, null, true),   // the hilum opens forwards and towards the midline
   };
   const local = (K, x, y) => { const dx = x - K.x, dy = y - K.y; return [dx * K.c + dy * K.s, -dx * K.s + dy * K.c]; };
   const global = (K, u, v) => [K.x + u * K.c - v * K.s, K.y + u * K.s + v * K.c];
@@ -58,11 +64,12 @@ const US = (() => {
     if (K.hilum && u / K.a > 0.3 && Math.abs(v / K.b) < 0.3) return T.sinus;   // the hilum: no cortex towards the midline
     if (p > 0.975) return T.capsule;
     const psi = Math.atan2(v / K.b, u / K.a);
-    const s = 0.42 + 0.06 * Math.sin(5 * psi + 1) + 0.03 * Math.sin(11 * psi);   // the sinus border is uneven
-    if (p < s) return T.sinus;
-    if (p < 0.74) {                       // the pyramids: wedges with their base out and their tip towards the sinus
-      const edge = 0.3 + 0.9 * (0.74 - p) / (0.74 - s);
-      if (Math.cos(9 * psi + 0.5) > edge) return T.pyramid;
+    const ps = Math.hypot(u / (K.a - K.par[0]), v / (K.b - K.par[1])) - 0.12 * Math.sin(5 * psi + 1) - 0.06 * Math.sin(11 * psi);   // the sinus border is uneven
+    if (ps < 1) return T.sinus;
+    const pc = Math.hypot(u / (K.a - CORTEX), v / (K.b - CORTEX));
+    if (pc < 1) {                         // the pyramids: wedges with their base out and their tip towards the sinus
+      const edge = 0.3 + 0.9 * (1 - pc) / (ps - pc);
+      if (Math.cos(K.wedges * psi + 0.5) > edge) return T.pyramid;
     }
     return T.cortex;
   }
@@ -101,17 +108,18 @@ const US = (() => {
     return y < 6 ? [T.bowel, 4 * Math.sin(3 * x) * Math.sin(4 * y)] : [T.retro, 0];
   }
 
+  const VERT = [6.6, 10.8, 2.2], IVC = [4.7, 8.2];
   function transPlane(x, y, d) {
     const sup = superficial(x, d); if (sup) return sup;
-    const rv = Math.hypot(x - 6.2, y - 13.4);                       // a vertebral body
-    if (rv < 2.2) return [rv > 1.95 && y < 13.4 ? T.bonesurface : T.bone, 0];
-    if (Math.hypot((x - 3.6) / 1.5, (y - 11) / 1.8) < 1) return [T.deepmuscle, 3 * Math.sin(y * 2 * Math.PI / 0.3)];   // psoas
-    const ivc = Math.hypot((x - 4.4) / 1.1, (y - 7.4) / 0.75);     // the inferior vena cava
+    const rv = Math.hypot(x - VERT[0], y - VERT[1]);                // a vertebral body in the midline; the kidney lies beside it
+    if (rv < VERT[2]) return [rv > VERT[2] - 0.25 && y < VERT[1] ? T.bonesurface : T.bone, 0];
+    if (Math.hypot((x - 3.7) / 1.4, (y - 10.9) / 1.7) < 1) return [T.muscle, 3 * Math.sin(y * 2 * Math.PI / 0.3)];   // psoas, between vertebra and kidney
+    const ivc = Math.hypot((x - IVC[0]) / 1.1, (y - IVC[1]) / 0.75);   // the inferior vena cava, in front of the vertebra's right half
     if (ivc < 1) return [T.blood, 0];
     if (ivc < 1.08) return [T.vwall, 0];
     { // the renal vein, from the hilum to the vena cava
-      const ax = 1.2, ay = 8.05, bx = 3.6, by = 7.55, t = Math.max(0, Math.min(1, ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2)));
-      if (Math.hypot(x - ax - t * (bx - ax), y - ay - t * (by - ay)) < 0.28) return [T.blood, 0];
+      const ax = 1.2, ay = 8.05, bx = IVC[0] - 0.9, by = IVC[1], t = Math.max(0, Math.min(1, ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2)));
+      if (Math.hypot(x - ax - t * (bx - ax), y - ay - t * (by - ay) + 0.25 * Math.sin(Math.PI * t)) < 0.2 + 0.1 * t) return [T.blood, 0];   // a gentle arch, widest at the vena cava
     }
     const K = KIDNEY.trans, [u, v] = local(K, x, y), k = kidney(K, u, v);
     if (k >= 0) return [k, 0];
@@ -132,13 +140,18 @@ const US = (() => {
   function labels(plane) {
     if (plane === "trans") {
       const K = KIDNEY.trans;
-      return [[-4.2, 4.0, "Lever", "Liver"], [...global(K, -0.6, 0), "Nyre", "Kidney"], [2.4, 7.25, "Nyrevene", "Renal vein"],
-              [4.4, 6.35, "Vena cava", "Vena cava"], [6.2, 10.8, "Hvirvel", "Vertebra"], [6.2, 16.4, "Skygge", "Shadow"],
-              [3.6, 11, "Psoas", "Psoas"], [3.4, 4.2, "Tarm", "Bowel"], [0, 0.75, "Fedt", "Fat"], [0, 1.75, "Muskel", "Muscle"]];
+      return [[-4.2, 4.0, "Lever", "Liver"], [...global(K, -0.6, 0), "Nyre", "Kidney"], [2.2, 9.0, "Nyrevene", "Renal vein"],
+              [IVC[0], IVC[1] - 1.1, "Vena cava", "Vena cava"], [VERT[0] + 0.4, VERT[1] - 1.3, "Hvirvel", "Vertebra"], [VERT[0], 15.6, "Skygge", "Shadow"],
+              [3.4, 11.2, "Psoas", "Psoas"], [3.4, 4.2, "Tarm", "Bowel"], [0, 0.75, "Fedt", "Fat"], [0, 1.75, "Muskel", "Muscle"]];
     }
-    const K = KIDNEY.long, psi = (2 * Math.PI - 0.5) / 9;
+    const K = KIDNEY.long, psi = (2 * Math.PI - 0.5) / K.wedges;   // the middle of one pyramid
+    let pu = 0, pv = 0, pn = 0;
+    for (let p = 0.2; p < 1; p += 0.01) {
+      const u = K.a * p * Math.cos(psi), v = K.b * p * Math.sin(psi);
+      if (kidney(K, u, v) === T.pyramid) { pu += u; pv += v; pn++; }
+    }
     return [[-2.4, 3.4, "Lever", "Liver"], [...global(K, 1.5, -1.9), "Nyrebark", "Cortex"],
-            [...global(K, K.a * 0.62 * Math.cos(psi), K.b * 0.62 * Math.sin(psi)), "Pyramide", "Pyramid"],
+            [...global(K, pu / pn, pv / pn), "Pyramide", "Pyramid"],
             [...global(K, 0.4, 0), "Sinus", "Sinus"], [...global(K, K.cyst[0], K.cyst[1]), "Cyste", "Cyst"],
             [-7.2, 9.6, "Diafragma", "Diaphragm"], [0, 0.75, "Fedt", "Fat"], [0, 1.75, "Muskel", "Muscle"],
             [3, 14.2, "Rygmuskel", "Back muscle"], [5.6, 4.2, "Tarm", "Bowel"]];
@@ -195,6 +208,6 @@ const US = (() => {
   }
 
   return { C, RC, DAP, CYCLES, NOISE_DB, BUILT_IN, BUILT_MAX, MID, RAYLEIGH, DEPTH_MAX, T, NAMES, LEVEL, ALPHA, anatomy, labels,
-           kidneySpan, beam, lines, spacing, tgcAt, gainAt, levels, model, foci };
+           kidneySpan, beam, lines, DENSITY, spacing, tgcAt, gainAt, levels, model, foci };
 })();
 if (typeof module !== "undefined") module.exports = US;

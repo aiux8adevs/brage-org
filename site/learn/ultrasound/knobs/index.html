@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#0A0E18">
   <title>Knapper og orientering | Oliver Brage</title>
   <link rel="stylesheet" href="../../radiography/histogram/histogram.css">
-  <link rel="stylesheet" href="knobs.css?v=1">
+  <link rel="stylesheet" href="knobs.css?v=2">
 </head>
 <body>
 <div class="wrap">
@@ -32,25 +32,32 @@
   <div class="stage">
     <div class="box controls">
       <div id="controls" class="ctls"></div>
-      <div id="taskcard" class="taskcard"></div>
     </div>
-    <div class="box graphs">
-      <h2 id="t-beam"></h2>
-      <canvas id="beam"></canvas>
-      <p class="note" id="t-beamnote"></p>
-      <h2 id="t-gaincv" class="mt"></h2>
-      <canvas id="gaincv"></canvas>
-      <p class="note" id="t-gainnote"></p>
+    <div class="mid">
+      <div class="box taskbox"><div id="taskcard" class="taskcard"></div></div>
+      <div class="box graphs">
+        <div>
+          <h2 id="t-beam"></h2>
+          <canvas id="beam"></canvas>
+          <p class="note" id="t-beamnote"></p>
+        </div>
+        <div>
+          <h2 id="t-gaincv"></h2>
+          <canvas id="gaincv"></canvas>
+          <p class="note" id="t-gainnote"></p>
+        </div>
+      </div>
     </div>
     <div class="right">
-      <div class="box">
+      <div class="box imgbox">
         <h2 id="t-image"></h2>
         <canvas id="img"></canvas>
+        <p class="seenline" aria-live="polite"><span id="t-seen"></span> <span id="seen"></span></p>
         <p class="note" id="t-imgnote"></p>
       </div>
       <div class="box readout">
         <div class="metrics" id="readout"></div>
-        <div class="seen"><p><span id="t-seen"></span> <span id="seen"></span></p><button class="reset" id="pin"></button></div>
+        <div class="seen"><button class="reset" id="pin"></button></div>
       </div>
     </div>
   </div>
@@ -65,7 +72,7 @@
   <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
 </div>
 <script src="../../radiography/tex.js"></script>
-<script src="model.js?v=1"></script>
-<script src="knobs.js?v=1"></script>
+<script src="model.js?v=2"></script>
+<script src="knobs.js?v=2"></script>
 </body>
 </html>

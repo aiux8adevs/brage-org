@@ -19,10 +19,11 @@ const T = {
     beamNote: "Strålen set fra siden, med proben til venstre. Det farvede bånd er strålens bredde: smallest ved fokus (orange trekant). To ting, der ligger tættere sidelæns end båndets bredde, smelter sammen. Den stiplede linje er afstanden mellem to skanlinjer. Det grå felt er nyren.",
     gainNote: "Hvor stærkt ekkoet fra leverlignende væv er i hver dybde, efter forstærkning. Det lyse bånd er de ekkoer, der vises som grå toner: over båndet bliver det hvidt, under bliver det sort. Den hvide linje skal helst ligge vandret midt i båndet. Den stiplede er støjen: når den kommer op i båndet, kan du se den i billedet.",
     gainNoteDeep: "Den røde linje er ekkoet fra leverlignende væv, før maskinen forstærker det: det falder 2 · α · f dB pr. cm. Den orange er den samlede forstærkning (gain, maskinens egen dybdekompensation og TGC). Summen er den hvide linje. Det lyse bånd er dynamikområdet: det, der vises som grå toner. Den stiplede er støjen efter forstærkning.",
-    imgNote: "Simuleret billede, ikke et rigtigt skannerbillede. Prikken øverst til venstre svarer til mærket på proben. Klik i billedet for at vælge, hvor du zoomer ind.",
+    imgNote: "Simuleret billede, ikke et rigtigt skannerbillede. Prikken øverst til venstre svarer til mærket på proben. Skalaen til højre er dybden i cm, og den orange trekant er fokus. Klik i billedet for at vælge, hvor du zoomer ind.",
     tasks: "Opgaver", answer: "Vis svar", of: "af", prev: "Forrige opgave", next: "Næste opgave",
     model: "Sådan virker modellen", foot: "© 2026 Oliver Brage. Alle rettigheder forbeholdes.", privacy: "Privatliv",
-    seen: "Det kan du se:", pin: "Gem tallene", unpin: "Fjern de gemte", saved: "gemt",
+    seen: "Det kan du se:", pin: "Gem tallene", unpin: "Fjern de gemte", saved: "gemt", task: "Opgave",
+    grp: { orient: "Orientering", bright: "Lysstyrke og kontrast", field: "Dybde og billedfelt", detail: "Detaljer og billedfrekvens" },
     plane: { long: "Langsgående", trans: "Tværgående" }, planeShort: { long: "Langs", trans: "Tværs" },
     ctl: { plane: "Snitplan", flip: "Proben", normal: "Normal", flipped: "Vendt", gain: "Gain", tgc: "TGC", depth: "Dybde", f: "Frekvens",
            focus: "Fokus", zones: "Fokuszoner", dr: "Dynamikområde", sector: "Sektorbredde", density: "Linjetæthed",
@@ -41,14 +42,14 @@ const T = {
             zoom: "Forstørrer billedet. Klik i billedet for at vælge stedet.", names: "Skriver navnene på det, du ser." },
     k: { frame: "Billedfrekvens", axial: "Aksial opløsning", lat: "Lateral opløsning ved nyren", pen: "Indtrængning", lines: "Linjer pr. billede", line: "Tid pr. linje" },
     f: { frame: v => v < 15 ? "bevægelse vil hakke" : v < 25 ? "nok til rolige organer" : "flydende",
-         axial: "langs strålen, bedre ved høj frekvens", latBeam: "begrænset af strålens bredde", latLine: "begrænset af afstanden mellem linjerne",
-         penShort: "når ikke om bag nyren", penOk: "i lever; når om bag nyren", lines: s => `${s} mm mellem linjerne ved nyren`, line: "ned og op: 2 · dybde / c" },
+         axial: "langs strålen, bedre ved høj frekvens", lat: (b, sp) => `størst af stråle ${b} og linjeafstand ${sp} mm`,
+         penShort: "når ikke om bag nyren", penOk: "i lever; når om bag nyren", lines: (n, deg) => `${n} pr. grad · ${deg}°`, line: "ned og op: 2 · dybde / c" },
     see: {
       flip: "Proben er vendt: billedet er spejlet, men prikken på skærmen står stadig til venstre. {side} ligger nu i skærmens højre side.",
       flipSide: { long: "Hovedet", trans: "Patientens højre side" },
       pen: "Under cirka {p} cm drukner ekkoerne i støj: frekvensen er for høj til den dybde.",
       cut: "Nyrens bagside er skåret af. Gør dybden større.",
-      noise: { long: "Gain er så højt, at støjen ses: cysten i nyrens øvre pol er ikke længere sort.", trans: "Gain er så højt, at støjen ses: blodet i vena cava er ikke længere sort." },
+      noise: { long: "Forstærkningen er så høj, at støjen ses: cysten i nyrens øvre pol er ikke længere sort.", trans: "Forstærkningen er så høj, at støjen ses: blodet i vena cava er ikke længere sort." },
       dark: "Billedet er for mørkt ved nyren: svage ekkoer forsvinder.",
       bright: "Billedet er for lyst: lyse strukturer bliver hvide uden detaljer.",
       darker: "Billedet bliver mørkere nedad. Løft de dybe TGC-skydere.",
@@ -63,56 +64,56 @@ const T = {
       base: "Billedet er jævnt, og nyren er i fokus. Prøv at ændre én knap ad gangen.",
     },
     graph: { depth: "dybde (cm)", mm: "bredde (mm)", width: "strålens bredde", space: "afstand mellem linjer", kidney: "nyren",
-             grey: "vises som grå toner", white: "hvidt", black: "sort", echo: "ekko efter forstærkning", noise: "støj", gain: "forstærkning", raw: "ekko før forstærkning" },
+             grey: "vises som grå toner", white: "hvidt", black: "sort", echo: "ekko efter", noise: "støj", gain: "forstærkning", raw: "ekko før" },
     dec: ",",
-    modelText: `<p><b>Det hele er simuleret.</b> Billedet er regnet ud fra en enkel model af væv og lyd. Der er ikke brugt rigtige ultralydsbilleder. Anatomien er forenklet: en højre nyre med en cyste i øvre pol, set gennem leveren fra forsiden af en liggende patient.</p>
+    modelText: `<p><b>Det hele er simuleret.</b> Billedet er regnet ud fra en enkel model af væv og lyd. Der er ikke brugt rigtige ultralydsbilleder. Anatomien er forenklet: en højre nyre (cirka 11 cm lang) med en cyste i øvre pol, set gennem leveren fra forsiden af en patient, der ligger på ryggen. I tværsnittet ses nyrens hilus, nyrevenen, vena cava, psoas og en hvirvel. Størrelser og dybder er typiske for en voksen, men ikke målt på en bestemt person.</p>
 <p><b>Bølgelængde og aksial opløsning.</b> $$\\lambda = \\frac{c}{f}, \\quad c = 1540 \\text{ m/s}$$ Pulsen er 2 svingninger lang. To ting langs strålen kan skilles ad, når de ligger mindst en halv pulslængde fra hinanden: $2\\lambda/2 = \\lambda$. Ved 3,5 MHz er det 0,44 mm.</p>
-<p><b>Strålen.</b> Sendestrålen er fokuseret i den valgte fokusdybde $z_f$. Bredden i fokus er $\\lambda \\cdot F$, hvor $F = z_f / D$ og aperturen $D$ er 2,4 cm (mindst 1,5). Væk fra fokus bliver den bredere, des hurtigere jo smallere fokus er. Modtagestrålen er fokuseret i alle dybder (dynamisk fokus) med $F = d/D$, mindst 2. Den samlede bredde er de to tilsammen. Med flere fokuszoner bruges den smalleste sendestråle i hver dybde, men hver linje skal sendes én gang pr. zone. Der, hvor sendestrålen er smal, er energien samlet, og ekkoerne bliver op til 3 dB stærkere (højst 4 dB svagere langt fra fokus).</p>
-<p><b>Speckle.</b> Vævet består af mange små spredere, der ligger tilfældigt. Hvert ekko er summen af alle spredere inden for strålens bredde og en halv pulslængde. Derfor får billedet et korn, hvis størrelse følger opløsningen, ikke vævets egen struktur. Hvert væv har sit eget ekkoniveau i dB i forhold til lever: fx sinus +7, nyrebark −4, pyramider −22, fedt under huden −14, væske −60.</p>
+<p><b>Strålen.</b> Sendestrålen er fokuseret i den valgte fokusdybde $z_f$. Bredden i fokus er $\\lambda \\cdot F$, hvor $F = z_f / D$ og aperturen $D$ er 2,4 cm (mindst 1,5). Væk fra fokus bliver den bredere, og jo smallere fokus er, desto hurtigere sker det. Modtagestrålen er fokuseret i alle dybder (dynamisk fokus) med $F = d/D$, mindst 2. Den samlede bredde er de to tilsammen. Med flere fokuszoner bruges den smalleste sendestråle i hver dybde, men hver linje skal sendes én gang pr. zone. Der, hvor sendestrålen er smal, er energien samlet, og ekkoerne bliver op til 3 dB stærkere (højst 4 dB svagere langt fra fokus). Tallet Lateral opløsning er det største af to: strålens bredde ved nyren og afstanden mellem to skanlinjer samme sted.</p>
+<p><b>Speckle.</b> Vævet består af mange små spredere, der ligger tilfældigt. Hvert ekko er summen af alle spredere inden for strålens bredde og en halv pulslængde. Derfor får billedet et korn, hvis størrelse følger opløsningen, ikke vævets egen struktur. Hvert væv har sit eget ekkoniveau i dB i forhold til lever: fx sinus +7, fedtet omkring nyren +3, nyrebark −4, pyramider −12, muskel −9, fedt under huden −14, væske −60.</p>
 <p><b>Dæmpning.</b> Lyden dæmpes på vej ned og op igen: $$A = 2 \\cdot \\alpha \\cdot f \\cdot d \\text{ dB}$$ med $\\alpha$ = 0,5 dB/cm/MHz i lever og det meste bløde væv, 0,6 i fedtet under huden, 0,7 i muskel, 0,002 i væske og 20 i knogle. Derfor er der lyst bag cysten og sort bag hvirvlen.</p>
 <p><b>Forstærkning.</b> Maskinen lægger selv $0,8 \\cdot f \\cdot d$ dB til (højst 40 dB). Resten klarer gain (det samme i alle dybder) og TGC: 8 skydere fordelt over den viste dybde, med rette linjer imellem.</p>
 <p><b>Støj og indtrængning.</b> Elektronisk støj ligger 70 dB under ekkoet fra lever ved huden. Støjen forstærkes af gain og TGC præcis som ekkoerne. Ekkoet fra lever drukner i støjen, når $2 \\cdot 0,5 \\cdot f \\cdot d = 70$, altså ved $d = 70/f$ cm.</p>
 <p><b>Visning.</b> Ekkoerne vises i dB (logaritmisk kompression). Dynamikområdet er det antal dB, der fordeles fra sort til hvid omkring en fast mellemgrå. Billedet tegnes som en vifte af skanlinjer, og mellem to linjer udfyldes der ved at blande dem.</p>
 <p><b>Billedfrekvens.</b> Hver linje skal vente på ekkoerne fra bunden: $$t_{linje} = \\frac{2 \\cdot d_{max}}{c}, \\quad \\text{billedfrekvens} = \\frac{1}{n_{linjer} \\cdot n_{zoner} \\cdot t_{linje}}$$ Linjetætheden er 1, 2 eller 3 linjer pr. grad. Zoom er her en læsezoom: den forstørrer kun det færdige billede.</p>
-<p><b>Det er ikke med.</b> Harmonisk billeddannelse, compound imaging, filtre, bevægelse og Doppler. De fleste artefakter (fx genlyd og spejlbilleder) er udeladt. De får deres eget emne. Tallene er typiske lærebogsværdier, ikke tal fra en bestemt skanner.</p>
+<p><b>Det er ikke med.</b> Snittykkelsen (strålens bredde på den anden led), harmonisk billeddannelse, compound imaging, filtre, bevægelse og Doppler. De fleste artefakter er udeladt, fx genlyd (reverberation), spejlbilledet bag diafragma og luft i tarmen. De får deres eget emne. Tallene er typiske lærebogsværdier, ikke tal fra en bestemt skanner.</p>
 <p>Kilder: Gibbs, Cole og Sassano, Ultrasound Physics and Technology (2009). Hoskins, Martin og Thrush, Diagnostic Ultrasound: Physics and Equipment, 3. udg. (2019). Kremkau, Sonography Principles and Instruments. Bushberg m.fl., The Essential Physics of Medical Imaging, kapitlet om ultralyd (dæmpning, opløsning, billedfrekvens).</p>`,
     groups: [
       ["Orientering", [
         ["Hvor er hovedet?", "Langsgående snit, proben holdt normalt. Hvilken side af skærmen vender mod patientens hoved? Find to ting i billedet, der viser det.", "Venstre side, der hvor prikken står. Til venstre ses diafragma (den lyse bue) og lungen bag den, og nyrens øvre pol ligger dér, dybere end den nedre. Leveren bliver tyndere mod højre og ender over tarmen."],
-        ["Vend proben", "Tryk på Vendt. Hvad ændrer sig i billedet, og hvad gør prikken på skærmen?", "Billedet spejles: hovedet kommer i højre side. Prikken bliver stående til venstre, for den hører til skærmen. Nu passer mærket på proben ikke med prikken. Mærk efter med en finger, før du skanner, ellers kan op og ned (eller højre og venstre) blive byttet om."],
-        ["Tværsnit", "Skift til Tværgående, proben holdt normalt (mærket mod patientens højre side). Hvilken side af skærmen er patientens højre? Hvor vender nyrens hilus?", "Patientens højre er til venstre på skærmen, som når du står over for patienten (som på CT). Hilus vender mod højre på skærmen, ind mod midtlinjen, hvor nyrevenen løber over til vena cava. Hvirvlen ligger længst til højre og dybest."],
-        ["Skyggen bag hvirvlen", "Tværsnit: under hvirvlen er der en sort stribe helt ned til bunden. Hvorfor? Kan gain hjælpe?", "Knogle kaster næsten al lyden tilbage og dæmper resten kraftigt (20 dB/cm/MHz mod 0,5 i lever). Der kommer ingen ekkoer bagfra, så der bliver sort: akustisk skygge. Mere gain hjælper ikke, for der er intet at forstærke. Artefakter får deres eget emne.", { deep: true }],
+        ["Vend proben", "Tryk på Vendt. Hvad ændrer sig i billedet, og hvad gør prikken på skærmen?", "Billedet spejles: hovedet kommer i højre side. Prikken bliver stående til venstre, for den hører til skærmen. Nu passer mærket på proben ikke med prikken. Tjek det, før du skanner: rør ved den ene ende af probens flade, og se hvilken side af skærmen der reagerer. Ellers kan hoved og fødder (eller højre og venstre) blive byttet om."],
+        ["Tværsnit", "Skift til Tværgående, proben holdt normalt (mærket mod patientens højre side). Hvilken side af skærmen er patientens højre? Hvor vender nyrens hilus?", "Patientens højre er til venstre på skærmen, som når du står over for patienten (som på CT). Hilus vender mod højre på skærmen, ind mod midtlinjen, hvor nyrevenen løber over til vena cava. Hvirvlen ligger i kroppens midtlinje og ses derfor længst til højre, lige bag vena cava."],
+        ["Skyggen bag hvirvlen", "Tværsnit: under hvirvlen er der en sort stribe helt ned til bunden. Hvorfor? Kan gain hjælpe?", "Knogle kaster næsten al lyden tilbage og dæmper resten kraftigt (20 dB/cm/MHz mod 0,5 i lever). Der kommer ingen ekkoer bagfra, så der bliver sort: akustisk skygge. Mere gain hjælper ikke: der er kun støj at forstærke, så skyggen bliver bare grå. Artefakter får deres eget emne.", { deep: true }],
       ]],
       ["Gain og TGC", [
-        ["For meget gain", "Langsgående snit. Skru gain op til +30 dB. Hvad sker der med cysten i nyrens øvre pol? Får du mere information?", "Cysten bliver grå i stedet for sort, fordi støjen nu forstærkes så meget, at den kan ses. Sinus og andre lyse strukturer bliver hvide uden detaljer. Gain forstærker ekko og støj lige meget, så der kommer ingen ny information, kun et lysere billede."],
+        ["For meget gain", "Tryk på Nulstil alt (langsgående snit). Skru gain op til +30 dB. Hvad sker der med cysten i nyrens øvre pol? Får du mere information?", "Cysten bliver grå i stedet for sort, fordi støjen nu forstærkes så meget, at den kan ses. Sinus og andre lyse strukturer bliver hvide uden detaljer. Gain forstærker ekko og støj lige meget, så der kommer ingen ny information, kun et lysere billede."],
         ["For lidt gain", "Skru gain ned til −15 dB. Hvad forsvinder først?", "De svage ekkoer: pyramiderne, fedtet under huden og vævet dybt nede bliver sorte. Faren er, at en mørk, fast forandring ligner en cyste, eller at noget overses."],
         ["Mørkere i dybden", "Tryk på Nulstil alt. Sammenlign leveren øverst med vævet under nyren. Hvorfor bliver billedet mørkere nedad?", "Lyden dæmpes på vej ned og på vej op igen, i lever 0,5 dB pr. cm pr. MHz hver vej. Ved 3,5 MHz og 16 cm er det 56 dB. Maskinen retter selv en del, men højst 40 dB. Resten skal du klare med TGC."],
-        ["Gør billedet jævnt", "Brug TGC-skyderne, så vævet har samme grå tone hele vejen ned. Hvilke skydere skal op? Se grafen Ekko og forstærkning.", "Skyderne fra nyren og nedefter skal op, de nederste mest (cirka +10 til +20 dB ved 18 cm). Den hvide linje i grafen bliver vandret. Gain ville gøre det hele lysere, også toppen, som allerede var fin."],
+        ["Gør billedet jævnt", "Brug TGC-skyderne, så vævet har samme grå tone hele vejen ned. Hvilke skydere skal op? Se grafen Ekko og forstærkning.", "Skyderne fra cirka 6 cm og nedefter skal op, de nederste mest: omkring +4 dB ved 6 cm, +8 til +10 ved nyren og op mod +20 nederst. Den hvide linje i grafen bliver vandret. Gain ville gøre det hele lysere, også toppen, som allerede var fin."],
         ["Bag cysten", "Se på vævet lige bag cysten. Hvorfor er det lysere end vævet ved siden af? Skal du rette det med TGC?", "Væske dæmper næsten ingen lyd, så ekkoerne bag cysten er stærkere end ved siden af. TGC virker i hele billedets bredde, så den kan ikke fjerne en lys stribe ét sted. Det skal den heller ikke: striben viser, at det er væske.", { deep: true }],
       ]],
       ["Dybde og zoom", [
-        ["Den rigtige dybde", "Start på 18 cm. Gør dybden mindre, så nyren fylder billedet, men du stadig kan se lidt under den. Hvilken dybde, og hvad sker der med billedfrekvensen?", "Cirka 13 cm: nyrens bagside ligger ved 11 cm på midterlinjen. Billedfrekvensen stiger fra 31 til 42 Hz, fordi lyden har kortere vej ned og op for hver linje."],
+        ["Den rigtige dybde", "Tryk på Nulstil alt, så dybden er 18 cm. Gør dybden mindre, så nyren fylder billedet, men du stadig kan se lidt under den. Hvilken dybde, og hvad sker der med billedfrekvensen?", "Cirka 13 cm: nyrens bagside ligger ved 11 cm på midterlinjen. Billedfrekvensen stiger fra 31 til 42 Hz, fordi lyden har kortere vej ned og op for hver linje."],
         ["For lidt dybde", "Prøv 9 cm. Hvad mangler nu?", "Nyrens bageste del og alt bag den. Fx væske bag nyren ses ikke. Start derfor dybt, se hele området igennem, og gør så dybden mindre."],
         ["Zoom", "Sæt dybden til 13 cm, vælg zoom 2×, og klik på cysten. Bliver billedet skarpere?", "Nej. Cysten bliver større, men kornet og kanterne bliver lige så meget større. Zoom forstørrer kun det billede, der allerede er lavet. Billedfrekvensen er den samme. Detaljerne afgøres af frekvens, fokus og linjetæthed."],
         ["Dybde eller zoom", "Hvorfor er det bedre at gøre dybden mindre end at zoome, når det, du vil se, ligger højt i billedet?", "Mindre dybde giver også højere billedfrekvens og udnytter hele skærmen. Zoom ændrer kun visningen. Mange skannere har også skrivezoom, der kun skanner det udvalgte område og kan lægge flere linjer dér. Den er ikke med i simulatoren.", { deep: true }],
       ]],
       ["Frekvens", [
-        ["Høj frekvens", "Dybde 18 cm. Gå fra 3,5 til 6 MHz. Hvad sker der øverst, og hvad sker der dybt nede?", "Øverst bliver kornet finere, og den aksiale opløsning går fra 0,44 til 0,26 mm. Men høj frekvens dæmpes mere: indtrængningen falder fra 20 til 12 cm. Dybere end cirka 12 cm er der mest støj, og nyrens bagside drukner."],
+        ["Høj frekvens", "Tryk på Nulstil alt (dybde 18 cm). Gå fra 3,5 til 6 MHz. Hvad sker der øverst, og hvad sker der dybt nede?", "Øverst bliver kornet finere, og den aksiale opløsning går fra 0,44 til 0,26 mm. Men høj frekvens dæmpes mere: indtrængningen falder fra 20 til 12 cm. Dybere end cirka 12 cm er der mest støj, og nyrens bagside drukner."],
         ["Lav frekvens", "Prøv 2 MHz. Hvad vinder du, og hvad taber du?", "Lyden når hele vejen ned (indtrængning 35 cm). Men kornet bliver groft, den aksiale opløsning er 0,77 mm, og strålen er bredere: 2,6 mm ved nyren."],
-        ["Den bedste frekvens", "Dybde 13 cm og fokus 8,5 cm. Find den højeste frekvens, hvor nyrens bagside (cirka 11 cm) stadig er tydelig. Du må gerne løfte dybden med TGC.", "Omkring 5 MHz, hvor indtrængningen er 14 cm. Ved 6 MHz er nyrens bagside næsten druknet i støj, og TGC hjælper ikke, for den løfter støjen lige så meget som ekkoerne. Vælg den højeste frekvens, der stadig når dybt nok."],
+        ["Den bedste frekvens", "Dybde 13 cm og fokus 8,5 cm. Find den højeste frekvens, hvor nyrens bagside (cirka 11 cm) stadig er tydelig. Du må gerne løfte dybden med TGC.", "Omkring 5 MHz, hvor indtrængningen er 14 cm. Ved 6 MHz (indtrængning 12 cm) bliver cysten og nyrens bageste del grå af støj, og TGC hjælper ikke, for den løfter støjen lige så meget som ekkoerne. Vælg den højeste frekvens, der stadig når dybt nok."],
       ]],
       ["Fokus", [
-        ["Flyt fokus", "Fokus står på 4 cm. Flyt det til nyrens midte (cirka 8,5 cm). Hvad sker der med strålens bredde ved nyren? Se grafen Strålen.", "Strålen ved nyren går fra 1,6 til 1,1 mm. Kanter og pyramider bliver skarpere sidelæns, og nyren bliver lidt lysere, fordi energien er samlet dér. Læg fokus ved eller lige under det, du vil se."],
-        ["Flere fokuszoner", "Fokus på 8,5 cm. Vælg 3 fokuszoner. Hvad bliver bedre, og hvad koster det?", "Strålen er smal over et længere stykke, men hver linje skal sendes tre gange: billedfrekvensen falder fra 31 til 10 Hz. Det duer ikke til noget, der bevæger sig, fx når patienten trækker vejret."],
+        ["Flyt fokus", "Tryk på Nulstil alt: fokus står på 4 cm. Flyt det til nyrens midte (cirka 8,5 cm). Hvad sker der med strålens bredde ved nyren? Se grafen Strålen og tallet Lateral opløsning.", "Strålen ved nyren går fra 1,6 til 1,1 mm. Kanter og pyramider bliver skarpere sidelæns, og nyren bliver lidt lysere, fordi energien er samlet dér. Den laterale opløsning viser nu 1,2 mm, for nu er det afstanden mellem linjerne, der begrænser. Læg fokus ved eller lige under det, du vil se."],
+        ["Flere fokuszoner", "Lad fokus stå på 8,5 cm og dybden på 18 cm. Vælg 3 fokuszoner. Hvad bliver bedre, og hvad koster det?", "Strålen er smal over et længere stykke, men hver linje skal sendes tre gange: billedfrekvensen falder fra 31 til 10 Hz. Det duer ikke til noget, der bevæger sig, fx når patienten trækker vejret."],
       ]],
       ["Billedfelt og billedfrekvens", [
-        ["Sektorbredde", "Gør sektoren smallere, fra 70 til 40 grader. Hvad sker der med billedfrekvensen, og hvorfor?", "Den stiger fra 31 til 54 Hz, fordi der skal færre linjer til (80 i stedet for 140). Til gengæld ser du mindre i siderne."],
-        ["Linjetæthed", "Fokus på 8,5 cm. Prøv lav og høj linjetæthed. Se på den laterale opløsning ved nyren og på billedfrekvensen.", "Lav: 70 linjer, 2,4 mm mellem linjerne ved nyren og 61 Hz, men billedet bliver grovere sidelæns. Høj: 210 linjer og 0,8 mm, men kun 20 Hz. Den laterale opløsning kan aldrig blive bedre end strålen (1,1 mm) eller afstanden mellem linjerne."],
+        ["Sektorbredde", "Tryk på Nulstil alt. Gør sektoren smallere, fra 70 til 40 grader. Hvad sker der med billedfrekvensen, og hvorfor?", "Den stiger fra 31 til 54 Hz, fordi der skal færre linjer til (80 i stedet for 140). Til gengæld ser du mindre i siderne."],
+        ["Linjetæthed", "Sæt sektoren til 70° igen og fokus på 8,5 cm. Prøv lav og høj linjetæthed. Se på den laterale opløsning ved nyren og på billedfrekvensen.", "Lav: 70 linjer, 2,4 mm mellem linjerne ved nyren og 61 Hz, men billedet bliver grovere sidelæns. Høj: 210 linjer med 0,8 mm imellem, men kun 20 Hz, og den laterale opløsning standser ved strålens 1,1 mm. Den kan aldrig blive bedre end strålens bredde eller afstanden mellem linjerne."],
         ["Det bedste billede", "Lav det bedste billede af nyren, du kan, med mindst 25 Hz. Gem tallene først, så du kan sammenligne med udgangspunktet.", "Fx dybde 13 cm, 5 MHz, fokus 8,5 cm, én fokuszone, høj linjetæthed, sektor 60° og TGC, så dybden er jævn. Det giver 33 Hz og 0,8 mm lateral opløsning mod 1,6 mm ved start, og den aksiale opløsning går fra 0,44 til 0,31 mm."],
       ]],
       ["Dynamikområde", [
-        ["Lavt", "Sæt dynamikområdet til 35 dB. Hvad sker der med billedet?", "Det bliver hårdt: sort og hvidt med få grå toner. Pyramiderne bliver mørkere, sinus lysere, og cysten står skarpt. Men svage forskelle i vævet forsvinder, og fedtet under huden bliver sort."],
-        ["Højt", "Sæt det til 80 dB.", "Billedet bliver blødt og gråt: flere grå toner, så små forskelle kan ses, men kontrasten mellem fx bark og pyramide bliver mindre."],
+        ["Lavt", "Tryk på Nulstil alt. Sæt dynamikområdet til 35 dB. Hvad sker der med billedet?", "Det bliver hårdt: sort og hvidt med få grå toner. Pyramiderne bliver mørkere, sinus lysere, og cysten står skarpt. Men svage forskelle i vævet forsvinder, og fedtet under huden bliver sort."],
+        ["Højt", "Sæt det til 80 dB. Hvad vinder du, og hvad taber du?", "Billedet bliver blødt og gråt: flere grå toner, så små forskelle kan ses, men kontrasten mellem fx bark og pyramide bliver mindre."],
       ]],
       ["Formler", [
         ["Bølgelængde", "Lyden går 1540 m/s i blødt væv. Regn bølgelængden ved 3,5 og 6 MHz. Pulsen er 2 svingninger lang. Hvad er den aksiale opløsning?", "$\\lambda = \\frac{1540}{3,5 \\cdot 10^6} = 0,44$ mm og $\\frac{1540}{6 \\cdot 10^6} = 0,26$ mm. Den aksiale opløsning er en halv pulslængde: $\\frac{2\\lambda}{2} = \\lambda$, altså 0,44 og 0,26 mm. Tjek tallene i simulatoren."],
@@ -130,12 +131,13 @@ const T = {
     beamNote: "The beam seen from the side, with the probe on the left. The coloured band is the beam's width: narrowest at the focus (orange triangle). Two things closer together sideways than the band is wide merge into one. The dashed line is the distance between two scan lines. The grey field is the kidney.",
     gainNote: "How strong the echo from liver-like tissue is at each depth, after gain. The light band is the echoes shown as shades of grey: above the band is white, below it is black. The white line should lie flat in the middle of the band. The dashed line is the noise: once it rises into the band, you can see it in the image.",
     gainNoteDeep: "The red line is the echo from liver-like tissue before the machine amplifies it: it falls by 2 · α · f dB per cm. The orange line is the total gain (gain, the machine's own depth compensation and TGC). Their sum is the white line. The light band is the dynamic range: what is shown as shades of grey. The dashed line is the noise after gain.",
-    imgNote: "A simulated image, not a real scanner image. The dot at the top left matches the marker on the probe. Click in the image to choose where to zoom.",
+    imgNote: "A simulated image, not a real scanner image. The dot at the top left matches the marker on the probe. The scale on the right is the depth in cm, and the orange triangle is the focus. Click in the image to choose where to zoom.",
     tasks: "Tasks", answer: "Show answer", of: "of", prev: "Previous task", next: "Next task",
     model: "How the model works", foot: "© 2026 Oliver Brage. All rights reserved.", privacy: "Privacy",
-    seen: "What you can see:", pin: "Save the numbers", unpin: "Remove saved", saved: "saved",
+    seen: "What you can see:", pin: "Save the numbers", unpin: "Remove saved", saved: "saved", task: "Task",
+    grp: { orient: "Orientation", bright: "Brightness and contrast", field: "Depth and field of view", detail: "Detail and frame rate" },
     plane: { long: "Longitudinal", trans: "Transverse" }, planeShort: { long: "Long", trans: "Trans" },
-    ctl: { plane: "Scan plane", flip: "Probe", normal: "Normal", flipped: "Turned", gain: "Gain", tgc: "TGC", depth: "Depth", f: "Frequency",
+    ctl: { plane: "Scan plane", flip: "Probe", normal: "Normal", flipped: "Reversed", gain: "Gain", tgc: "TGC", depth: "Depth", f: "Frequency",
            focus: "Focus", zones: "Focal zones", dr: "Dynamic range", sector: "Sector width", density: "Line density",
            low: "Low", mid: "Medium", high: "High", zoom: "Zoom", names: "Show names", on: "On", off: "Off", reset: "Reset all", tgcReset: "TGC to 0" },
     help: { plane: "Long: the probe lies along the body. Trans: across it.",
@@ -152,14 +154,14 @@ const T = {
             zoom: "Enlarges the image. Click in the image to choose the spot.", names: "Writes the names of what you see." },
     k: { frame: "Frame rate", axial: "Axial resolution", lat: "Lateral resolution at the kidney", pen: "Penetration", lines: "Lines per frame", line: "Time per line" },
     f: { frame: v => v < 15 ? "motion will judder" : v < 25 ? "enough for still organs" : "smooth",
-         axial: "along the beam, better at high frequency", latBeam: "limited by the beam's width", latLine: "limited by the line spacing",
-         penShort: "does not reach behind the kidney", penOk: "in liver; reaches behind the kidney", lines: s => `${s} mm between lines at the kidney`, line: "down and back: 2 · depth / c" },
+         axial: "along the beam, better at high frequency", lat: (b, sp) => `larger of beam ${b} and line spacing ${sp} mm`,
+         penShort: "does not reach behind the kidney", penOk: "in liver; reaches behind the kidney", lines: (n, deg) => `${n} per degree · ${deg}°`, line: "down and back: 2 · depth / c" },
     see: {
-      flip: "The probe is turned: the image is mirrored, but the dot on the screen is still on the left. {side} is now on the right of the screen.",
+      flip: "The probe is reversed: the image is mirrored, but the dot on the screen is still on the left. {side} is now on the right of the screen.",
       flipSide: { long: "The head", trans: "The patient's right side" },
       pen: "Below about {p} cm the echoes drown in noise: the frequency is too high for that depth.",
       cut: "The back of the kidney is cut off. Increase the depth.",
-      noise: { long: "The gain is so high that the noise shows: the cyst in the upper pole is no longer black.", trans: "The gain is so high that the noise shows: the blood in the vena cava is no longer black." },
+      noise: { long: "The amplification is so high that the noise shows: the cyst in the kidney's upper pole is no longer black.", trans: "The amplification is so high that the noise shows: the blood in the vena cava is no longer black." },
       dark: "The image is too dark at the kidney: weak echoes disappear.",
       bright: "The image is too bright: bright structures turn white without detail.",
       darker: "The image gets darker downwards. Raise the deep TGC sliders.",
@@ -174,56 +176,56 @@ const T = {
       base: "The image is even and the kidney is in focus. Try changing one knob at a time.",
     },
     graph: { depth: "depth (cm)", mm: "width (mm)", width: "beam width", space: "line spacing", kidney: "kidney",
-             grey: "shown as grey", white: "white", black: "black", echo: "echo after gain", noise: "noise", gain: "gain", raw: "echo before gain" },
+             grey: "shown as grey", white: "white", black: "black", echo: "echo after", noise: "noise", gain: "gain", raw: "echo before" },
     dec: ".",
-    modelText: `<p><b>Everything is simulated.</b> The image is computed from a simple model of tissue and sound. No real ultrasound images are used. The anatomy is simplified: a right kidney with a cyst in the upper pole, seen through the liver from the front of a patient lying on their back.</p>
+    modelText: `<p><b>Everything is simulated.</b> The image is computed from a simple model of tissue and sound. No real ultrasound images are used. The anatomy is simplified: a right kidney (about 11 cm long) with a cyst in the upper pole, seen through the liver from the front of a patient lying on their back. The transverse plane shows the kidney's hilum, the renal vein, the vena cava, the psoas and a vertebra. Sizes and depths are typical of an adult, but not measured on a particular person.</p>
 <p><b>Wavelength and axial resolution.</b> $$\\lambda = \\frac{c}{f}, \\quad c = 1540 \\text{ m/s}$$ The pulse is 2 cycles long. Two things along the beam can be told apart when they are at least half a pulse length apart: $2\\lambda/2 = \\lambda$. At 3.5 MHz that is 0.44 mm.</p>
-<p><b>The beam.</b> The transmit beam is focused at the chosen focal depth $z_f$. Its width at the focus is $\\lambda \\cdot F$, where $F = z_f / D$ and the aperture $D$ is 2.4 cm (at least 1.5). Away from the focus it widens, faster the narrower the focus. The receive beam is focused at every depth (dynamic focusing) with $F = d/D$, at least 2. The total width combines the two. With more focal zones, the narrowest transmit beam is used at each depth, but every line has to be sent once per zone. Where the transmit beam is narrow the energy is concentrated, and echoes get up to 3 dB stronger (at most 4 dB weaker far from the focus).</p>
-<p><b>Speckle.</b> Tissue is made of many small scatterers placed at random. Each echo is the sum of all scatterers within the beam's width and half a pulse length. That is why the image has a grain whose size follows the resolution, not the tissue's own structure. Each tissue has its own echo level in dB relative to liver: for example sinus +7, cortex −4, pyramids −22, fat under the skin −14, fluid −60.</p>
+<p><b>The beam.</b> The transmit beam is focused at the chosen focal depth $z_f$. Its width at the focus is $\\lambda \\cdot F$, where $F = z_f / D$ and the aperture $D$ is 2.4 cm (at least 1.5). Away from the focus it widens, and the narrower the focus, the faster it does so. The receive beam is focused at every depth (dynamic focusing) with $F = d/D$, at least 2. The total width combines the two. With more focal zones, the narrowest transmit beam is used at each depth, but every line has to be sent once per zone. Where the transmit beam is narrow the energy is concentrated, and echoes get up to 3 dB stronger (at most 4 dB weaker far from the focus). The number Lateral resolution is the larger of two: the beam's width at the kidney and the distance between two scan lines at the same place.</p>
+<p><b>Speckle.</b> Tissue is made of many small scatterers placed at random. Each echo is the sum of all scatterers within the beam's width and half a pulse length. That is why the image has a grain whose size follows the resolution, not the tissue's own structure. Each tissue has its own echo level in dB relative to liver: for example sinus +7, the fat around the kidney +3, cortex −4, pyramids −12, muscle −9, fat under the skin −14, fluid −60.</p>
 <p><b>Attenuation.</b> The sound is attenuated on the way down and back up: $$A = 2 \\cdot \\alpha \\cdot f \\cdot d \\text{ dB}$$ with $\\alpha$ = 0.5 dB/cm/MHz in liver and most soft tissue, 0.6 in the fat under the skin, 0.7 in muscle, 0.002 in fluid and 20 in bone. That is why it is bright behind the cyst and black behind the vertebra.</p>
 <p><b>Gain.</b> The machine itself adds $0.8 \\cdot f \\cdot d$ dB (at most 40 dB). Gain (the same at all depths) and TGC handle the rest: 8 sliders spread over the depth shown, joined by straight lines.</p>
 <p><b>Noise and penetration.</b> Electronic noise lies 70 dB below the liver echo at the skin. Gain and TGC amplify the noise exactly as they amplify the echoes. The liver echo drowns in the noise when $2 \\cdot 0.5 \\cdot f \\cdot d = 70$, so at $d = 70/f$ cm.</p>
 <p><b>Display.</b> Echoes are shown in dB (log compression). The dynamic range is the number of dB spread from black to white around a fixed mid grey. The image is drawn as a fan of scan lines, and the space between two lines is filled by blending them.</p>
 <p><b>Frame rate.</b> Each line has to wait for the echoes from the bottom: $$t_{line} = \\frac{2 \\cdot d_{max}}{c}, \\quad \\text{frame rate} = \\frac{1}{n_{lines} \\cdot n_{zones} \\cdot t_{line}}$$ Line density is 1, 2 or 3 lines per degree. Zoom here is a read zoom: it only enlarges the finished image.</p>
-<p><b>Not included.</b> Harmonic imaging, compound imaging, filters, motion and Doppler. Most artefacts (reverberation and mirror images, for example) are left out. They get a topic of their own. The numbers are typical textbook values, not those of a particular scanner.</p>
+<p><b>Not included.</b> The slice thickness (the beam's width in the other direction), harmonic imaging, compound imaging, filters, motion and Doppler. Most artefacts are left out, for example reverberation, the mirror image behind the diaphragm and gas in the bowel. They get a topic of their own. The numbers are typical textbook values, not those of a particular scanner.</p>
 <p>Sources: Gibbs, Cole and Sassano, Ultrasound Physics and Technology (2009). Hoskins, Martin and Thrush, Diagnostic Ultrasound: Physics and Equipment, 3rd ed. (2019). Kremkau, Sonography Principles and Instruments. Bushberg et al., The Essential Physics of Medical Imaging, the ultrasound chapter (attenuation, resolution, frame rate).</p>`,
     groups: [
       ["Orientation", [
         ["Where is the head?", "Longitudinal plane, probe held normally. Which side of the screen faces the patient's head? Find two things in the image that show it.", "The left side, where the dot is. On the left you see the diaphragm (the bright curve) with the lung behind it, and the kidney's upper pole lies there, deeper than the lower pole. The liver thins towards the right and ends above the bowel."],
-        ["Turn the probe", "Press Turned. What changes in the image, and what does the dot on the screen do?", "The image is mirrored: the head moves to the right side. The dot stays on the left, because it belongs to the screen. Now the probe's marker no longer matches the dot. Feel for the marker with a finger before you scan, or head and feet (or right and left) can be swapped."],
-        ["Transverse", "Switch to Transverse, probe held normally (marker towards the patient's right). Which side of the screen is the patient's right? Which way does the kidney's hilum face?", "The patient's right is on the left of the screen, as when you face the patient (as on CT). The hilum faces right on the screen, towards the midline, where the renal vein runs to the vena cava. The vertebra lies furthest right and deepest."],
-        ["The shadow behind the vertebra", "Transverse: below the vertebra there is a black band all the way down. Why? Can gain help?", "Bone sends almost all the sound back and strongly attenuates the rest (20 dB/cm/MHz against 0.5 in liver). No echoes come from behind it, so it is black: an acoustic shadow. More gain does not help, as there is nothing to amplify. Artefacts get a topic of their own.", { deep: true }],
+        ["Reverse the probe", "Press Reversed. What changes in the image, and what does the dot on the screen do?", "The image is mirrored: the head moves to the right side. The dot stays on the left, because it belongs to the screen. Now the probe's marker no longer matches the dot. Check it before you scan: touch one end of the probe's face and see which side of the screen reacts. Otherwise head and feet (or right and left) can be swapped."],
+        ["Transverse", "Switch to Transverse, probe held normally (marker towards the patient's right). Which side of the screen is the patient's right? Which way does the kidney's hilum face?", "The patient's right is on the left of the screen, as when you face the patient (as on CT). The hilum faces right on the screen, towards the midline, where the renal vein runs to the vena cava. The vertebra lies in the body's midline and is therefore seen furthest right, just behind the vena cava."],
+        ["The shadow behind the vertebra", "Transverse: below the vertebra there is a black band all the way down. Why? Can gain help?", "Bone sends almost all the sound back and strongly attenuates the rest (20 dB/cm/MHz against 0.5 in liver). No echoes come from behind it, so it is black: an acoustic shadow. More gain does not help: there is only noise to amplify, so the shadow just turns grey. Artefacts get a topic of their own.", { deep: true }],
       ]],
       ["Gain and TGC", [
-        ["Too much gain", "Longitudinal plane. Turn the gain up to +30 dB. What happens to the cyst in the kidney's upper pole? Do you get more information?", "The cyst turns grey instead of black, because the noise is now amplified enough to be seen. The sinus and other bright structures turn white without detail. Gain amplifies echoes and noise equally, so there is no new information, only a brighter image."],
+        ["Too much gain", "Press Reset all (longitudinal plane). Turn the gain up to +30 dB. What happens to the cyst in the kidney's upper pole? Do you get more information?", "The cyst turns grey instead of black, because the noise is now amplified enough to be seen. The sinus and other bright structures turn white without detail. Gain amplifies echoes and noise equally, so there is no new information, only a brighter image."],
         ["Too little gain", "Turn the gain down to −15 dB. What disappears first?", "The weak echoes: the pyramids, the fat under the skin and the deep tissue turn black. The danger is that a dark solid lesion looks like a cyst, or that something is missed."],
         ["Darker with depth", "Press Reset all. Compare the liver at the top with the tissue below the kidney. Why does the image get darker downwards?", "The sound is attenuated on the way down and on the way back up, in liver 0.5 dB per cm per MHz each way. At 3.5 MHz and 16 cm that is 56 dB. The machine corrects part of it, but at most 40 dB. You have to handle the rest with TGC."],
-        ["Make the image even", "Use the TGC sliders so the tissue has the same grey all the way down. Which sliders go up? Look at the graph Echo and gain.", "The sliders from the kidney down go up, the lowest most (about +10 to +20 dB at 18 cm). The white line in the graph turns flat. Gain would brighten everything, including the top, which was already fine."],
+        ["Make the image even", "Use the TGC sliders so the tissue has the same grey all the way down. Which sliders go up? Look at the graph Echo and gain.", "The sliders from about 6 cm down go up, the lowest most: about +4 dB at 6 cm, +8 to +10 at the kidney and up towards +20 at the bottom. The white line in the graph turns flat. Gain would brighten everything, including the top, which was already fine."],
         ["Behind the cyst", "Look at the tissue just behind the cyst. Why is it brighter than the tissue beside it? Should you correct it with TGC?", "Fluid hardly attenuates sound, so the echoes behind the cyst are stronger than beside it. TGC acts across the whole width of the image, so it cannot remove a bright band in one place. Nor should it: the band shows that this is fluid.", { deep: true }],
       ]],
       ["Depth and zoom", [
-        ["The right depth", "Start at 18 cm. Reduce the depth so the kidney fills the image but you still see a little below it. Which depth, and what happens to the frame rate?", "About 13 cm: the back of the kidney lies at 11 cm on the centre line. The frame rate rises from 31 to 42 Hz, because the sound has a shorter way down and back for each line."],
+        ["The right depth", "Press Reset all, so the depth is 18 cm. Reduce the depth so the kidney fills the image but you still see a little below it. Which depth, and what happens to the frame rate?", "About 13 cm: the back of the kidney lies at 11 cm on the centre line. The frame rate rises from 31 to 42 Hz, because the sound has a shorter way down and back for each line."],
         ["Too little depth", "Try 9 cm. What is missing now?", "The back of the kidney and everything behind it. Fluid behind the kidney, for example, is not seen. So start deep, look through the whole area, then reduce the depth."],
         ["Zoom", "Set the depth to 13 cm, choose zoom 2×, and click on the cyst. Does the image get sharper?", "No. The cyst gets bigger, but the grain and the edges get just as much bigger. Zoom only enlarges the image already made. The frame rate is the same. Detail is set by frequency, focus and line density."],
         ["Depth or zoom", "Why is it better to reduce the depth than to zoom, when what you want to see lies high in the image?", "Less depth also gives a higher frame rate and uses the whole screen. Zoom only changes the view. Many scanners also have a write zoom, which scans only the chosen area and can put more lines there. It is not in the simulator.", { deep: true }],
       ]],
       ["Frequency", [
-        ["High frequency", "Depth 18 cm. Go from 3.5 to 6 MHz. What happens at the top, and what happens deep down?", "At the top the grain gets finer, and the axial resolution goes from 0.44 to 0.26 mm. But high frequency is attenuated more: the penetration falls from 20 to 12 cm. Deeper than about 12 cm it is mostly noise, and the back of the kidney drowns."],
+        ["High frequency", "Press Reset all (depth 18 cm). Go from 3.5 to 6 MHz. What happens at the top, and what happens deep down?", "At the top the grain gets finer, and the axial resolution goes from 0.44 to 0.26 mm. But high frequency is attenuated more: the penetration falls from 20 to 12 cm. Deeper than about 12 cm it is mostly noise, and the back of the kidney drowns."],
         ["Low frequency", "Try 2 MHz. What do you gain, and what do you lose?", "The sound reaches all the way down (penetration 35 cm). But the grain gets coarse, the axial resolution is 0.77 mm, and the beam is wider: 2.6 mm at the kidney."],
-        ["The best frequency", "Depth 13 cm and focus 8.5 cm. Find the highest frequency at which the back of the kidney (about 11 cm) is still clear. You may lift the depth with TGC.", "About 5 MHz, where the penetration is 14 cm. At 6 MHz the back of the kidney has almost drowned in noise, and TGC does not help, because it lifts the noise as much as the echoes. Choose the highest frequency that still reaches deep enough."],
+        ["The best frequency", "Depth 13 cm and focus 8.5 cm. Find the highest frequency at which the back of the kidney (about 11 cm) is still clear. You may lift the depth with TGC.", "About 5 MHz, where the penetration is 14 cm. At 6 MHz (penetration 12 cm) the cyst and the back part of the kidney turn grey with noise, and TGC does not help, because it lifts the noise as much as the echoes. Choose the highest frequency that still reaches deep enough."],
       ]],
       ["Focus", [
-        ["Move the focus", "The focus is at 4 cm. Move it to the middle of the kidney (about 8.5 cm). What happens to the beam's width at the kidney? Look at the graph The beam.", "The beam at the kidney goes from 1.6 to 1.1 mm. Edges and pyramids get sharper sideways, and the kidney gets a little brighter, because the energy is concentrated there. Put the focus at or just below what you want to see."],
-        ["More focal zones", "Focus at 8.5 cm. Choose 3 focal zones. What gets better, and what does it cost?", "The beam is narrow over a longer stretch, but every line has to be sent three times: the frame rate falls from 31 to 10 Hz. That is no good for anything that moves, such as when the patient breathes."],
+        ["Move the focus", "Press Reset all: the focus is at 4 cm. Move it to the middle of the kidney (about 8.5 cm). What happens to the beam's width at the kidney? Look at the graph The beam and the number Lateral resolution.", "The beam at the kidney goes from 1.6 to 1.1 mm. Edges and pyramids get sharper sideways, and the kidney gets a little brighter, because the energy is concentrated there. The lateral resolution now shows 1.2 mm, because the distance between the lines is now what limits it. Put the focus at or just below what you want to see."],
+        ["More focal zones", "Leave the focus at 8.5 cm and the depth at 18 cm. Choose 3 focal zones. What gets better, and what does it cost?", "The beam is narrow over a longer stretch, but every line has to be sent three times: the frame rate falls from 31 to 10 Hz. That is no good for anything that moves, such as when the patient breathes."],
       ]],
       ["Field of view and frame rate", [
-        ["Sector width", "Make the sector narrower, from 70 to 40 degrees. What happens to the frame rate, and why?", "It rises from 31 to 54 Hz, because fewer lines are needed (80 instead of 140). In return you see less at the sides."],
-        ["Line density", "Focus at 8.5 cm. Try low and high line density. Look at the lateral resolution at the kidney and at the frame rate.", "Low: 70 lines, 2.4 mm between lines at the kidney and 61 Hz, but the image gets coarser sideways. High: 210 lines and 0.8 mm, but only 20 Hz. The lateral resolution can never be better than the beam (1.1 mm) or the line spacing."],
+        ["Sector width", "Press Reset all. Make the sector narrower, from 70 to 40 degrees. What happens to the frame rate, and why?", "It rises from 31 to 54 Hz, because fewer lines are needed (80 instead of 140). In return you see less at the sides."],
+        ["Line density", "Set the sector to 70° again and the focus to 8.5 cm. Try low and high line density. Look at the lateral resolution at the kidney and at the frame rate.", "Low: 70 lines, 2.4 mm between lines at the kidney and 61 Hz, but the image gets coarser sideways. High: 210 lines 0.8 mm apart, but only 20 Hz, and the lateral resolution stops at the beam's 1.1 mm. It can never be better than the beam's width or the line spacing."],
         ["The best image", "Make the best image of the kidney you can, with at least 25 Hz. Save the numbers first so you can compare with the starting point.", "For example depth 13 cm, 5 MHz, focus 8.5 cm, one focal zone, high line density, sector 60° and TGC so the depth is even. That gives 33 Hz and 0.8 mm lateral resolution against 1.6 mm at the start, and the axial resolution goes from 0.44 to 0.31 mm."],
       ]],
       ["Dynamic range", [
-        ["Low", "Set the dynamic range to 35 dB. What happens to the image?", "It turns hard: black and white with few shades of grey. The pyramids get darker, the sinus brighter, and the cyst stands out sharply. But faint differences in the tissue disappear, and the fat under the skin turns black."],
-        ["High", "Set it to 80 dB.", "The image turns soft and grey: more shades, so small differences can be seen, but the contrast between, say, cortex and pyramid gets smaller."],
+        ["Low", "Press Reset all. Set the dynamic range to 35 dB. What happens to the image?", "It turns hard: black and white with few shades of grey. The pyramids get darker, the sinus brighter, and the cyst stands out sharply. But faint differences in the tissue disappear, and the fat under the skin turns black."],
+        ["High", "Set it to 80 dB. What do you gain, and what do you lose?", "The image turns soft and grey: more shades, so small differences can be seen, but the contrast between, say, cortex and pyramid gets smaller."],
       ]],
       ["Formulas", [
         ["Wavelength", "Sound travels at 1540 m/s in soft tissue. Work out the wavelength at 3.5 and 6 MHz. The pulse is 2 cycles long. What is the axial resolution?", "$\\lambda = \\frac{1540}{3.5 \\cdot 10^6} = 0.44$ mm and $\\frac{1540}{6 \\cdot 10^6} = 0.26$ mm. The axial resolution is half a pulse length: $\\frac{2\\lambda}{2} = \\lambda$, so 0.44 and 0.26 mm. Check the numbers in the simulator."],
@@ -413,8 +415,11 @@ function overlays(ctx, W, H, V) {
   const zoomed = S.zoom > 1, mx = zoomed ? 12 : V.ox - US.RC * Math.sin(V.th) * V.sc - 10, my = zoomed ? 10 : Math.max(10, Y(US.RC * (Math.cos(V.th) - 1)) - 2);
   ctx.fillStyle = css("--signal"); ctx.beginPath(); ctx.arc(mx, my, 5, 0, 7); ctx.fill();
   // the settings line, as on a scanner
-  text(ctx, `${L.planeShort[S.plane]} · ${fmt(S.f, 1)} MHz · ${Math.round(M.frame)} Hz · G ${S.gain > 0 ? "+" : ""}${S.gain} dB · DR ${S.dr}${S.zoom > 1 ? " · zoom " + fmt(S.zoom, S.zoom % 1 ? 1 : 0) + "×" : ""}`,
-       W - 6, 14, css("--muted"), "right", 11, mono);
+  const parts = [L.planeShort[S.plane], `${fmt(S.f, 1)} MHz`, `${Math.round(M.frame)} Hz`, `G ${S.gain > 0 ? "+" : ""}${S.gain} dB`, `DR ${S.dr}`];
+  if (S.zoom > 1) parts.push(`zoom ${fmt(S.zoom, S.zoom % 1 ? 1 : 0)}×`);
+  ctx.font = `11px ${css(mono)}`;
+  while (parts.length > 1 && ctx.measureText(parts.join(" · ")).width > W - 34) parts.shift();   // a narrow screen: keep the dot clear
+  text(ctx, parts.join(" · "), W - 6, 14, css("--muted"), "right", 11, mono);
   // depth scale on the right, measured along the centre line
   const sxp = W - V.mR + 14;
   ctx.strokeStyle = css("--muted"); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(sxp, Math.max(V.mT, Y(0))); ctx.lineTo(sxp, Math.min(H, Y(S.depth))); ctx.stroke();
@@ -461,7 +466,7 @@ function depthTicks(ctx, X, y0, label, x1) {
 function drawBeam() {
   const [ctx, W, H] = fit($("beam"));
   if (W < 10) return;
-  const G = T[S.lang].graph, B = M.B, x0 = 30, x1 = W - 8, y0 = H - 32, y1 = 18, ym = (y0 + y1) / 2;
+  const G = T[S.lang].graph, B = M.B, x0 = 30, x1 = W - 8, y0 = H - 32, y1 = 30, ym = (y0 + y1) / 2;
   const X = d => x0 + d / S.depth * (x1 - x0);
   let wmax = 0;
   for (let d = 0.2; d <= S.depth; d += 0.1) wmax = Math.max(wmax, B.w(d), US.spacing(S, d));
@@ -491,7 +496,7 @@ function drawBeam() {
   for (const z of B.zs) if (z <= S.depth) { ctx.beginPath(); ctx.moveTo(X(z), y1 + 2); ctx.lineTo(X(z) - 5, y1 - 7); ctx.lineTo(X(z) + 5, y1 - 7); ctx.fill(); }
   // scale and legend
   for (const v of [-Math.floor(half), 0, Math.floor(half)]) text(ctx, String(v), x0 - 5, Y(v) + 3, css("--muted"), "right", 10);
-  text(ctx, G.mm, 2, 11, css("--muted"), "left", 10);
+  text(ctx, G.mm, 2, y0 + 26, css("--muted"), "left", 10);
   depthTicks(ctx, X, y0, G.depth, x1);
   let lx = x1;
   for (const [name, col, dash] of [[G.space, css("--muted"), true], [G.width, css("--signal"), false]]) {
@@ -518,7 +523,7 @@ function drawGain() {
   text(ctx, G.black, x1 - 4, Y(bot) + 12, css("--muted"), "right", 10);
   axes(ctx, x0, y0, x1, y1);
   for (let v = -80; v <= 40; v += 20) text(ctx, String(v), x0 - 5, Y(v) + 3, css("--muted"), "right", 10);
-  text(ctx, "dB", 2, 11, css("--muted"), "left", 10);
+  text(ctx, "dB", 2, y0 + 26, css("--muted"), "left", 10);
   const curve = (fn, col, w, dash) => {
     ctx.strokeStyle = col; ctx.lineWidth = w; ctx.setLineDash(dash || []); ctx.beginPath();
     for (let d = 0.2; d <= S.depth; d += 0.1) ctx.lineTo(X(d), Y(fn(US.levels(S, d, M.B))));
@@ -544,12 +549,12 @@ function drawGain() {
 
 // ---- the numbers, what you can see, and the saved numbers ----
 function metrics() {
-  const L = T[S.lang], fr = M.frame, lineLimited = M.spaceK > M.beamK;
+  const L = T[S.lang], fr = M.frame;
   return [[fr < 15 ? "err" : fr < 25 ? "mag" : "ok", "frame", `${Math.round(fr)} Hz`, L.f.frame(fr)],
           ["", "axial", `${fmt(M.axial * 10, 2)} mm`, L.f.axial],
-          ["mag", "lat", `${fmt(M.lat * 10, 1)} mm`, lineLimited ? L.f.latLine : L.f.latBeam],
+          ["mag", "lat", `${fmt(M.lat * 10, 1)} mm`, L.f.lat(fmt(M.beamK * 10, 1), fmt(M.spaceK * 10, 1))],
           [M.pen < M.K.back + 1 ? "err" : "ok", "pen", `${fmt(M.pen, 0)} cm`, M.pen < M.K.back + 1 ? L.f.penShort : L.f.penOk],
-          ["", "lines", String(M.L), L.f.lines(fmt(M.spaceK * 10, 1))],
+          ["", "lines", String(M.L), L.f.lines(US.DENSITY[S.density], S.sector)],
           ["", "line", `${Math.round(2 * S.depth / US.C * 1e6)} µs`, L.f.line]];
 }
 function observations() {
@@ -567,11 +572,11 @@ function observations() {
     [kd.noiseGrey > 0.12, L.noise[S.plane]],
     [kd.grey < 0.2, L.dark],
     [top.grey > 0.8 || kd.grey > 0.78, L.bright],
-    [drop > 0.15, L.darker], [drop < -0.15, L.lighter],
-    [S.depth > K.back + 3.5, L.deep.replace("{x}", fmt(S.depth - K.back, 0))],
-    [nearest > 2.5, L.focus.replace("{z}", fmt(S.focus, 1)).replace("{k}", fmt(K.mid, 1))],
     [S.dr < 45, L.drLow], [S.dr > 70, L.drHigh],
     [S.density === "low", L.lowLines], [S.zoom > 1, L.zoom],
+    [drop > 0.15, L.darker], [drop < -0.15, L.lighter],
+    [nearest > 2.5, L.focus.replace("{z}", fmt(S.focus, 1)).replace("{k}", fmt(K.mid, 1))],
+    [S.depth > K.back + 3.5, L.deep.replace("{x}", fmt(S.depth - K.back, 0))],
   ].filter(([on]) => on).slice(0, 2).map(([, t]) => t);
   return found.length ? found : [L.base];
 }
@@ -630,15 +635,18 @@ function buildControls() {
     S.tgc.map((v, i) => `<div class="tgcrow"><span>${fmt((i + 0.5) * S.depth / TGC_N, 0)} cm</span>` +
       `<input type="range" id="tgc-${i}" min="-20" max="20" step="1" value="${v}" aria-label="TGC ${i + 1}"><span id="o-tgc-${i}">${v > 0 ? "+" : ""}${v}</span></div>`).join("") +
     `${help("tgc")}</div>`;
+  const grp = k => `<h3 class="grp">${L.grp[k]}</h3>`;
   box.innerHTML =
-    seg("plane", [["long", L.plane.long], ["trans", L.plane.trans]]) +
+    grp("orient") + seg("plane", [["long", L.plane.long], ["trans", L.plane.trans]]) +
     seg("flip", [["false", C.normal], ["true", C.flipped]], `<canvas id="probe" aria-hidden="true"></canvas>`) +
-    slider("gain") + tgc + slider("depth") + slider("f") + slider("focus") +
-    seg("zones", [[1, "1"], [2, "2"], [3, "3"]]) + slider("dr") + slider("sector") +
-    seg("density", [["low", C.low], ["mid", C.mid], ["high", C.high]]) +
-    seg("zoom", [[1, "1×"], [1.5, "1,5×".replace(",", T[S.lang].dec)], [2, "2×"], [3, "3×"]]) +
     seg("names", [["false", C.off], ["true", C.on]]) +
-    `<div class="ctl"><button class="reset" id="reset">${C.reset}</button></div>`;
+    grp("bright") + slider("gain") + tgc + slider("dr") +
+    grp("field") + slider("depth") + slider("sector") +
+    seg("zoom", [[1, "1×"], [1.5, "1,5×".replace(",", T[S.lang].dec)], [2, "2×"], [3, "3×"]]) +
+    grp("detail") + slider("f") + slider("focus") +
+    seg("zones", [[1, "1"], [2, "2"], [3, "3"]]) +
+    seg("density", [["low", C.low], ["mid", C.mid], ["high", C.high]]) +
+    `<div class="ctl last"><button class="reset" id="reset">${C.reset}</button></div>`;
   box.querySelectorAll("button[data-k]").forEach(b => b.onclick = () => {
     const k = b.dataset.k, v = b.dataset.v;
     S[k] = v === "true" ? true : v === "false" ? false : ["zones", "zoom"].includes(k) ? +v : v;
@@ -675,7 +683,7 @@ function buildCard() {
   const L = T[S.lang], flat = taskList(), i = Math.max(0, flat.findIndex(t => t.id === taskId)), t = flat[i];
   taskId = t.id;
   $("taskcard").innerHTML =
-    `<div class="tc-head"><span>${t.g} · ${t.k} ${L.of} ${t.n}</span>` +
+    `<div class="tc-head"><span><b>${L.task}</b> · ${t.g} · ${t.k} ${L.of} ${t.n}</span>` +
     `<span class="seg"><button id="tc-prev" aria-label="${L.prev}">‹</button><button id="tc-next" aria-label="${L.next}">›</button></span></div>` +
     `<h4>${t.h}</h4><p class="q">${math(t.q)}</p>` +
     `<details class="answer"><summary>${L.answer}</summary><p class="a">${math(t.a)}</p></details>`;
