@@ -93,17 +93,16 @@ chosen by the owner, password file `/var/www/brage.org/.htpasswd-staging` (outsi
 `--delete`), `noindex`, `no-store`, no cookies. Only to stop students looking early; approval happens in Claude
 sessions, not on the site. Staged folders are listed in `staged.list`; `deploy.sh` aborts if one lacks its
 `.htaccess` and checks for 401 after `--go`. Go live = delete the folder's `.htaccess`, remove its line from
-`staged.list`, link it from the learn page. Now staged: `learn/ultrasound/` (overview page + U4 simulator, local only).
+`staged.list`, link it from the learn page. Now staged: `learn/ultrasound/` (overview page + U4 simulator, uploaded 2026-11-14 behind the password).
 
 **Ultrasound progress:**
 | Element | Status | Where | Notes |
 |---|---|---|---|
-| Overview page U1–U6 | waiting for the owner's review | learn/ultrasound/ | U4 is the only active card; the rest say "on the way" |
-| U4 Knapper og orientering: simulator | waiting for the owner's review (built 2026-11-14, reviewed 97e7ed8: physics, anatomy, texts, layout) | learn/ultrasound/knobs/ | own B-mode model (model.js), long + transverse kidney, 20 tasks + 3 deeper + 5 formulas; tasks are general knobology (owner chose this over the hands-on points, adjust later) |
+| Overview page U1–U6 | on staging (password), not public | learn/ultrasound/ | U4 is the only active card; the rest say "on the way" |
+| U4 Knapper og orientering: simulator | approved by the owner 2026-11-14; on staging (password), not public | learn/ultrasound/knobs/ | own B-mode model (model.js), long + transverse kidney, 20 tasks + 3 deeper + 5 formulas; tasks are general knobology (owner chose this over the hands-on points, adjust later) |
 | U4 video (DA/EN × 2) and PDF | not started | | storyboard after the simulator is approved |
 
-Questions for the U4 review: is the model's look close enough to a real scanner (speckle, kidney, shadow)?
-Pyramids −12 dB and perirenal fat +3 dB (distinct enough?); kidney centre 8.7 cm deep (deep side of normal); no aorta in transverse.
+Owner answers 2026-11-14: pyramids −12 dB ok, penetration 70/f ok, kidney 8.7 cm ok, no aorta ok.
 Penetration rule 70/f cm (a teaching simplification); read zoom only (write zoom described in a task); frame-rate
 numbers from 1/2/3 lines per degree. Deploying uploads to the staged folder only (behind the password).
 
