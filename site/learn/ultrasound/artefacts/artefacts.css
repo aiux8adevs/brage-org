@@ -1,0 +1,3 @@
+/* Artefact page: the knobology page's layout (knobs.css); only the A-line canvas and disabled buttons are new. */
+#aline { width: 100%; aspect-ratio: 1.7 / 1; display: block; }
+.ctl .seg button:disabled { opacity: .4; }
