@@ -93,7 +93,18 @@ chosen by the owner, password file `/var/www/brage.org/.htpasswd-staging` (outsi
 `--delete`), `noindex`, `no-store`, no cookies. Only to stop students looking early; approval happens in Claude
 sessions, not on the site. Staged folders are listed in `staged.list`; `deploy.sh` aborts if one lacks its
 `.htaccess` and checks for 401 after `--go`. Go live = delete the folder's `.htaccess`, remove its line from
-`staged.list`, link it from the learn page. Now staged: `learn/ultrasound/` (placeholder page).
+`staged.list`, link it from the learn page. Now staged: `learn/ultrasound/` (overview page + U4 simulator, local only).
+
+**Ultrasound progress:**
+| Element | Status | Where | Notes |
+|---|---|---|---|
+| Overview page U1–U6 | waiting for the owner's review | learn/ultrasound/ | U4 is the only active card; the rest say "on the way" |
+| U4 Knapper og orientering: simulator | waiting for the owner's review (built 2026-11-14) | learn/ultrasound/knobs/ | own B-mode model (model.js), long + transverse kidney, 20 tasks + 3 deeper + 5 formulas; tasks are general knobology (owner chose this over the hands-on points, adjust later) |
+| U4 video (DA/EN × 2) and PDF | not started | | storyboard after the simulator is approved |
+
+Questions for the U4 review: is the model's look close enough to a real scanner (speckle, kidney, shadow)?
+Penetration rule 70/f cm (a teaching simplification); read zoom only (write zoom described in a task); frame-rate
+numbers from 1/2/3 lines per degree. Deploying uploads to the staged folder only (behind the password).
 
 **Coordination between sessions on this repo (agreed 2026-11-13):** each session commits only its own paths
 (`git add <paths>`, never `-A`); re-read PIPELINE.md before editing and keep to your own section; message the other

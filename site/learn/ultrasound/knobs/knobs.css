@@ -1,0 +1,33 @@
+/* Knobology page: the radiography simulators' look (histogram.css); only the canvases and the TGC block are new. */
+#img { width: 100%; aspect-ratio: 4 / 3; display: block; background: #000; border-radius: 4px; cursor: crosshair; touch-action: pan-y; }
+#beam { width: 100%; aspect-ratio: 2.1 / 1; display: block; }
+#gaincv { width: 100%; aspect-ratio: 1.6 / 1; display: block; }
+#probe { width: 110px; height: 108px; display: block; margin: 6px auto 0; }
+.metrics { display: contents; }
+/* the TGC: eight small sliders stacked by depth, like the slide pots on a scanner */
+.ctl.tgc label { align-items: center; }
+.tgcrow { display: grid; grid-template-columns: 42px minmax(0, 1fr) 30px; align-items: center; gap: 6px; font: 11px var(--mono); color: var(--muted); }
+.tgcrow input { margin: 0; height: 18px; accent-color: var(--amber); }
+.tgcrow span:last-child { text-align: right; color: var(--amber); }
+.ctl .mini { background: transparent; color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 1px 8px; font: 500 11px var(--body); cursor: pointer; }
+.ctl .mini:hover { color: var(--fg); }
+.ctl .seg { flex-wrap: wrap; }
+.stage + section.tasks { margin-top: 28px; }
+section.tasks + section.model { margin-top: 28px; }
+#model-text math[display="block"] { max-width: 100%; overflow-x: auto; }
+@media (min-width: 1100px) and (min-height: 600px) {
+  .stage { grid-template-columns: 270px minmax(0, 0.85fr) minmax(0, 1.3fr); height: auto !important; min-height: 0; }
+  .stage .controls { order: 0; grid-column: auto; overflow-y: auto; max-height: calc(100svh - 150px); }
+  .ctls { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+  .stage > *, .stage .right, .stage .right > .box { min-height: auto; }
+  .stage .right { grid-template-rows: auto auto; }
+  #img { aspect-ratio: auto; height: calc(100svh - 330px); min-height: 360px; }
+}
+/* on a phone the image comes first and the controls right under it */
+@media (max-width: 780px) {
+  .stage .right { display: contents; }
+  .stage .right > .box:first-child { order: 1; }
+  .stage .controls { order: 2; }
+  .stage .right > .readout { order: 3; }
+  .stage > .graphs { order: 4; }
+}
