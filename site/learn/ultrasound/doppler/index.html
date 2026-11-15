@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Doppler and safety: colour, power and spectral Doppler, aliasing, angle correction, compression for DVT, MI and TI in a simulator.">
+  <meta name="theme-color" content="#0A0E18">
+  <title>Doppler og sikkerhed | Oliver Brage</title>
+  <link rel="stylesheet" href="../../radiography/histogram/histogram.css">
+  <link rel="stylesheet" href="../knobs/knobs.css?v=2">
+  <link rel="stylesheet" href="doppler.css?v=1">
+</head>
+<body>
+<div class="wrap">
+  <a class="back" id="t-back" href="../"></a>
+  <header>
+    <div>
+      <h1 id="t-title">Doppler og sikkerhed</h1>
+      <p class="sub" id="t-sub"></p>
+    </div>
+    <div class="toggles">
+      <div class="seg" role="group" aria-label="Sprog / language">
+        <button id="lang-da" aria-pressed="true">Dansk</button><button id="lang-en" aria-pressed="false">English</button>
+      </div>
+      <div class="seg" role="group" id="level-group">
+        <button id="lvl-grund" aria-pressed="true"></button><button id="lvl-deep" aria-pressed="false"></button>
+      </div>
+    </div>
+  </header>
+
+  <h2 class="simtitle" id="t-simtitle"></h2>
+  <div class="stage">
+    <div class="box controls">
+      <div id="controls" class="ctls"></div>
+    </div>
+    <div class="mid">
+      <div class="box taskbox"><div id="taskcard" class="taskcard"></div></div>
+      <div class="box graphs">
+        <div>
+          <h2 id="t-graph"></h2>
+          <canvas id="graph"></canvas>
+          <p class="note" id="t-graphnote"></p>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="box imgbox">
+        <h2 id="t-image"></h2>
+        <canvas id="img"></canvas>
+        <p class="seenline" aria-live="polite"><span id="t-seen"></span> <span id="seen"></span></p>
+        <p class="note" id="t-imgnote"></p>
+      </div>
+      <div class="box readout">
+        <div class="metrics" id="readout"></div>
+        <div class="seen"><button class="reset" id="pin"></button></div>
+      </div>
+    </div>
+  </div>
+  <section class="tasks">
+    <h3 id="t-tasks"></h3>
+    <div id="task-list" class="tasks"></div>
+  </section>
+  <section class="model">
+    <details><summary id="t-model"></summary><div id="model-text"></div></details>
+  </section>
+
+  <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
+</div>
+<script src="../../radiography/tex.js"></script>
+<script src="model.js?v=1"></script>
+<script src="doppler.js?v=1"></script>
+</body>
+</html>

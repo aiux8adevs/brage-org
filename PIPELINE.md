@@ -93,7 +93,7 @@ chosen by the owner, password file `/var/www/brage.org/.htpasswd-staging` (outsi
 `--delete`), `noindex`, `no-store`, no cookies. Only to stop students looking early; approval happens in Claude
 sessions, not on the site. Staged folders are listed in `staged.list`; `deploy.sh` aborts if one lacks its
 `.htaccess` and checks for 401 after `--go`. Go live = delete the folder's `.htaccess`, remove its line from
-`staged.list`, link it from the learn page. Now staged: `learn/ultrasound/` (overview page + U4 simulator, uploaded 2026-11-14 behind the password).
+`staged.list`, link it from the learn page. Now staged: `learn/ultrasound/` (overview page + U4, U5 and U6 simulators, behind the password).
 
 **Ultrasound progress:**
 | Element | Status | Where | Notes |
@@ -101,7 +101,8 @@ sessions, not on the site. Staged folders are listed in `staged.list`; `deploy.s
 | Overview page U1–U6 | on staging (password), not public | learn/ultrasound/ | U4 is the only active card; the rest say "on the way" |
 | U4 Knapper og orientering: simulator | approved by the owner 2026-11-14; on staging (password), not public | learn/ultrasound/knobs/ | own B-mode model (model.js), long + transverse kidney, 20 tasks + 3 deeper + 5 formulas; tasks are general knobology (owner chose this over the hands-on points, adjust later) |
 | U4 video (DA/EN × 2) and PDF | rendered 2026-11-14, waiting for the owner's review | manim-studio media/brage-org/ultralyd/u4-knapper/ | 4 versions (DA 5:47/7:15, EN 6:31/8:05) + 2 PDFs; audio QA passed. Listen by ear (DA): k1_hilus, k1_billede, k2_F_tal, k4_F_ind, k2_gain/k2_regel ("gain" said as "gejn"). Storyboard decisions a/b approved; podcast decided later with the whole package. [tjek] items 1–4 still open. Not on the site yet: the knobs page has no video tab |
-| U5 Artefakter i klinikken: simulator | waiting for the owner's review (built 2026-11-14) | learn/ultrasound/artefacts/ | own model; two scenes (abdomen convex, surface linear); shadow, enhancement, reverberation, comet tail, mirror, edge shadow, side lobes (abdomen only), harmonic imaging, slice thickness, fatty liver, anisotropy, needle angle; 20 tasks + 2 deeper + 5 formulas; overview card active; local only |
+| U5 Artefakter i klinikken: simulator | waiting for the owner's review (built 2026-11-14); on staging since 2026-11-15 | learn/ultrasound/artefacts/ | own model; two scenes (abdomen convex, surface linear); shadow, enhancement, reverberation, comet tail, mirror, edge shadow, side lobes (abdomen only), harmonic imaging, slice thickness, fatty liver, anisotropy, needle angle; 20 tasks + 2 deeper + 5 formulas; overview card active; local only |
+| U6 Doppler og sikkerhed: simulator | built 2026-11-15 overnight on the owner's go ("næste emne, simulator og video ... læg online undervejs"); on staging (password), waiting for review | learn/ultrasound/doppler/ | own model; groin, linear probe; long scene (CFA + CFV: colour, power, spectral, steer, heel-toe, angle correction, PRF, baseline, wall filter, Doppler frequency, stenosis) and across scene (compression for DVT, fresh/older clot); MI/TI from output, mode, PRF; 25 tasks + 1 deeper + 6 formulas. [tjek] safety wording (BMUS TI 0.7 foetus, MI 0.7 contrast), probe hygiene wording, CFV medial on the right of the screen |
 
 Owner answers 2026-11-14: pyramids −12 dB ok, penetration 70/f ok, kidney 8.7 cm ok, no aorta ok.
 Penetration rule 70/f cm (a teaching simplification); read zoom only (write zoom described in a task); frame-rate
