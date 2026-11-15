@@ -1,0 +1,3 @@
+/* Sound meets tissue page: the knobology page's layout (knobs.css); only the strength graph is new. */
+#graph { width: 100%; aspect-ratio: 2 / 1; display: block; }
+@media (max-width: 780px) { .stage .imgbox #img { aspect-ratio: 1.15 / 1; } }
