@@ -348,6 +348,7 @@ function colourOverlay() {
     const F = DP.flow(x, z, M.G, S, S.t);
     if (F) {
       const L = DP.lumen(x, z, M.G, S);
+      if (F.id === "v") COLSTAT.veinCells++;
       // the beam's width spreads the angle a little; disturbed flow adds random speed
       let vt = F.toward + 0.09 * F.v * (2 * h3 - 1) + (F.turb ? F.turb * Math.abs(F.toward) * (2 * h2 - 1) * 1.6 : 0);
       if (F.turb > 0.15) COLSTAT.mosaic = true;
@@ -357,7 +358,7 @@ function colourOverlay() {
       if (F.id === "a") artDet++;
       if (S.mode === "power") {
         if (Math.abs(vt) < wv) continue;
-        const k = 0.45 + 0.55 * Math.sqrt(Math.max(0, 1 - L.rn * L.rn));
+        const k = (0.45 + 0.55 * Math.sqrt(Math.max(0, 1 - L.rn * L.rn))) * (0.85 + 0.15 * h2);
         COL.set([255 * k, 150 * k * k, 40 * k, 235], o);
         if (F.id === "v") COLSTAT.vein++;
         continue;
@@ -379,7 +380,6 @@ function colourOverlay() {
         COLSTAT.noise++;
       }
     }
-    if (DP.lumen(x, z, M.G, S) && DP.lumen(x, z, M.G, S).id === "v") COLSTAT.veinCells++;
   }
   COLSTAT.weak = artFound > 20 && artDet < 0.7 * artFound;
 }
