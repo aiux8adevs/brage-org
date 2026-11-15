@@ -123,4 +123,4 @@ session before touching publish.rules, deploy.sh, .htaccess, learn/topic.js or l
 - ML section on the site (English, one level).
 
 
-**Formula tasks dropped (owner 2026-11-15):** "jeg tror overordnet vi skal droppe formelopgaverne .... det er ikke det de bruger deres tid på i klinik". Formula groups removed from U4, U5 and U6; U1 made without. Open question: do the deeper-level video lines with formulas (U4, U6) stay?
+**Formula tasks dropped (owner 2026-11-15):** "jeg tror overordnet vi skal droppe formelopgaverne .... det er ikke det de bruger deres tid på i klinik". Formula groups removed from U4, U5 and U6; U1 made without. Owner answer 2026-11-15: "formler må gerne være der i video": formula lines in the videos stay.
