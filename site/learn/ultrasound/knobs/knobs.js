@@ -115,13 +115,6 @@ const T = {
         ["Lavt", "Tryk på Nulstil alt. Sæt dynamikområdet til 35 dB. Hvad sker der med billedet?", "Det bliver hårdt: sort og hvidt med få grå toner. Pyramiderne bliver mørkere, sinus lysere, og cysten står skarpt. Men svage forskelle i vævet forsvinder, og fedtet under huden bliver sort."],
         ["Højt", "Sæt det til 80 dB. Hvad vinder du, og hvad taber du?", "Billedet bliver blødt og gråt: flere grå toner, så små forskelle kan ses, men kontrasten mellem fx bark og pyramide bliver mindre."],
       ]],
-      ["Formler", [
-        ["Bølgelængde", "Lyden går 1540 m/s i blødt væv. Regn bølgelængden ved 3,5 og 6 MHz. Pulsen er 2 svingninger lang. Hvad er den aksiale opløsning?", "$\\lambda = \\frac{1540}{3,5 \\cdot 10^6} = 0,44$ mm og $\\frac{1540}{6 \\cdot 10^6} = 0,26$ mm. Den aksiale opløsning er en halv pulslængde: $\\frac{2\\lambda}{2} = \\lambda$, altså 0,44 og 0,26 mm. Tjek tallene i simulatoren."],
-        ["Tid og dybde", "Et ekko kommer tilbage 130 µs efter pulsen. Hvor dybt ligger det, der kastede det tilbage?", "Lyden skal ned og op igen: $d = \\frac{c \\cdot t}{2} = \\frac{1540 \\cdot 130 \\cdot 10^{-6}}{2} = 0,10$ m, altså 10 cm."],
-        ["Indtrængning", "Lever dæmper 0,5 dB/cm/MHz hver vej. Maskinen kan høre ekkoer ned til 70 dB under ekkoet fra huden. Hvor dybt når du ved 5 MHz?", "$2 \\cdot 0,5 \\cdot 5 \\cdot d = 70$ giver $d = 14$ cm. Tjek Indtrængning i simulatoren."],
-        ["TGC i tal", "Ved 3,5 MHz: hvor meget er ekkoet fra 10 cm dæmpet i alt? Maskinen retter selv 0,8 dB/cm/MHz. Hvor meget mangler?", "Dæmpning: $2 \\cdot 0,5 \\cdot 3,5 \\cdot 10 = 35$ dB. Maskinen: $0,8 \\cdot 3,5 \\cdot 10 = 28$ dB. Der mangler 7 dB, som TGC skal give."],
-        ["Billedfrekvens", "Dybde 13 cm, 140 linjer og én fokuszone. Regn billedfrekvensen. Hvad bliver den med 3 fokuszoner?", "Én linje: $\\frac{2 \\cdot 0,13}{1540} = 169$ µs. Et billede: $140 \\cdot 169$ µs $= 23,6$ ms, altså 42 Hz. Med 3 zoner tager det tre gange så lang tid: 14 Hz."],
-      ], "deep"],
     ],
   },
   en: {
@@ -227,13 +220,6 @@ const T = {
         ["Low", "Press Reset all. Set the dynamic range to 35 dB. What happens to the image?", "It turns hard: black and white with few shades of grey. The pyramids get darker, the sinus brighter, and the cyst stands out sharply. But faint differences in the tissue disappear, and the fat under the skin turns black."],
         ["High", "Set it to 80 dB. What do you gain, and what do you lose?", "The image turns soft and grey: more shades, so small differences can be seen, but the contrast between, say, cortex and pyramid gets smaller."],
       ]],
-      ["Formulas", [
-        ["Wavelength", "Sound travels at 1540 m/s in soft tissue. Work out the wavelength at 3.5 and 6 MHz. The pulse is 2 cycles long. What is the axial resolution?", "$\\lambda = \\frac{1540}{3.5 \\cdot 10^6} = 0.44$ mm and $\\frac{1540}{6 \\cdot 10^6} = 0.26$ mm. The axial resolution is half a pulse length: $\\frac{2\\lambda}{2} = \\lambda$, so 0.44 and 0.26 mm. Check the numbers in the simulator."],
-        ["Time and depth", "An echo comes back 130 µs after the pulse. How deep is what sent it back?", "The sound goes down and back up: $d = \\frac{c \\cdot t}{2} = \\frac{1540 \\cdot 130 \\cdot 10^{-6}}{2} = 0.10$ m, so 10 cm."],
-        ["Penetration", "Liver attenuates 0.5 dB/cm/MHz each way. The machine can hear echoes down to 70 dB below the echo from the skin. How deep do you reach at 5 MHz?", "$2 \\cdot 0.5 \\cdot 5 \\cdot d = 70$ gives $d = 14$ cm. Check Penetration in the simulator."],
-        ["TGC in numbers", "At 3.5 MHz: how much is the echo from 10 cm attenuated in all? The machine corrects 0.8 dB/cm/MHz itself. How much is missing?", "Attenuation: $2 \\cdot 0.5 \\cdot 3.5 \\cdot 10 = 35$ dB. The machine: $0.8 \\cdot 3.5 \\cdot 10 = 28$ dB. 7 dB is missing, which the TGC has to give."],
-        ["Frame rate", "Depth 13 cm, 140 lines and one focal zone. Work out the frame rate. What is it with 3 focal zones?", "One line: $\\frac{2 \\cdot 0.13}{1540} = 169$ µs. One frame: $140 \\cdot 169$ µs $= 23.6$ ms, so 42 Hz. With 3 zones it takes three times as long: 14 Hz."],
-      ], "deep"],
     ],
   },
 };

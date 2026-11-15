@@ -128,14 +128,6 @@ const T = {
         ["Grænserne", "Hvornår skal du være ekstra varsom med MI og TI?", "Ved foster og nyfødte og ved øjet. Hold TI lavt (under 0,7 ved foster), og begræns tiden, jo højere TI er. Ved kontraststof med gasbobler kan MI over 0,7 få boblerne til at sprænge. Brug kun Doppler på et tidligt foster, hvis der er en klinisk grund."],
         ["Probehygiejne", "Proben har været brugt på en patient med et sår i lysken. Hvad gør du, før den næste patient?", "Tør gelen af, rengør og desinficer proben efter afdelingens retningslinje. Ved sår, slimhinder eller sterile procedurer bruges probeovertræk og steril gel, og proben højniveau-desinficeres bagefter. Gelflasker kan også smitte."],
       ]],
-      ["Formler", [
-        ["Dopplerskiftet", "Beregn dopplerskiftet for blod med 100 cm/s ved 5 MHz og 60°.", "$$f_D = \\frac{2 f_0 v \\cos\\theta}{c} = \\frac{2 \\cdot 5\\,000\\,000 \\cdot 1 \\cdot 0,5}{1540} \\approx 3\\,200 \\text{ Hz}$$ Skiftet er hørbart: 3,2 kHz. Derfor kan skanneren også afspille Doppler som lyd."],
-        ["Nyquist-grænsen", "PRF er 5 kHz, og dopplerfrekvensen 5 MHz. Hvad er den største fart langs strålen, der kan måles uden aliasing? Og vinkelkorrigeret ved 60°?", "$$v_{max} = \\frac{c \\cdot PRF}{4 f_0} = \\frac{1540 \\cdot 5000}{4 \\cdot 5\\,000\\,000} = 0,385 \\text{ m/s}$$ 38,5 cm/s langs strålen. Ved 60° er det $38,5/\\cos 60° = 77$ cm/s i blodets retning."],
-        ["Vinkelfejl", "Den sande vinkel er 60°, men du sætter vinkelkorrektionen til 65°. Hvor meget for høj bliver farten?", "$$\\frac{\\cos 60°}{\\cos 65°} = \\frac{0,500}{0,423} = 1,18$$ 18 % for høj."],
-        ["Dybden sætter grænsen", "En pulse skal nå ned og op, før den næste sendes. Hvad er den højeste PRF for en gate i 8 cm dybde? Hvad er den største fart langs strålen ved 3 MHz?", "$$PRF_{max} = \\frac{c}{2d} = \\frac{1540}{2 \\cdot 0,08} \\approx 9\\,600 \\text{ Hz}$$ $$v_{max} = \\frac{1540 \\cdot 9600}{4 \\cdot 3\\,000\\,000} \\approx 1,23 \\text{ m/s}$$ Dybe kar med hurtigt blod er svære at måle uden aliasing. Lav frekvens hjælper."],
-        ["Forsnævringen", "En arterie forsnævres, så diameteren bliver 40 % mindre. Hvor meget hurtigere går blodet i forsnævringen?", "Arealet følger diameteren i anden: $0,6^2 = 0,36$. Det samme blod skal igennem, så farten bliver $1/0,36 \\approx 2,8$ gange større: 100 cm/s bliver cirka 280 cm/s."],
-        ["MI", "Det sjældne undertryk (peak rarefactional pressure) er 1,6 MPa ved 4 MHz. Hvad er MI? Hvad hvis udgangseffekten sænkes 6 dB?", "$$MI = \\frac{p_r}{\\sqrt{f}} = \\frac{1,6}{\\sqrt{4}} = 0,8$$ −6 dB halverer trykket: MI bliver 0,4."],
-      ], "deep"],
     ],
   },
   en: {
@@ -252,14 +244,6 @@ const T = {
         ["The limits", "When should you take extra care with MI and TI?", "With a fetus or a newborn, and at the eye. Keep TI low (under 0.7 for a fetus), and limit the time the higher TI is. With contrast agents containing gas bubbles, an MI over 0.7 can make the bubbles burst. Use Doppler on an early fetus only when there is a clinical reason."],
         ["Probe hygiene", "The probe has been used on a patient with a wound in the groin. What do you do before the next patient?", "Wipe off the gel, clean and disinfect the probe following the department's guideline. With wounds, mucous membranes or sterile procedures, use a probe cover and sterile gel, and give the probe high-level disinfection afterwards. Gel bottles can spread infection too."],
       ]],
-      ["Formulas", [
-        ["The Doppler shift", "Work out the Doppler shift for blood at 100 cm/s at 5 MHz and 60°.", "$$f_D = \\frac{2 f_0 v \\cos\\theta}{c} = \\frac{2 \\cdot 5\\,000\\,000 \\cdot 1 \\cdot 0.5}{1540} \\approx 3\\,200 \\text{ Hz}$$ The shift is audible: 3.2 kHz. That is why the scanner can also play Doppler as sound."],
-        ["The Nyquist limit", "The PRF is 5 kHz, and the Doppler frequency 5 MHz. What is the highest speed along the beam that can be measured without aliasing? And angle corrected at 60°?", "$$v_{max} = \\frac{c \\cdot PRF}{4 f_0} = \\frac{1540 \\cdot 5000}{4 \\cdot 5\\,000\\,000} = 0.385 \\text{ m/s}$$ 38.5 cm/s along the beam. At 60° that is $38.5/\\cos 60° = 77$ cm/s in the direction of the blood."],
-        ["Angle error", "The true angle is 60°, but you set the angle correction to 65°. How much too high is the speed?", "$$\\frac{\\cos 60°}{\\cos 65°} = \\frac{0.500}{0.423} = 1.18$$ 18 % too high."],
-        ["Depth sets the limit", "A pulse must get down and back before the next is sent. What is the highest PRF for a gate at 8 cm depth? What is the highest speed along the beam at 3 MHz?", "$$PRF_{max} = \\frac{c}{2d} = \\frac{1540}{2 \\cdot 0.08} \\approx 9\\,600 \\text{ Hz}$$ $$v_{max} = \\frac{1540 \\cdot 9600}{4 \\cdot 3\\,000\\,000} \\approx 1.23 \\text{ m/s}$$ Deep vessels with fast blood are hard to measure without aliasing. A low frequency helps."],
-        ["The stenosis", "An artery narrows so its diameter is 40 % smaller. How much faster does the blood move in the stenosis?", "The area follows the diameter squared: $0.6^2 = 0.36$. The same blood has to get through, so the speed is $1/0.36 \\approx 2.8$ times higher: 100 cm/s becomes about 280 cm/s."],
-        ["MI", "The peak rarefactional pressure is 1.6 MPa at 4 MHz. What is MI? And if the output power is lowered by 6 dB?", "$$MI = \\frac{p_r}{\\sqrt{f}} = \\frac{1.6}{\\sqrt{4}} = 0.8$$ −6 dB halves the pressure: MI becomes 0.4."],
-      ], "deep"],
     ],
   },
 };

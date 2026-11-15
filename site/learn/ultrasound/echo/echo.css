@@ -1,0 +1,4 @@
+/* Sound and echo page: the knobology page's layout (knobs.css); only the A-line canvas is new. */
+#graph { width: 100%; aspect-ratio: 2 / 1; display: block; }
+/* the image is tall (5 cm wide, up to 16 cm deep), so it gets a little more height on a phone */
+@media (max-width: 780px) { .stage .imgbox #img { aspect-ratio: 1.15 / 1; } }

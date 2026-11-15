@@ -93,12 +93,13 @@ chosen by the owner, password file `/var/www/brage.org/.htpasswd-staging` (outsi
 `--delete`), `noindex`, `no-store`, no cookies. Only to stop students looking early; approval happens in Claude
 sessions, not on the site. Staged folders are listed in `staged.list`; `deploy.sh` aborts if one lacks its
 `.htaccess` and checks for 401 after `--go`. Go live = delete the folder's `.htaccess`, remove its line from
-`staged.list`, link it from the learn page. Now staged: `learn/ultrasound/` (overview page + U4, U5 and U6 simulators, behind the password).
+`staged.list`, link it from the learn page. Now staged: `learn/ultrasound/` (overview page + U1, U4, U5 and U6 simulators, behind the password).
 
 **Ultrasound progress:**
 | Element | Status | Where | Notes |
 |---|---|---|---|
 | Overview page U1–U6 | on staging (password), not public | learn/ultrasound/ | U4 is the only active card; the rest say "on the way" |
+| U1 Lyd og ekko: simulator | built 2026-11-15 on the owner's "ja" (U1 simulator + video, staging allowed); on staging (password), waiting for review | learn/ultrasound/echo/ | own model; linear probe, two scenes (liver with fat, muscle, calcification + shadow, vein, cyst, haemangioma; phantom with wire column, wire pairs 2/1/0.5 mm, four cylinders); pulse travelling down and echo coming up over time, A-line graph, pulse shape at fixed scale; frequency, cycles (2/3/5), depth, fat layer (1450 m/s), scanner speed (deeper level); penetration 70/f as U4; 18 tasks + 2 deeper, no formula tasks |
 | U4 Knapper og orientering: simulator | approved by the owner 2026-11-14; on staging (password), not public | learn/ultrasound/knobs/ | own B-mode model (model.js), long + transverse kidney, 20 tasks + 3 deeper + 5 formulas; tasks are general knobology (owner chose this over the hands-on points, adjust later) |
 | U4 video (DA/EN × 2) and PDF | rendered 2026-11-14, waiting for the owner's review | manim-studio media/brage-org/ultralyd/u4-knapper/ | 4 versions (DA 5:47/7:15, EN 6:31/8:05) + 2 PDFs; audio QA passed. Listen by ear (DA): k1_hilus, k1_billede, k2_F_tal, k4_F_ind, k2_gain/k2_regel ("gain" said as "gejn"). Storyboard decisions a/b approved; podcast decided later with the whole package. [tjek] items 1–4 still open. Not on the site yet: the knobs page has no video tab |
 | U5 Artefakter i klinikken: simulator | waiting for the owner's review (built 2026-11-14); on staging since 2026-11-15 | learn/ultrasound/artefacts/ | own model; two scenes (abdomen convex, surface linear); shadow, enhancement, reverberation, comet tail, mirror, edge shadow, side lobes (abdomen only), harmonic imaging, slice thickness, fatty liver, anisotropy, needle angle; 20 tasks + 2 deeper + 5 formulas; overview card active; local only |
@@ -119,3 +120,6 @@ session before touching publish.rules, deploy.sh, .htaccess, learn/topic.js or l
 - Noise video, line n4_kv (DA+EN): reword so it does not sound as if CNR falls with kV; the trade-off shows at the same detector dose (REX). Owner said yes 2026-11-13; do with the next video round.
 - Possibly warmer host voices designed with Qwen3-TTS.
 - ML section on the site (English, one level).
+
+
+**Formula tasks dropped (owner 2026-11-15):** "jeg tror overordnet vi skal droppe formelopgaverne .... det er ikke det de bruger deres tid på i klinik". Formula groups removed from U4, U5 and U6; U1 made without. Open question: do the deeper-level video lines with formulas (U4, U6) stay?

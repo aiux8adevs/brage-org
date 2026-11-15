@@ -1,8 +1,9 @@
 // The ultrasound overview: the six topics in course order, Danish/English in the address (?lang=da),
 // nothing saved on the visitor's device. A topic with a path has a page; the others are on the way.
 const TOPICS = [
-  { n: "U1", da: ["Lyd og ekko", "Lyd, frekvens og bølgelængde, 1540 m/s, puls-ekko og gråtoner. Hvorfor væv ser lyst eller mørkt ud."],
-             en: ["Sound and echo", "Sound, frequency and wavelength, 1540 m/s, pulse-echo and grey scale. Why tissue looks bright or dark."] },
+  { n: "U1", path: "echo", kinds: ["simulator"],
+             da: ["Lyd og ekko", "Lyd, frekvens og bølgelængde, 1540 m/s, puls-ekko og gråtoner. Hvorfor væv ser lyst eller mørkt ud. Simulatoren: følg pulsen ned og ekkoet op, i en lever og et testfantom."],
+             en: ["Sound and echo", "Sound, frequency and wavelength, 1540 m/s, pulse-echo and grey scale. Why tissue looks bright or dark. The simulator: follow the pulse down and the echo back, in a liver and a test phantom."] },
   { n: "U2", da: ["Lyd møder væv", "Impedans, refleksion, spredning og speckle, brydning, absorption og dæmpning."],
              en: ["Sound meets tissue", "Impedance, reflection, scatter and speckle, refraction, absorption and attenuation."] },
   { n: "U3", da: ["Proben og strålen", "Piezo, probetyper, fokusering, strålens form og de fem slags opløsning."],
