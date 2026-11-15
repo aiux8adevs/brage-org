@@ -1,0 +1,4 @@
+/* The probe and the beam page: the knobology page's layout (knobs.css); only the beam graph is new. */
+#graph { width: 100%; aspect-ratio: 2 / 1; display: block; }
+@media (max-width: 780px) { .stage .imgbox #img { aspect-ratio: 1.15 / 1; } }
+#zoom { width: 100%; aspect-ratio: 1.35 / 1; display: block; }
