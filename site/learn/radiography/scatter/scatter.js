@@ -365,8 +365,13 @@ const PART_FILES = ["spredt", "raster3b", "tage3c"];
 // the parts the owner has approved; with ?draft=1 all of them are shown
 const LIVE_PARTS = 2;
 const nParts = () => new URLSearchParams(location.search).get("draft") === "1" ? PART_FILES.length : LIVE_PARTS;
-const groups = () => T[S.lang].groups.filter(g => g[2] !== "deep" || S.level === "deep");
+const groups = () => T[S.lang].groups.map((g, gi) => [g[0], g[1], g[2], gi]).filter(g => g[2] !== "deep" || S.level === "deep");
 let task = 0;
+// opening a task in the list below shows the same task in the card beside the simulator
+document.getElementById("task-list").addEventListener("toggle", e => {
+  const d = e.target, ids = groups().flatMap(([, items, , gi]) => items.map((_, ii) => gi + ":" + ii)), k = ids.indexOf(d.dataset.id);
+  if (d.open && k >= 0) { task = k; buildCard(); }
+}, true);
 function buildCard() {
   const L = T[S.lang], flat = groups().flatMap(([g, items]) => items.map((it, k) => [g, k + 1, items.length, ...it]));
   task = Math.min(task, flat.length - 1);
@@ -400,9 +405,9 @@ function buildText() {
   document.getElementById("t-back").href = "../../?lang=" + S.lang;
   set("lvl-grund", L.grund); set("lvl-deep", L.deep);
   document.getElementById("model-text").innerHTML = withMath(L.modelText);
-  document.getElementById("task-list").innerHTML = groups().map(([g, items]) =>
-    `<h4 class="tgroup">${g}</h4>` + items.map(([h, q, a]) =>
-      `<details><summary>${h}</summary><p class="q">${withMath(q)}</p><details class="answer">` +
+  document.getElementById("task-list").innerHTML = groups().map(([g, items, , gi]) =>
+    `<h4 class="tgroup">${g}</h4>` + items.map(([h, q, a], ii) =>
+      `<details data-id="${gi}:${ii}"><summary>${h}</summary><p class="q">${withMath(q)}</p><details class="answer">` +
       `<summary>${L.answer}</summary><p class="a">${withMath(a)}</p></details></details>`).join("")).join("");
   buildCard(); buildVideo();
 }

@@ -1,0 +1,48 @@
+{
+  "_about": "The learning outcomes the self-tests are checked against (selftest.py coverage). The wording is shortened from the study programme; 'pages' are the topic pages whose videos teach the outcome, empty when no video does yet. 'practical' outcomes are trained in the skills lab, not in a multiple-choice test.",
+  "radiography": {
+    "source": "Studieordning 4.1.7.2 DR, 1. semester",
+    "goals": {
+      "R-organ":    { "da": "Identificere organprogrammer og følge en simpel procedure ved valg af organprogram", "en": "Identify organ programs and follow a simple procedure for choosing one", "pages": ["histogram"] },
+      "R-krystal":  { "da": "Forklare krystallernes egenskaber i billedpladen/flatpanelet", "en": "Explain the properties of the crystals in the image plate/flat panel", "pages": ["detector"] },
+      "R-billede":  { "da": "Forklare opbygningen af det digitale billede", "en": "Explain how the digital image is built up", "pages": ["detector", "histogram"] },
+      "R-ad":       { "da": "Forklare analog/digital-konvertering", "en": "Explain analogue/digital conversion", "pages": ["detector"] },
+      "R-bit":      { "da": "Forklare bit, matrix og pixel", "en": "Explain bit, matrix and pixel", "pages": ["detector"] },
+      "R-lut":      { "da": "Forklare dynamikområdet og LUT", "en": "Explain the dynamic range and the LUT", "pages": ["histogram"] },
+      "R-ei":       { "da": "Beskrive eksponeringsindeks", "en": "Describe the exposure index", "pages": ["histogram", "noise"] },
+      "R-ff":       { "da": "Beskrive fill factor", "en": "Describe the fill factor", "pages": ["detector"] },
+      "R-udl":      { "da": "Beskrive udlæsning af signalet", "en": "Describe the readout of the signal", "pages": ["detector"] },
+      "R-filter":   { "da": "Vurdere ekstern filtrering", "en": "Assess external filtration", "pages": ["tube"] },
+      "R-aec":      { "da": "Vurdere automatik (AEC)", "en": "Assess automatic exposure control (AEC)", "pages": ["tube"] },
+      "R-spredt":   { "da": "Vurdere primær- og sekundærstrålingens betydning for røntgenbilledet", "en": "Assess what primary and secondary radiation do to the image", "pages": ["scatter"] },
+      "R-raster":   { "da": "Vurdere raster", "en": "Assess the grid", "pages": ["scatter"] },
+      "R-virtuel":  { "da": "Vurdere virtuelt raster", "en": "Assess the virtual grid", "pages": ["scatter"] },
+      "R-airgap":   { "da": "Vurdere airgap", "en": "Assess the air gap", "pages": ["scatter"] },
+      "R-lab":      { "da": "Anvende udvalgte parametre ved billeddannelse i færdighedslaboratoriet", "en": "Use selected parameters when making images in the skills lab", "pages": [], "practical": true },
+      "Q-absorber": { "da": "Vurdere billedkvalitet: absorbers karakteristika, fotoelektrisk effekt og comptonspredning", "en": "Assess image quality: the absorber, photoelectric effect and Compton scatter", "pages": ["scatter", "tube"] },
+      "Q-stoej":    { "da": "Vurdere billedkvalitet: støj (SNR)", "en": "Assess image quality: noise (SNR)", "pages": ["noise"] },
+      "Q-kontrast": { "da": "Vurdere billedkvalitet: kontrast", "en": "Assess image quality: contrast", "pages": ["noise", "scatter", "tube"] },
+      "Q-skarp":    { "da": "Vurdere billedkvalitet: skarphed", "en": "Assess image quality: sharpness", "pages": ["shadow", "detector"] },
+      "Q-forvr":    { "da": "Vurdere billedkvalitet: forvrængning og overlejring", "en": "Assess image quality: distortion and superimposition", "pages": ["shadow"] },
+      "Q-artefakt": { "da": "Vurdere billedkvalitet: artefakter", "en": "Assess image quality: artefacts", "pages": [] },
+      "Q-vaev":     { "da": "Beskrive hvordan de valgte parametre ændrer vævenes fremtræden i billedet", "en": "Describe how the chosen parameters change how tissues show in the image", "pages": ["noise", "scatter", "tube"] }
+    }
+  },
+  "ultrasound": {
+    "source": "Studieordning 5.4 Ultralyd, 5. semester",
+    "goals": {
+      "U-fysik":   { "da": "Beskrive og demonstrere generelle ultralydsprincipper: fysik", "en": "Describe and demonstrate general principles: physics", "pages": ["echo", "tissue"] },
+      "U-scanner": { "da": "Beskrive og demonstrere generelle ultralydsprincipper: scannerens opbygning", "en": "Describe and demonstrate general principles: how the scanner is built", "pages": ["probe", "knobs"] },
+      "U-artefakt":{ "da": "Beskrive og demonstrere generelle ultralydsprincipper: artefakter", "en": "Describe and demonstrate general principles: artefacts", "pages": ["artefacts", "tissue", "probe"] },
+      "U-doppler": { "da": "Beskrive og demonstrere generelle ultralydsprincipper: Doppler", "en": "Describe and demonstrate general principles: Doppler", "pages": ["doppler"] },
+      "U-sikker":  { "da": "Beskrive og demonstrere generelle ultralydsprincipper: sikkerhed", "en": "Describe and demonstrate general principles: safety", "pages": ["doppler"] },
+      "U-fald":    { "da": "Beskrive faldgruber inden for undersøgelserne", "en": "Describe pitfalls in the examinations", "pages": ["knobs", "artefacts", "doppler"] },
+      "U-aorta":   { "da": "Normal aorta og abdominalt aortaaneurisme", "en": "Normal aorta and abdominal aortic aneurysm", "pages": [] },
+      "U-dvt":     { "da": "Underekstremitet med fokus på DVT", "en": "The leg veins, with a focus on DVT", "pages": ["doppler"] },
+      "U-nyre":    { "da": "Nyrer og blære: cyster, tumorer, hydronefrose, urinretention", "en": "Kidneys and bladder: cysts, tumours, hydronephrosis, urinary retention", "pages": ["knobs", "artefacts"] },
+      "U-lever":   { "da": "Lever, pancreas, milt og galdeblære: cyster, fedt, sten, kolecystit m.m.", "en": "Liver, pancreas, spleen and gallbladder: cysts, fat, stones, cholecystitis and more", "pages": ["artefacts"] },
+      "U-msk":     { "da": "Udvalgte muskuloskeletale patologier", "en": "Selected musculoskeletal pathologies", "pages": ["artefacts"] },
+      "U-venflon": { "da": "Ultralydsvejledt venflonanlæggelse", "en": "Ultrasound-guided cannulation", "pages": ["artefacts"] }
+    }
+  }
+}

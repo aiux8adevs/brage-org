@@ -18,6 +18,13 @@ while read -r dir; do
   fi
 done < staged.list
 
+# The self-tests: every question must still point to a line in its video and a task in its simulator, and none may
+# rest on narration or a task that has changed since it was written (selftest/selftest.py says what to do).
+if ! python3 selftest/selftest.py check; then
+  echo "STOP: the self-tests do not match the videos or the simulators. Nothing uploaded." >&2
+  exit 1
+fi
+
 # Video folders are protected from --delete: the videos are not in git (see sync_videos.sh), so a
 # checkout without them must not wipe them on the server. Old videos are removed by hand.
 flags=(-av --checksum --delete --filter "P video/***" --filter "merge publish.rules" --exclude .git -e "ssh -i $HOME/.ssh/obrage_simply -o IdentitiesOnly=yes")

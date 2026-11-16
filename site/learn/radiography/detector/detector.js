@@ -401,8 +401,13 @@ function buildControls() {
   });
   $("reset").onclick = () => { Object.assign(S, START); buildControls(); update(); };
 }
-const groups = () => T[S.lang].groups.filter(g => g[2] !== "deep" || S.level === "deep");
+const groups = () => T[S.lang].groups.map((g, gi) => [g[0], g[1], g[2], gi]).filter(g => g[2] !== "deep" || S.level === "deep");
 let task = 0;
+// opening a task in the list below shows the same task in the card beside the simulator
+document.getElementById("task-list").addEventListener("toggle", e => {
+  const d = e.target, ids = groups().flatMap(([, items, , gi]) => items.map((_, ii) => gi + ":" + ii)), k = ids.indexOf(d.dataset.id);
+  if (d.open && k >= 0) { task = k; buildCard(); }
+}, true);
 function buildCard() {
   const L = T[S.lang], flat = groups().flatMap(([g, items]) => items.map((it, k) => [g, k + 1, items.length, ...it]));
   task = Math.min(task, flat.length - 1);
@@ -428,9 +433,9 @@ function buildText() {
   $("level-group").setAttribute("aria-label", S.lang === "da" ? "Niveau" : "Level");
   $("chapter-list").innerHTML = L.list.map(c => `<li>${c}</li>`).join("");
   $("model-text").innerHTML = withMath(L.modelText);
-  $("task-list").innerHTML = groups().map(([g, items]) =>
-    `<h4 class="tgroup">${g}</h4>` + items.map(([h, q, a]) =>
-      `<details><summary>${h}</summary><p class="q">${withMath(q)}</p><details class="answer">` +
+  $("task-list").innerHTML = groups().map(([g, items, , gi]) =>
+    `<h4 class="tgroup">${g}</h4>` + items.map(([h, q, a], ii) =>
+      `<details data-id="${gi}:${ii}"><summary>${h}</summary><p class="q">${withMath(q)}</p><details class="answer">` +
       `<summary>${L.answer}</summary><p class="a">${withMath(a)}</p></details></details>`).join("")).join("");
   buildCard();
   // the video in the chosen language and level; only reloaded when that choice changes

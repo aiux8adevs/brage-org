@@ -100,7 +100,7 @@ function drawOverview(box) {
 // ---- a topic page: tabs, the handout tab, previous / next ----
 function show(hash) {
   const here = pages.find(p => p.path === document.body.dataset.topic);
-  const [tab0, arg] = decodeURIComponent(hash).split(/:(.*)/s);           // "video:raster3b@83.5", "task:<title>"
+  const [tab0, arg] = decodeURIComponent(hash).split(/:(.*)/s);           // "video:raster3b@83.5", "task:3:1"
   let tab = tab0 === "task" ? "simulator" : tab0;
   if (!here.tabs.includes(tab)) tab = here.tabs[0];
   document.querySelectorAll("[data-tab]").forEach(el => { el.hidden = el.dataset.tab !== tab; });
@@ -120,14 +120,17 @@ function seek(arg) {
   if (vid.readyState >= 1) go(); else { vid.preload = "metadata"; vid.addEventListener("loadedmetadata", go, { once: true }); vid.load(); }
   vid.scrollIntoView({ block: "start" });
 }
-// open the simulator task with this title and bring it into view
-function openTask(title) {
-  const s = [...document.querySelectorAll("#task-list summary")].find(x => x.textContent.trim() === title.trim());
-  if (!s) return;
-  s.parentElement.open = true;
-  setTimeout(() => s.scrollIntoView({ block: "center" }), 50);
+// open the simulator task with this id ("group:item"; older links: its title) and bring it into view;
+// opening it also shows it in the card beside the simulator
+function openTask(key) {
+  const d = document.querySelector(`#task-list details[data-id="${key.replace(/["\\]/g, "")}"]`) ||
+    [...document.querySelectorAll("#task-list summary")].find(x => x.textContent.trim() === key.trim())?.parentElement;
+  if (!d) return;
+  d.open = true;
+  setTimeout(() => (document.querySelector(`#task-list details[data-id="${key.replace(/["\\]/g, "")}"]`) || d).scrollIntoView({ block: "center" }), 50);
 }
-// ---- the self-test tab (draft only until approved): loads selftest.js and the questions when first needed ----
+// ---- the self-test tab (draft only until approved): loads selftest.js and the questions (../selftest.json, kept in
+// step with the videos and tasks by selftest/selftest.py) when first needed ----
 let TEST = null, TIMES = {};
 function drawSelftest(here) {
   if (TEST) { TEST.draw(); return; }
@@ -138,11 +141,11 @@ function drawSelftest(here) {
     (document.getElementById("handout-box") || document.getElementById("tabs")).after(box);
     const css = document.createElement("link"); css.rel = "stylesheet"; css.href = "../../selftest.css?v=1"; document.head.append(css);
     const load = src => new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.append(s); });
-    Promise.all([load("../../selftest.js?v=1"), load("../selftest-data.js?v=1")]).then(() => {
-      const data = R_TEST[here.path];
+    Promise.all([load("../../selftest.js?v=2"), fetch("../selftest.json?v=2").then(r => r.json())]).then(([, all]) => {
+      const data = all.pages[here.path];
       if (!data) return;
       TEST = SelfTest.mount(box, { lang, concepts: data.concepts, qs: data.qs, link: (c, kind) => {
-        if (kind === "task") return "#task:" + encodeURIComponent(c.task[lang() === "da" ? 0 : 1]);
+        if (kind === "task") return c.task ? "#task:" + c.task : null;
         const t = TIMES[c.file]?.[`${lang()}_${level() ? "fordybelse" : "grund"}`]?.[c.line];
         return t === undefined ? null : `#video:${c.file}@${t}`;
       } });

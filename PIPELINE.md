@@ -112,8 +112,8 @@ sessions, not on the site. Staged folders are listed in `staged.list`; `deploy.s
 | U6 video (DA/EN × 2) and PDF | rendered 2026-11-15 overnight, waiting for the owner's review | manim-studio media/brage-org/ultralyd/u6-doppler/ | 4 versions (DA 6:18/7:40, EN 7:05/8:38) + 2 PDFs; images are stills from the U6 simulator; audio QA passed (EN deeper: 10 s caption hold after d3_F_bred, reading time, as in U4). Listen by ear (DA): d2_F_nyq, d5_mode, d5_hyg, d1_styr, d0_blod ("doppler" and "trombe" are often misheard by Whisper but may be fine). [tjek] items 1–5 in storyboards/ultralyd_doppler/01_draft.md. Not on the site yet: no video tab |
 | Ultrasound video tabs | online on staging 2026-11-16 on the owner's "vil du lægge video online ... stadig under staging beskyttelse med kodeord" | learn/ultrasound/usvideo.js + .css | tabs Video / Simulator / Glossary and PDF / Test yourself on U1–U6; the video follows the page's language and level; previous / next links on all six pages (U6 → self-test). Files copied by sync_videos.sh (ultrasound block, always synced: the folder is staged). Stills scripts now open the simulators with #simulator |
 | Ultrasound glossary | built 2026-11-16 on the owner's "byg blot ultralydssporet så komplet som uligt med hvad vi har nu"; on staging, waiting for review | learn/ultrasound/glossary/ | 53 terms in 6 groups, DA/EN, own short explanations, search in both languages, filter per topic. [tjek] U1/U4 say "billedfrekvens", U3 says "billedhastighed": pick one |
-| Ultrasound self-test | built 2026-11-16; reworked the same day on the owner's "ja, ingen lagring på enheden" to a fourth tab on every topic page; on staging, waiting for review | learn/ultrasound/selftest-data.js, learn/selftest.js, quiz/ | 6 questions per topic (36), each tied to a concept; the result lists weak concepts with "▶ watch the video from m:ss" (#video:<s>) and "try the task" (#task:<title>). Line start times: manim-studio line_times.py finds each voice clip in the finished video's sound by cross-correlation (owner's idea to use measured times; match 0.99, deeper-only lines correctly absent from basic), written by sync_videos.sh to video/times.json. Answers in memory only: no cookies, no storage, nothing sent. The quiz/ page uses the same data and links into the topic pages |
-| Radiography self-test | built 2026-11-16 on the owner's "ja, ingen lagring på enheden" (both tracks); draft only (?draft=1), local until approved | learn/radiography/selftest-data.js, topic.js | 6 questions per page (detector, histogram, noise, scatter incl. 3c, shadow, tube incl. 5b), same engine and links; times in video/times_<file>.json; on pages with parts the link switches part. The data file and times stay local (publish.rules); the live pages only got the inert topic.js code, regression-tested without draft |
+| Ultrasound self-test | built 2026-11-16; fourth tab on every topic page (owner: "ja, ingen lagring på enheden"); reworked 2026-11-16 to cover the learning outcomes (owner: "ja det er rigtigt forstået"); on staging, waiting for review | learn/ultrasound/selftest.json, learn/selftest.js, quiz/ | 6–8 questions per topic (43), each tagged with the learning outcomes it covers (selftest/goals.json, study programme 5.4); the result lists weak concepts with "▶ watch the video from m:ss" and "try the task". Answers in memory only: no cookies, no storage, nothing sent. The quiz/ page uses the same data. See "Self-tests" below |
+| Radiography self-test | built 2026-11-16 (both tracks); reviewed by the owner 2026-11-16 ("fint udgangspunkt"), then reworked to cover the learning outcomes (study programme 4.1.7.2); draft only (?draft=1), local until approved | learn/radiography/selftest.json, topic.js | 7–8 questions per page (47). Not covered: artefacts (Q-artefakt, no video teaches it), organ programs only through the LUT line b5_protokol. selftest.json and the times files stay local (publish.rules); the live pages only got the inert topic.js code, regression-tested without draft |
 | U5 video (DA/EN × 2) and PDF | rendered 2026-11-16 on the owner's "byg blot ultralydssporet så komplet som uligt med hvad vi har nu"; on staging, waiting for review | manim-studio media/brage-org/ultralyd/u5-artefakter/ | 4 versions (DA 6:31/6:57, EN 7:18/7:49) + 2 PDFs; formulas only at the deeper level (d_n = n·d_0, f = 2r/e); images are stills from the U5 simulator; audio QA passed. Listen by ear (DA): a6_sene ("svagere" heard as "sværere"), a2_kopier, a5_snit, a0_billede, a6_spids. [tjek] items 1–5 in storyboards/ultralyd_artefakter/01_draft.md |
 
 Owner answers 2026-11-14: pyramids −12 dB ok, penetration 70/f ok, kidney 8.7 cm ok, no aorta ok.
@@ -124,6 +124,25 @@ numbers from 1/2/3 lines per degree. Deploying uploads to the staged folder only
 (`git add <paths>`, never `-A`); re-read PIPELINE.md before editing and keep to your own section; message the other
 session before touching publish.rules, deploy.sh, .htaccess, learn/topic.js or learn/index.html, and before any
 `./deploy.sh --go`.
+
+## Self-tests: how they stay in step with the videos and simulators (2026-11-16)
+Every topic page ends with a self-test. The questions are in `site/learn/<track>/selftest.json`; each question has a
+concept, and each concept points to a narrated **line key** (e.g. `a2_kopier`) and a simulator **task id** (`group:item`,
+rendered as `<details data-id>`), never to a time or a title. `selftest/selftest.py` keeps them honest:
+
+- `./sync_videos.sh` measures where every line starts in all four versions (manim-studio `line_times_page.py`, clip
+  cross-correlation) and stores a fingerprint of each chapter's narration in `video/times*.json`. A re-render therefore
+  moves the "watch from m:ss" links by itself.
+- `python3 selftest/selftest.py check` (run at the end of sync and at the start of `deploy.sh`, which stops on an error)
+  fails when a line or task is gone, and when the narration of a chapter or the text of a task has changed since the
+  question was written. It names the questions to re-read; after review, `selftest.py accept <track> <page> <concept>`
+  stores the new fingerprints. Example: rewording `n4_kv` (see below) will flag noise question 4.
+- New topic: `selftest.py skeleton <track> <page>` prints the page's learning outcomes, every chapter with its lines (marked
+  with or without questions), the simulator's tasks with ids, and concept stubs. Write the questions (DA/EN, one or more
+  outcomes each, aim for 6–8, prefer "you see X, what do you do"), then `accept` fills in fingerprints and task titles.
+- `selftest.py coverage` lists the learning outcomes and how many questions cover each; `goals.json` has the outcomes
+  (shortened from the study programmes) and which pages teach them.
+- In the simulators, opening a task in the list also shows it in the task card beside the simulator (all 12, 2026-11-16).
 
 ## Not started / later
 - When videos 5a/5b go live: tube tabs back to video/simulator/handout in topic.js, add tube media to publish.rules and live list in sync_videos.sh, and change the tube subtitle in tube.js ("Simulatoren er klar; to videoer er på vej").

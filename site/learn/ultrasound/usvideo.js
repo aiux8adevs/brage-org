@@ -5,8 +5,9 @@
 // <name>_<da|en>_<grund|fordybelse>.mp4, poster_<da|en>.jpg, <name>_<da|en>.pdf and times.json (where each narrated
 // line starts), where <name> is the body's data-video attribute. A page without data-video (no video yet) gets only
 // the previous / next links.
-// The address can point into the page: #video:83.5 plays the video from 83.5 s, #task:Små%20cyster opens that
-// simulator task. The self-test's links use this, also from the page with all topics.
+// The address can point into the page: #video:83.5 plays the video from 83.5 s, #task:3:1 opens that simulator task
+// (group 3, item 1; older links by title still work). The self-test's links use this, also from the page with all
+// topics. The self-test's questions are in ../selftest.json.
 (() => {
   const ORDER = [
     ["echo", "U1 Lyd og ekko", "U1 Sound and echo"], ["tissue", "U2 Lyd møder væv", "U2 Sound meets tissue"],
@@ -27,8 +28,7 @@
   const name = document.body.dataset.video;
   const here = location.pathname.split("/").filter(Boolean).pop();
   const idx = ORDER.findIndex(o => o[0] === here);
-  const topic = typeof US_QUIZ !== "undefined" ? US_QUIZ.find(g => g.path === here) : null;
-  const TABS = ["video", "simulator", "handout", ...(topic ? ["selftest"] : [])];
+  const TABS = ["video", "simulator", "handout", "selftest"];
   const el = (tag, attrs = {}) => Object.assign(document.createElement(tag), attrs);
   const lang = () => (document.documentElement.lang === "da" ? "da" : "en");
   const deep = () => document.getElementById("lvl-deep")?.getAttribute("aria-pressed") === "true";
@@ -58,15 +58,17 @@
     hbox = el("section", { className: "box", id: "handout-box" }); hbox.dataset.tab = "handout";
     sbox = el("section", { className: "box selftest" }); sbox.dataset.tab = "selftest";
     header.after(nav, vbox, sim, hbox, sbox);
-    if (topic) {
-      test = SelfTest.mount(sbox, { lang, concepts: US_CONCEPTS[topic.n], qs: topic.qs, link });
-      fetch("video/times.json").then(r => r.ok ? r.json() : null).then(j => { TIMES = j; test.draw(); }).catch(() => {});
-    }
+    fetch("../selftest.json?v=2").then(r => r.json()).then(data => {
+      const topic = data.pages[here];
+      if (!topic) { TABS.pop(); drawTabs(); return; }                  // no questions for this page yet
+      test = SelfTest.mount(sbox, { lang, concepts: topic.concepts, qs: topic.qs, link });
+      return fetch("video/times.json").then(r => r.ok ? r.json() : null).then(j => { TIMES = j; test.draw(); });
+    }).catch(() => {});
   }
 
   // the self-test's links: the video at the line that explains the concept, and the task that practises it
   function link(c, kind) {
-    if (kind === "task") return "#task:" + encodeURIComponent(c.task[lang() === "da" ? 0 : 1]);
+    if (kind === "task") return c.task ? "#task:" + c.task : null;
     const t = lineTime(c.line);
     return t === null ? null : "#video:" + t;
   }
@@ -76,7 +78,7 @@
     return own[key] ?? null;
   }
 
-  // ---- show a tab, or a place in it: "video", "video:83.5", "task:<title>" ----
+  // ---- show a tab, or a place in it: "video", "video:83.5", "task:3:1" ----
   function show(hash) {
     if (!name) return;
     const [tab0, arg] = decodeURIComponent(hash).split(/:(.*)/s);
@@ -94,12 +96,14 @@
     if (vid.readyState >= 1) go(); else { vid.preload = "metadata"; vid.addEventListener("loadedmetadata", go, { once: true }); vid.load(); }
     vbox.scrollIntoView({ block: "start" });
   }
-  // open the task with this title in the simulator's task list and bring it into view
-  function openTask(title) {
-    const s = [...document.querySelectorAll("#task-list summary")].find(x => x.textContent.trim() === title.trim());
-    if (!s) return;
-    s.parentElement.open = true;
-    setTimeout(() => s.scrollIntoView({ block: "center" }), 50);
+  // open the task with this id (or, from older links, this title) in the simulator's task list and bring it into view;
+  // opening it also shows it in the card beside the simulator
+  function openTask(key) {
+    const d = document.querySelector(`#task-list details[data-id="${key.replace(/["\\]/g, "")}"]`) ||
+      [...document.querySelectorAll("#task-list summary")].find(x => x.textContent.trim() === key.trim())?.parentElement;
+    if (!d) return;
+    d.open = true;
+    setTimeout(() => d.scrollIntoView({ block: "center" }), 50);
   }
   function drawTabs() {
     const L = lang(), T = W[L], other = L === "da" ? "en" : "da";

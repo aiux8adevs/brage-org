@@ -75,3 +75,7 @@ for p in "${ultra[@]}"; do
   ~/code/personal/venv/bin/python ~/projects/manim-studio/line_times_page.py "$U/$src" "$cls" "$voice" "$out/times.json"
   echo "synced $page (staged)"
 done
+
+# The self-tests point into these videos: check that every question still has its line and its task, and flag the
+# questions whose narration or task has changed since they were written (deploy.sh stops on the same check).
+python3 selftest/selftest.py check || echo "The self-tests need a look before the next deploy (see above)." >&2

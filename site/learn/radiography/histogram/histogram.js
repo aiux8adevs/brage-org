@@ -595,16 +595,21 @@ function buildText() {
   document.getElementById("lvl-grund").textContent = L.grund;
   document.getElementById("lvl-deep").textContent = L.deep;
   document.getElementById("level-group").setAttribute("aria-label", S.lang === "da" ? "Niveau" : "Level");
-  document.getElementById("task-list").innerHTML = groups().map(([g, items]) =>
-    `<h4 class="tgroup">${g}</h4>` + items.map(([h, q, a]) =>
-      `<details><summary>${h}</summary><p class="q">${withMath(q)}</p><details class="answer">` +
+  document.getElementById("task-list").innerHTML = groups().map(([g, items, , gi]) =>
+    `<h4 class="tgroup">${g}</h4>` + items.map(([h, q, a], ii) =>
+      `<details data-id="${gi}:${ii}"><summary>${h}</summary><p class="q">${withMath(q)}</p><details class="answer">` +
       `<summary>${L.answer}</summary><p class="a">${withMath(a)}</p></details></details>`).join("")).join("");
   buildCard();
 }
 // the tasks, grouped by topic; groups marked "deep" (the formulas) only at the deeper level
-const groups = () => T[S.lang].groups.filter(g => g[2] !== "deep" || S.level === "deep");
+const groups = () => T[S.lang].groups.map((g, gi) => [g[0], g[1], g[2], gi]).filter(g => g[2] !== "deep" || S.level === "deep");
 // one task at a time in a card under the controls; the full list stays at the bottom of the page
 let task = 0;
+// opening a task in the list below shows the same task in the card beside the simulator
+document.getElementById("task-list").addEventListener("toggle", e => {
+  const d = e.target, ids = groups().flatMap(([, items, , gi]) => items.map((_, ii) => gi + ":" + ii)), k = ids.indexOf(d.dataset.id);
+  if (d.open && k >= 0) { task = k; buildCard(); }
+}, true);
 function buildCard() {
   const L = T[S.lang], flat = groups().flatMap(([g, items]) => items.map((it, k) => [g, k + 1, items.length, ...it]));
   task = Math.min(task, flat.length - 1);

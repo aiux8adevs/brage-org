@@ -525,6 +525,11 @@ function taskList() {
   return out;
 }
 let taskId = "0:0";
+// opening a task in the list below shows the same task in the card beside the simulator
+document.getElementById("task-list").addEventListener("toggle", e => {
+  const d = e.target;
+  if (d.open && d.dataset.id) { taskId = d.dataset.id; buildCard(); }
+}, true);
 function buildCard() {
   const L = T[S.lang], flat = taskList(), i = Math.max(0, flat.findIndex(t => t.id === taskId)), t = flat[i];
   taskId = t.id;
@@ -549,7 +554,7 @@ function buildText() {
   let last = "";
   $("task-list").innerHTML = taskList().map(t => {
     const head = t.g === last ? "" : `<h4 class="tgroup">${t.g}</h4>`; last = t.g;
-    return head + `<details><summary>${t.h}</summary><p class="q">${math(t.q)}</p><details class="answer">` +
+    return head + `<details data-id="${t.id}"><summary>${t.h}</summary><p class="q">${math(t.q)}</p><details class="answer">` +
       `<summary>${L.answer}</summary><p class="a">${math(t.a)}</p></details></details>`; }).join("");
   buildCard();
 }

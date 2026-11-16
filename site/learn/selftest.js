@@ -6,7 +6,7 @@
 // nothing is sent anywhere; closing or reloading the page forgets them.
 //
 //   SelfTest.mount(box, { lang, concepts, qs, link, title })
-//     concepts  { id: { da, en, line, task: [da, en] } }         line: narration key, task: task title per language
+//     concepts  { id: { da, en, line, task, tname: [da, en] } }  line: narration key, task: task id, tname: its title
 //     qs        [{ c: concept id, a: right option, da: [question, [options], why], en: [...] }]
 //     link      (concept, kind) => href or null; kind "video" or "task" (the page knows its video times)
 //     title     optional heading above the questions
@@ -59,7 +59,7 @@ const SelfTest = (() => {
         return `<li class="${weak ? "weak" : "good"}"><span class="st-c">${esc(c[L])}</span> <span class="st-n">${p.r}/${p.n}</span> ` +
           `<span class="st-tag">${weak ? T.weak : T.good}</span>` +
           (v ? ` <a class="st-go" href="${v}">▶ ${T.video} ${clock(+v.match(/[:@]([\d.]+)$/)[1])}</a>` : "") +
-          (t ? ` <a class="st-go" href="${t}">${T.task}: ${esc(c.task[L === "da" ? 0 : 1])}</a>` : "") + `</li>`;
+          (t ? ` <a class="st-go" href="${t}">${T.task}: ${esc(c.tname[L === "da" ? 0 : 1])}</a>` : "") + `</li>`;
       });
       const allRight = r === n;
       return `<h3>${T.result}</h3><p>${T.score(r, n, opt.qs.length)}${allRight ? " " + T.all : ""}</p>` +
