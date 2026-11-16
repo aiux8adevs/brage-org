@@ -144,6 +144,42 @@ rendered as `<details data-id>`), never to a time or a title. `selftest/selftest
   (shortened from the study programmes) and which pages teach them.
 - In the simulators, opening a task in the list also shows it in the task card beside the simulator (all 12, 2026-11-16).
 
+## Private learning area: maths for 9th-grade exam (decided 2026-11-16, not started)
+**Purpose:** a private area on brage.org for one pupil (the owner's son, 8th grade, about halfway through the year),
+preparing for the written maths exam FP9 in early May 2028. Basis: the ministry's exam guide (Oct 2025) and the new
+subject plan for maths (second draft June 2026; the final plan applies from 1 Aug 2027, so his exam follows it; recheck
+the plan and the exam rules in Aug 2027).
+
+**Owner's decisions (2026-11-16):**
+1. Behind its own password on brage.org, **no name anywhere** (not in URLs, text, files or commits).
+2. His class uses GeoGebra; he also does tasks on Skoledu. Textbook system and current topics: the owner will ask.
+3. Progress must survive a change of computer: GDPR is less critical here (one known user, the owner's own server),
+   but progress must not disappear. The folder structure must allow more subjects later.
+4. Start with a diagnostic test and a trainer for the exam part without aids. Add **real games** that are fun in
+   themselves (not quiz-with-praise), as a supplement to the structure, for geometry, rules of arithmetic and anything
+   else that suits.
+
+**Structure (proposed, to be confirmed):** `site/elev/` = the area (own .htaccess, own password file
+`/var/www/brage.org/.htpasswd-elev`, created by the owner on the server), `site/elev/<subject>/` per subject
+(`matematik/` first), shared code in `site/elev/shared/`. Progress: a small PHP endpoint behind the same password writes
+JSON to a folder outside public_html (`/var/www/brage.org/elevdata/`), with a copy in the browser; the server copy wins
+on a new computer. Server checked: PHP 8.5, writable home outside public_html.
+
+**Order:** (1) diagnostic + trainer "uden hjælpemidler" for 8th-grade topics; (2) games and explore pages
+(functions/growth, geometry, statistics/probability) with self-tests; (3) trainer "med hjælpemidler" (context tasks,
+written reasoning, GeoGebra guides) in 9th grade; (4) timed mock exams and open problems, spring 2028.
+Old exam sets on prøvebanken.dk are linked, never copied; all tasks on the site are our own.
+
+**Game ideas for the owner to choose from** (own designs in known genres, no copies of existing games):
+- Card battler with operation cards (+7, ×2, ², √, ÷3, negatives, fractions): hit the enemy's number exactly in few
+  moves; new cards and bosses with rules between fights. Trains order of operations, powers, fractions, mental maths.
+- Angle golf on a coordinate grid: aim by angle, bank shots by reflection, set the power by distance (Pythagoras);
+  later holes with similar triangles and shadows.
+- Function artillery: shoot over hills with y = ax + b (later exponential), against the computer.
+- Prime factory: numbers on conveyor belts, machines that divide; orders for prime factors, reduced fractions, squares.
+- Kiosk tycoon: buy, mark up in %, discounts, VAT, loans with interest; weather data to forecast sales.
+- Fair or not? Design a dice game, simulate thousands of rounds, find the house edge.
+
 ## Not started / later
 - When videos 5a/5b go live: tube tabs back to video/simulator/handout/selftest in topic.js, add video/times_roer5a.json and times_aec5b.json to publish.rules (self-test links), add tube media to publish.rules and live list in sync_videos.sh, and change the tube subtitle in tube.js ("Simulatoren er klar; to videoer er på vej").
 - Noise video, line n4_kv (DA+EN): reword so it does not sound as if CNR falls with kV; the trade-off shows at the same detector dose (REX). Owner said yes 2026-11-13; do with the next video round.
