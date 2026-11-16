@@ -525,6 +525,13 @@ function taskList() {
   return out;
 }
 let taskId = "0:0";
+// paging the card opens the same task in the list below and closes the one the card showed before (other tasks the
+// reader opened stay open; the page does not scroll)
+function cardToList(from, to) {
+  const at = id => document.querySelector(`#task-list details[data-id="${id}"]`);
+  if (from !== to && at(from)) at(from).open = false;
+  if (at(to)) at(to).open = true;
+}
 // opening a task in the list below shows the same task in the card beside the simulator
 document.getElementById("task-list").addEventListener("toggle", e => {
   const d = e.target;
@@ -538,7 +545,7 @@ function buildCard() {
     `<span class="seg"><button id="tc-prev" aria-label="${L.prev}">‹</button><button id="tc-next" aria-label="${L.next}">›</button></span></div>` +
     `<h4>${t.h}</h4><p class="q">${math(t.q)}</p>` +
     `<details class="answer"><summary>${L.answer}</summary><p class="a">${math(t.a)}</p></details>`;
-  const go = d => { taskId = flat[(i + d + flat.length) % flat.length].id; buildCard(); };
+  const go = d => { const from = taskId; taskId = flat[(i + d + flat.length) % flat.length].id; buildCard(); cardToList(from, taskId); };
   $("tc-prev").onclick = () => go(-1);
   $("tc-next").onclick = () => go(1);
 }

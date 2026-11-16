@@ -605,6 +605,13 @@ function buildText() {
 const groups = () => T[S.lang].groups.map((g, gi) => [g[0], g[1], g[2], gi]).filter(g => g[2] !== "deep" || S.level === "deep");
 // one task at a time in a card under the controls; the full list stays at the bottom of the page
 let task = 0;
+// paging the card opens the same task in the list below and closes the one the card showed before (other tasks the
+// reader opened stay open; the page does not scroll)
+function cardToList(from, to) {
+  const at = id => document.querySelector(`#task-list details[data-id="${id}"]`);
+  if (from !== to && at(from)) at(from).open = false;
+  if (at(to)) at(to).open = true;
+}
 // opening a task in the list below shows the same task in the card beside the simulator
 document.getElementById("task-list").addEventListener("toggle", e => {
   const d = e.target, ids = groups().flatMap(([, items, , gi]) => items.map((_, ii) => gi + ":" + ii)), k = ids.indexOf(d.dataset.id);
@@ -619,7 +626,8 @@ function buildCard() {
     `<span class="seg"><button id="tc-prev" aria-label="${L.prev}">‹</button><button id="tc-next" aria-label="${L.next}">›</button></span></div>` +
     `<h4>${h}</h4><p class="q">${withMath(q)}</p>` +
     `<details class="answer"><summary>${L.answer}</summary><p class="a">${withMath(a)}</p></details>`;
-  const go = d => { task = (task + d + flat.length) % flat.length; buildCard(); };
+  const go = d => { const ids = groups().flatMap(([, items, , gi]) => items.map((_, ii) => gi + ":" + ii)), from = ids[task];
+    task = (task + d + flat.length) % flat.length; buildCard(); cardToList(from, ids[task]); };
   document.getElementById("tc-prev").onclick = () => go(-1);
   document.getElementById("tc-next").onclick = () => go(1);
 }
