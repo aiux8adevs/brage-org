@@ -48,3 +48,24 @@ for p in "${pages[@]}"; do
   done
   echo "synced $page"
 done
+
+# Ultrasound: staged behind the password (staged.list), so synced every time. Page folder | topic folder:scene class:file name
+U=~/projects/manim-studio/media/brage-org/ultralyd
+ultra=(
+  "learn/ultrasound/echo|u1-ekko:Echo:echo"
+  "learn/ultrasound/tissue|u2-vaev:Tissue:tissue"
+  "learn/ultrasound/probe|u3-proben:Probe:probe"
+  "learn/ultrasound/knobs|u4-knapper:Knapper:knapper"
+  "learn/ultrasound/doppler|u6-doppler:Doppler:doppler"
+)
+for p in "${ultra[@]}"; do
+  IFS="|" read -r page part <<< "$p"
+  IFS=":" read -r src cls name <<< "$part"
+  out="site/$page/video"; mkdir -p "$out"
+  for lang in da en; do
+    for lvl in grund fordybelse; do cp "$U/$src/${cls}_${lang}_${lvl}.mp4" "$out/${name}_${lang}_${lvl}.mp4"; done
+    ffmpeg -v error -y -ss 2.6 -i "$U/$src/${cls}_${lang}_grund.mp4" -frames:v 1 -vf scale=1280:-1 -q:v 4 "$out/poster_$lang.jpg"
+    cp "$U/$src/${name}_${lang}.pdf" "$out/"
+  done
+  echo "synced $page (staged)"
+done
