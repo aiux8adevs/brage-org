@@ -59,6 +59,7 @@ ultra=(
   "learn/ultrasound/tissue|u2-vaev:Tissue:tissue:tissue"
   "learn/ultrasound/probe|u3-proben:Probe:probe:probe"
   "learn/ultrasound/knobs|u4-knapper:Knapper:knapper:knapper"
+  "learn/ultrasound/artefacts|u5-artefakter:Artefakter:artefakter:artefakter"
   "learn/ultrasound/doppler|u6-doppler:Doppler:doppler:doppler"
 )
 for p in "${ultra[@]}"; do

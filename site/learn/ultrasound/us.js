@@ -13,7 +13,7 @@ const TOPICS = [
   { n: "U4", path: "knobs", kinds: ["video", "simulator"],
              da: ["Knapper og orientering", "Gain, TGC, dybde, zoom, frekvens, fokus, dynamikområde, sektor og linjetæthed, og hvordan billedet vender. Simulatoren: en nyre set gennem leveren."],
              en: ["Knobs and orientation", "Gain, TGC, depth, zoom, frequency, focus, dynamic range, sector and line density, and which way the image faces. The simulator: a kidney seen through the liver."] },
-  { n: "U5", path: "artefacts", kinds: ["simulator"], da: ["Artefakter i klinikken", "Genlyd, skygge, forstærkning, spejlbillede og andre artefakter, koblet til sten, cyster, fedtlever og kanyler. Simulatoren: flyt sten, gas, cyste og kanyle."],
+  { n: "U5", path: "artefacts", kinds: ["video", "simulator"], da: ["Artefakter i klinikken", "Genlyd, skygge, forstærkning, spejlbillede og andre artefakter, koblet til sten, cyster, fedtlever og kanyler. Simulatoren: flyt sten, gas, cyste og kanyle."],
              en: ["Artefacts in the clinic", "Reverberation, shadowing, enhancement, mirror images and other artefacts, linked to stones, cysts, fatty liver and needles. The simulator: move stone, gas, cyst and needle."] },
   { n: "U6", path: "doppler", kinds: ["video", "simulator"], da: ["Doppler og sikkerhed", "Dopplereffekten, vinkel, farve-, power- og spektraldoppler, aliasing, kompression ved DVT, TI/MI og ALARA. Simulatoren: arterie og vene i lysken."],
              en: ["Doppler and safety", "The Doppler effect, angle, colour, power and spectral Doppler, aliasing, compression for DVT, TI/MI and ALARA. The simulator: artery and vein in the groin."] },
