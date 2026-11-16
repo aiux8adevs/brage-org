@@ -144,7 +144,7 @@ rendered as `<details data-id>`), never to a time or a title. `selftest/selftest
   (shortened from the study programmes) and which pages teach them.
 - In the simulators, opening a task in the list also shows it in the task card beside the simulator (all 12, 2026-11-16).
 
-## Private learning area: maths for 9th-grade exam (decided 2026-11-16, not started)
+## Private learning area: maths for 9th-grade exam (decided 2026-11-16; step 1 built)
 **Purpose:** a private area on brage.org for one pupil (the owner's son, 8th grade, about halfway through the year),
 preparing for the written maths exam FP9 in early May 2028. Basis: the ministry's exam guide (Oct 2025) and the new
 subject plan for maths (second draft June 2026; the final plan applies from 1 Aug 2027, so his exam follows it; recheck
@@ -170,7 +170,23 @@ on a new computer. Server checked: PHP 8.5, writable home outside public_html.
 written reasoning, GeoGebra guides) in 9th grade; (4) timed mock exams and open problems, spring 2028.
 Old exam sets on prøvebanken.dk are linked, never copied; all tasks on the site are our own.
 
-**Game ideas for the owner to choose from** (own designs in known genres, no copies of existing games):
+**Built 2026-11-16 (step 1, commit 0ea279f, deployed behind /elev/, 401):** front page with subjects; maths trainer
+for the part without aids: 24 topics x 3 levels (task generators, 28,800 generated tasks checked), answers read in the
+exam's notation and checked by value (check.js), worked solution per task, diagnostic (one task per topic), adaptive
+practice (3 right in a row up, 2 wrong down; weak and long-unseen topics first), timed 60-min test that survives a
+reload (seeded tasks). Progress: append-only events, browser copy + elev/api/progress.php (tested on the server with
+PHP CLI: adds, ignores duplicates, drops invalid events, data folder 0700). Waiting: the owner creates
+/var/www/brage.org/.htpasswd-elev; the owner asks the school about textbook system and current topics.
+
+**Game ideas (Fable, 2026-11-16, on the owner's "Vil du bede fable se på muligheder"):** nine concepts with a shared
+adaptation rule (separate dials for maths and action, aim for 75–85 % success, invisible adjustment, 70 % at level and
+30 % on the weakest topic). Fable's ranking: (1) vacuum-robot tower defense where dogs bite numbers apart by prime
+factors, (2) dog-on-a-leash garden puzzle (Pythagoras, coordinates, circle), (3) arena roguelike where the weapon is a
+chain of operations (order of operations), (4) dog tanks with bank shots (angles). Also: vertical shooter with
+operation gates, laser-pointer lines (y = ax + b), cargo-plane balance (equations), treat machine (probability), dog
+show statistics (weakest). Gaps: area/volume, units. Owner to choose.
+
+**Earlier game ideas (Claude)** (own designs in known genres, no copies of existing games):
 - Card battler with operation cards (+7, ×2, ², √, ÷3, negatives, fractions): hit the enemy's number exactly in few
   moves; new cards and bosses with rules between fights. Trains order of operations, powers, fractions, mental maths.
 - Angle golf on a coordinate grid: aim by angle, bank shots by reflection, set the power by distance (Pythagoras);
