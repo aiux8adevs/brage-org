@@ -87,13 +87,14 @@
         `<div class="nav"><button class="btn primary" id="go">Tjek</button></div>`;
       const box = main.querySelector(".task"), inp = box.querySelector("input"), fb = box.querySelector(".fb"), go = main.querySelector("#go");
       wireKeys(main); inp.focus();
-      let checked = false;
+      let checked = false, checkedAt = 0;
       const check = () => {
-        if (checked) { i++; return show(); }
+        // a moment's pause before moving on, so the answer and the explanation are seen, not skipped by a double Enter
+        if (checked) { if (Date.now() - checkedAt < 700) return; i++; return show(); }
         const r = Check.answer(inp.value, t.spec);
         if (r.empty) { fb.innerHTML = `<p class="note">Skriv et svar først.</p>`; return; }
         if (r.unread) { fb.innerHTML = `<p class="note">Svaret kunne ikke læses. Brug tal, komma, / til brøk og ^ til potens.</p>`; return; }
-        checked = true; inp.readOnly = true;
+        checked = true; checkedAt = Date.now(); inp.readOnly = true;
         Progress.add({ sub: SUB, s: skill.id, lv, ok: r.ok, mode, ms: Date.now() - t0 });
         if (r.ok) right++;
         done.push([skill, r.ok]);
@@ -103,7 +104,8 @@
         go.focus();
       };
       go.onclick = check;
-      inp.onkeydown = e => { if (e.key === "Enter") check(); };
+      // Enter checks the answer; preventDefault stops the same key press from also clicking "Næste", which gets focus
+      inp.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); check(); } };
     }
     function summary() {
       const st = states(), weak = [...new Set(done.filter(d => !d[1]).map(d => d[0]))];
