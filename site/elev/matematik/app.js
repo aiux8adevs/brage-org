@@ -67,7 +67,8 @@
       `<a class="big${diagDone ? " primary" : ""}" href="#oev"><b>Øv</b><span>10 opgaver. Træneren vælger de emner, du har mest brug for.</span></a>` +
       `<a class="big" href="#proeve"><b>Prøve på tid</b><span>Som prøven uden hjælpemidler: 1 time, ingen lommeregner, svar først til sidst.</span></a></div>` +
       `<p class="legend"><span class="good">sidder</span> <span class="mid">på vej</span> <span class="weak">øv mere</span> · prikkerne er niveau 1–3 · tallet er de seneste svar. Klik et emne for at øve netop det.</p>` + rows +
-      `<p class="sync">${{ synced: "Gemt på serveren.", offline: "Ikke forbundet: dine svar gemmes her og sendes, når forbindelsen er tilbage.", waiting: "Henter…" }[Progress.status()]}</p>`;
+      `<h2>Spil</h2><div class="actions"><a class="big game" href="spil/stoevsuger/"><b>Støvsugerkrigen</b><span>Robotstøvsugere med tal på ryggen. Skyd dem i stykker med primtal.</span></a>` +
+      `<a class="big game" href="spil/prelleskud/"><b>Prelleskud</b><span>Kampvogne og bandeskud. Ram om hjørner med vinkler.</span></a></div>`;
   }
 
   // ---------- practice and diagnostic: one task at a time ----------
@@ -180,6 +181,7 @@
     else overview();
     scrollTo(0, 0);
   }
+  Progress.renderStatus(document.getElementById("sync"));
   window.addEventListener("hashchange", route);
   Progress.onChange(() => { if (!location.hash || location.hash === "#") overview(); });
   route();

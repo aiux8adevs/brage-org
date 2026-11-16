@@ -1,58 +1,90 @@
-// Progress for the private learning area, kept as a list of events ("this task, right or wrong, at this time").
-// Events are never changed, only added, so two computers can never overwrite each other: syncing is just the union
-// of both lists (by event id). The server copy (../api/progress.php, behind the area's password) is the one that
-// survives a new computer; localStorage is a copy for speed and for when the network is down. Unsent events wait in
-// a queue and go with the next sync.
+// Progress for the private learning area, kept per user as a list of events ("this task, right or wrong, at this
+// time"). Events are never changed, only added, so two computers can never overwrite each other: syncing is just
+// the union of both lists (by event id).
+//
+// Every family member has their own login to the area. The server (../api/progress.php) keeps one file per login
+// and says who is logged in; this browser keeps a copy per user, so two people on one computer never mix answers.
+// New answers are saved here at once and sent to the server in the background; unsent ones wait in a queue and go
+// with the next sync. Progress.renderStatus(el) shows "Gemt online kl. …" or what is still waiting, with a button.
 //
 //   await Progress.ready             loaded from this browser, then merged with the server
-//   Progress.add({ sub, s, lv, ok, mode, ms })   one answer: subject, skill id, level, right?, mode, time spent
+//   Progress.add({ sub, s, lv, ok, mode, ms })   one event: subject, skill or game id, level, right?, mode, ms
 //   Progress.events(sub)             all events for a subject, oldest first
-//   Progress.status()                "synced" | "offline" | "waiting"
 const Progress = (() => {
-  const KEY = "elev.events.v1", QUEUE = "elev.queue.v1";
   const API = new URL("../api/progress.php", document.currentScript.src).href;
-  const read = k => { try { return JSON.parse(localStorage.getItem(k) || "[]"); } catch { return []; } };
-  const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* full or blocked: the server copy still counts */ } };
-  let all = read(KEY), queue = read(QUEUE), state = "waiting";
+  const get = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } };
+  const put = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* full or blocked: the server copy still counts */ } };
+  const K = u => ({ ev: `elev.events.v2.${u}`, q: `elev.queue.v2.${u}`, saved: `elev.saved.v2.${u}` });
+  let user = get("elev.user.v2", "") || "ukendt";                     // the last user seen in this browser
+  let all = get(K(user).ev, []), queue = get(K(user).q, []), state = "waiting", busy = null;
   const listeners = [];
+  const tell = () => listeners.forEach(f => { try { f(); } catch { /* a listener must not stop the others */ } });
 
   function merge(list) {
     const seen = new Set(all.map(e => e.id));
     let added = 0;
     for (const e of list) if (e && e.id && !seen.has(e.id)) { all.push(e); seen.add(e.id); added++; }
-    if (added) { all.sort((a, b) => a.t - b.t); write(KEY, all); }
+    if (added) { all.sort((a, b) => a.t - b.t); put(K(user).ev, all); }
     return added;
   }
-  async function sync() {
+  // the server says who is logged in; answers given before we knew (first visit, offline) go to that user
+  function becomeUser(u) {
+    if (u === user) return;
+    const carry = user === "ukendt" ? { ev: all, q: queue } : { ev: [], q: [] };
+    user = u; put("elev.user.v2", u);
+    all = get(K(u).ev, []); queue = get(K(u).q, []);
+    merge(carry.ev); queue.push(...carry.q); put(K(u).q, queue);
+    if (carry.ev.length) { localStorage.removeItem(K("ukendt").ev); localStorage.removeItem(K("ukendt").q); }
+  }
+  async function syncOnce() {
     try {
-      if (queue.length) {
-        const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ events: queue }), credentials: "same-origin" });
-        // only a real confirmation from the server empties the queue (not, say, a page served instead of the script)
-        const ack = r.ok ? await r.json().catch(() => null) : null;
-        if (!ack || typeof ack.added !== "number") throw new Error("not saved");
-        queue = []; write(QUEUE, queue);
-      }
       const r = await fetch(API, { credentials: "same-origin", cache: "no-store" });
-      if (!r.ok) throw new Error(r.status);
-      const body = await r.json();
-      if (!Array.isArray(body.events)) throw new Error("no events");
+      const body = r.ok ? await r.json().catch(() => null) : null;
+      if (!body || !Array.isArray(body.events) || !body.user) throw new Error("no answer");
+      becomeUser(body.user);
       const changed = merge(body.events);
-      state = "synced";
-      if (changed) listeners.forEach(f => f());
+      if (queue.length) {
+        const sending = queue.slice();
+        const p = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ events: sending }), credentials: "same-origin" });
+        // only a real confirmation from the server empties the queue (not, say, a page served instead of the script)
+        const ack = p.ok ? await p.json().catch(() => null) : null;
+        if (!ack || typeof ack.added !== "number" || ack.user !== user) throw new Error("not saved");
+        const sent = new Set(sending.map(e => e.id));
+        queue = queue.filter(e => !sent.has(e.id)); put(K(user).q, queue);
+      }
+      put(K(user).saved, Date.now());
+      state = queue.length ? "pending" : "synced";
+      if (changed) tell();
     } catch {
-      state = "offline";
+      state = queue.length ? "offline" : "offline-clean";
     }
+    tell();
     return state;
   }
+  const sync = () => (busy = busy || syncOnce().finally(() => { busy = null; }));
   const id = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
   function add(e) {
     const ev = { id: id(), t: Date.now(), ...e };
     merge([ev]);
-    queue.push(ev); write(QUEUE, queue);
+    queue.push(ev); put(K(user).q, queue);
+    state = "pending"; tell();
     sync();
     return ev;
   }
+  // a status line with a "save now" button, kept up to date
+  function renderStatus(el) {
+    const draw = () => {
+      const t = get(K(user).saved, 0), clock = t ? new Date(t).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" }) : null;
+      const txt = queue.length ? `${queue.length} svar er kun gemt på denne computer${state === "offline" ? " (ingen forbindelse lige nu)" : ""}.`
+        : clock ? `Gemt online kl. ${clock}.` : "Ikke gemt online endnu.";
+      el.innerHTML = `<span class="${queue.length ? "warn" : "okc"}">${txt}</span> <button type="button" class="btn small">Gem nu</button>`;
+      el.querySelector("button").onclick = () => { el.querySelector("span").textContent = "Gemmer…"; sync(); };
+    };
+    listeners.push(draw); draw();
+  }
   const ready = sync();
   window.addEventListener("online", sync);
-  return { ready, add, sync, events: sub => all.filter(e => e.sub === sub), status: () => state, onChange: f => listeners.push(f) };
+  setInterval(() => { if (queue.length) sync(); }, 60000);            // try again every minute while something waits
+  return { ready, add, sync, renderStatus, events: sub => all.filter(e => e.sub === sub), user: () => user,
+           status: () => state, onChange: f => listeners.push(f) };
 })();
