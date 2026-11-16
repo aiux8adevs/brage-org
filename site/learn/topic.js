@@ -6,12 +6,12 @@
 const SERIES = [
   { da: "Det digitale billede", en: "The digital image", pages: [
     // simulator and podcast approved 2026-11-02
-    { path: "detector", tabs: ["video", "podcast", "simulator", "handout"], file: "detektor",
+    { path: "detector", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "detektor",
       podcast: [["detektor", { title: "From photon to number", minutes: 9 }]],
       da: { title: "Fra foton til tal", text: "Hvordan røntgenfotonen bliver til et tal: scintillator, fill factor, udlæsning, ADC, bitdybde, matrix og pixel. Simulatoren: vælg detektor, lagtykkelse, pixelstørrelse og bit." },
       en: { title: "From photon to number", text: "How the X-ray photon becomes a number: scintillator, fill factor, readout, ADC, bit depth, matrix and pixel. The simulator: choose the detector, layer thickness, pixel size and bits." } },
     // podcast approved 2026-11-02
-    { path: "histogram", tabs: ["video", "podcast", "simulator", "handout"], file: "histogram",
+    { path: "histogram", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "histogram",
       podcast: [["histogram", { title: "From number to image", minutes: 8 }]],
       da: { title: "Fra tal til billede", text: "Histogram, eksponeringsindeks (EI og REX), automatisk skalering, LUT og WW/WL. Simulatoren: skru på dosis og indblænding, og se hvorfor lysheden intet siger om dosis." },
       en: { title: "From number to image", text: "Histogram, exposure index (EI and REX), automatic rescaling, LUT and WW/WL. The simulator: change dose and collimation, and see why brightness says nothing about dose." } },
@@ -19,7 +19,7 @@ const SERIES = [
   { da: "Støj", en: "Noise", pages: [
     // simulator live 2026-11-02; video and handout live 2026-11-02 (owner approved the English basic version)
     // podcast approved 2026-11-02
-    { path: "noise", tabs: ["video", "podcast", "simulator", "handout"], file: "stoej",
+    { path: "noise", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "stoej",
       podcast: [["stoej", { title: "Noise: when there are not enough photons", minutes: 7 }]],
       da: { title: "Støj, SNR og CNR", text: "Kvantestøj, SNR og CNR. Simulatoren: skru på dosis, kV, pixelstørrelse og detektor, og se hvilke detaljer der forsvinder i støjen." },
       en: { title: "Noise, SNR and CNR", text: "Quantum noise, SNR and CNR. The simulator: change dose, kV, pixel size and detector, and see which details disappear in the noise." } },
@@ -27,7 +27,7 @@ const SERIES = [
     soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
   { da: "Spredt stråling", en: "Scatter", pages: [
     // 3a with its podcast and 3b approved 2026-11-02; 3c stays a draft (draftFiles)
-    { path: "scatter", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout"],
+    { path: "scatter", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"],
       podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 9 }]],
       draftPodcast: [["spredt", { title: "3a Scatter: the fog over the image", minutes: 9 }], ["raster3b", { title: "3b The grid: how it works, and what it costs", minutes: 10 }],
                      ["tage3c", { title: "3c Other ways: virtual grid, air gap and compression", minutes: 9 }]],
@@ -41,7 +41,7 @@ const SERIES = [
   { da: "Skarphed", en: "Sharpness", pages: [
     // the video is added to tabs once it is approved
     // video and podcast approved 2026-11-02
-    { path: "shadow", tabs: ["video", "podcast", "simulator", "handout"], file: "uskarphed",
+    { path: "shadow", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "uskarphed",
       podcast: [["uskarphed", { title: "Sharpness: five ways the shadow lies", minutes: 7 }]],
       da: { title: "Skarphed: fem måder skyggen snyder på", text: "Forstørrelse, formforvrængning, geometrisk uskarphed, bevægelsesuskarphed og overlejring. Flyt fokus, objekt og detektor." },
       en: { title: "Sharpness: five ways the shadow lies", text: "Magnification, shape distortion, focal spot blur, motion blur and superimposition. Move the focal spot, the object and the detector." } },
@@ -49,7 +49,7 @@ const SERIES = [
   { da: "Røntgenrøret", en: "The X-ray tube", pages: [
     // draft until the owner approves: shown only with ?draft=1
     // simulator live 2026-11-13; videos 5a/5b and their PDFs still drafts (draftTabs, ?draft=1)
-    { path: "tube", tabs: ["simulator"], draftTabs: ["video", "simulator", "handout"],
+    { path: "tube", tabs: ["simulator"], draftTabs: ["video", "simulator", "handout", "selftest"],
       files: [["roer5a", { da: "5a Røret og strålen", en: "5a The tube and the beam" }], ["aec5b", { da: "5b Automatisk eksponering", en: "5b Automatic exposure control" }]],
       da: { title: "Røntgenrøret", text: "Bremsestråling og karakteristisk stråling, spektret, heel-effekten, filtrering og automatisk eksponering (AEC). Simulatoren: skru på kV og filter, vend røret, og vælg ionkamre." },
       en: { title: "The X-ray tube", text: "Bremsstrahlung and characteristic radiation, the spectrum, the heel effect, filtration and automatic exposure control (AEC). The simulator: change kV and filter, turn the tube, and choose chambers." } },
@@ -58,18 +58,18 @@ const SERIES = [
 ];
 
 const WORDS = {
-  da: { video: "Video", podcast: "Podcast", simulator: "Simulator og opgaver", handout: "Ordkort og PDF", prev: "Forrige", next: "Næste",
+  da: { video: "Video", podcast: "Podcast", simulator: "Simulator og opgaver", handout: "Ordkort og PDF", selftest: "Test dig selv", prev: "Forrige", next: "Næste",
         soon: "På vej", pdf: "Ordkort og transskription (PDF)", pdfOther: "Engelsk udgave (PDF)",
         pdfNote: "Det hele, der bliver sagt i videoen, plus en dansk-engelsk ordliste til Bushong.",
         podNote: "En samtale på engelsk mellem to værter, til efter videoen. Den går lidt dybere og kan høres uden skærm, fx på vej hjem. Lyden spiller videre, når skærmen slukker.",
         podSynth: "Stemmerne er syntetiske.",
-        open: "Åbn →", kinds: { video: "Video", podcast: "Podcast", simulator: "Simulator", handout: "Ordkort" } },
-  en: { video: "Video", podcast: "Podcast", simulator: "Simulator and tasks", handout: "Glossary and PDF", prev: "Previous", next: "Next",
+        open: "Åbn →", kinds: { video: "Video", podcast: "Podcast", simulator: "Simulator", handout: "Ordkort", selftest: "Selvtest" } },
+  en: { video: "Video", podcast: "Podcast", simulator: "Simulator and tasks", handout: "Glossary and PDF", selftest: "Test yourself", prev: "Previous", next: "Next",
         soon: "On the way", pdf: "Glossary and transcript (PDF)", pdfOther: "Danish version (PDF)",
         pdfNote: "Everything said in the video, plus a Danish-English glossary.",
         podNote: "A conversation in English between two hosts, for after the video. It goes a little deeper and works without a screen, on the way home for example. It keeps playing when the screen turns off.",
         podSynth: "The voices are synthetic.",
-        open: "Open →", kinds: { video: "Video", podcast: "Podcast", simulator: "Simulator", handout: "Glossary" } },
+        open: "Open →", kinds: { video: "Video", podcast: "Podcast", simulator: "Simulator", handout: "Glossary", selftest: "Self-test" } },
 };
 
 const lang = () => (document.documentElement.lang === "da" ? "da" : "en");
@@ -98,13 +98,58 @@ function drawOverview(box) {
 }
 
 // ---- a topic page: tabs, the handout tab, previous / next ----
-function show(tab) {
+function show(hash) {
   const here = pages.find(p => p.path === document.body.dataset.topic);
+  const [tab0, arg] = decodeURIComponent(hash).split(/:(.*)/s);           // "video:raster3b@83.5", "task:<title>"
+  let tab = tab0 === "task" ? "simulator" : tab0;
   if (!here.tabs.includes(tab)) tab = here.tabs[0];
   document.querySelectorAll("[data-tab]").forEach(el => { el.hidden = el.dataset.tab !== tab; });
   document.querySelectorAll(".tabs a").forEach(a => a.setAttribute("aria-current", a.dataset.go === tab ? "page" : "false"));
   if (tab !== "video") document.querySelectorAll("video").forEach(v => v.pause());
   window.dispatchEvent(new Event("resize"));     // the simulators size their canvases to what is visible
+  if (tab === "video" && tab0 === "video" && arg) seek(arg);
+  if (tab0 === "task" && arg) openTask(arg);
+}
+// play the video from a moment: "<file>@<seconds>"; on pages with parts, switch to that part first
+function seek(arg) {
+  const [file, t] = arg.split("@"), sec = parseFloat(t);
+  if (typeof PART_FILES !== "undefined") document.querySelector(`#parts button[data-p="${PART_FILES.indexOf(file)}"]`)?.click();
+  const vid = document.getElementById("vid");
+  if (!vid || !isFinite(sec)) return;
+  const go = () => { vid.currentTime = sec; vid.play().catch(() => {}); };
+  if (vid.readyState >= 1) go(); else { vid.preload = "metadata"; vid.addEventListener("loadedmetadata", go, { once: true }); vid.load(); }
+  vid.scrollIntoView({ block: "start" });
+}
+// open the simulator task with this title and bring it into view
+function openTask(title) {
+  const s = [...document.querySelectorAll("#task-list summary")].find(x => x.textContent.trim() === title.trim());
+  if (!s) return;
+  s.parentElement.open = true;
+  setTimeout(() => s.scrollIntoView({ block: "center" }), 50);
+}
+// ---- the self-test tab (draft only until approved): loads selftest.js and the questions when first needed ----
+let TEST = null, TIMES = {};
+function drawSelftest(here) {
+  if (TEST) { TEST.draw(); return; }
+  let box = document.getElementById("selftest-box");
+  if (!box) {
+    box = document.createElement("section");
+    box.className = "box selftest"; box.id = "selftest-box"; box.dataset.tab = "selftest"; box.hidden = true;
+    (document.getElementById("handout-box") || document.getElementById("tabs")).after(box);
+    const css = document.createElement("link"); css.rel = "stylesheet"; css.href = "../../selftest.css?v=1"; document.head.append(css);
+    const load = src => new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.append(s); });
+    Promise.all([load("../../selftest.js?v=1"), load("../selftest-data.js?v=1")]).then(() => {
+      const data = R_TEST[here.path];
+      if (!data) return;
+      TEST = SelfTest.mount(box, { lang, concepts: data.concepts, qs: data.qs, link: (c, kind) => {
+        if (kind === "task") return "#task:" + encodeURIComponent(c.task[lang() === "da" ? 0 : 1]);
+        const t = TIMES[c.file]?.[`${lang()}_${level() ? "fordybelse" : "grund"}`]?.[c.line];
+        return t === undefined ? null : `#video:${c.file}@${t}`;
+      } });
+      for (const f of new Set(Object.values(data.concepts).map(c => c.file)))
+        fetch(`video/times_${f}.json`).then(r => r.ok ? r.json() : null).then(j => { if (j) { TIMES[f] = j; TEST.draw(); } }).catch(() => {});
+    }).catch(() => {});
+  }
 }
 // ---- the podcast tab: a plain <audio> element, because that is what phones let play on with the
 // screen off; the Media Session API puts the title and play/skip buttons on the lock screen ----
@@ -144,6 +189,7 @@ function drawTopic() {
       · <a href="video/${f}_${other}.pdf">${W.pdfOther}</a></p>`).join("") + `<p class="note">${W.pdfNote}</p>`;
   }
   if (here.podcast && here.tabs.includes("podcast")) drawPodcast(here, L, W);
+  if (here.tabs.includes("selftest")) drawSelftest(here);
   const i = pages.indexOf(here), prev = pages[i - 1], next = pages[i + 1];
   const link = (p, cls, word) => p ? `<a class="${cls}" href="../${p.path}/?lang=${L}${level()}"><small>${word}</small>${p[L].title}</a>` : "<span></span>";
   document.getElementById("series").innerHTML = link(prev, "prev", "← " + W.prev) + link(next, "next", W.next + " →");
@@ -155,3 +201,11 @@ const draw = overview ? () => drawOverview(overview) : drawTopic;
 draw();
 new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 if (!overview) window.addEventListener("hashchange", () => show(current()));
+// a self-test link clicked twice has the same hash, which fires no hashchange: handle the click directly
+if (!overview) document.addEventListener("click", e => {
+  const a = e.target.closest("a.st-go");
+  if (!a) return;
+  e.preventDefault();
+  history.replaceState(null, "", location.search + a.getAttribute("href"));
+  show(a.getAttribute("href").slice(1));
+});

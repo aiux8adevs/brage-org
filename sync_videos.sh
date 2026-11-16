@@ -43,29 +43,34 @@ for p in "${pages[@]}"; do
       # the glossary and transcript PDF, made by make_transcript_radiografi.py
       cp "$R/$src/${name}_${lang}.pdf" "$out/"
     done
+    # where each narrated line starts in each version, for the self-test's "watch the video from here" links
+    ~/code/personal/venv/bin/python ~/projects/manim-studio/line_times_page.py "$R/$src" "$cls" "$name" "$out/times_${name}.json"
     # the English podcast episode, only when marked approved (":podcast")
     if [[ "$pod" == "podcast" && -f "$R/$src/podcast_en.mp3" ]]; then cp "$R/$src/podcast_en.mp3" "$out/podcast_${name}_en.mp3"; fi
   done
   echo "synced $page"
 done
 
-# Ultrasound: staged behind the password (staged.list), so synced every time. Page folder | topic folder:scene class:file name
+# Ultrasound: staged behind the password (staged.list), so synced every time.
+# Page folder | topic folder:scene class:file name:voice part (the narration module, e.g. knapper_da / knapper_en)
 U=~/projects/manim-studio/media/brage-org/ultralyd
 ultra=(
-  "learn/ultrasound/echo|u1-ekko:Echo:echo"
-  "learn/ultrasound/tissue|u2-vaev:Tissue:tissue"
-  "learn/ultrasound/probe|u3-proben:Probe:probe"
-  "learn/ultrasound/knobs|u4-knapper:Knapper:knapper"
-  "learn/ultrasound/doppler|u6-doppler:Doppler:doppler"
+  "learn/ultrasound/echo|u1-ekko:Echo:echo:echo"
+  "learn/ultrasound/tissue|u2-vaev:Tissue:tissue:tissue"
+  "learn/ultrasound/probe|u3-proben:Probe:probe:probe"
+  "learn/ultrasound/knobs|u4-knapper:Knapper:knapper:knapper"
+  "learn/ultrasound/doppler|u6-doppler:Doppler:doppler:doppler"
 )
 for p in "${ultra[@]}"; do
   IFS="|" read -r page part <<< "$p"
-  IFS=":" read -r src cls name <<< "$part"
+  IFS=":" read -r src cls name voice <<< "$part"
   out="site/$page/video"; mkdir -p "$out"
   for lang in da en; do
     for lvl in grund fordybelse; do cp "$U/$src/${cls}_${lang}_${lvl}.mp4" "$out/${name}_${lang}_${lvl}.mp4"; done
     ffmpeg -v error -y -ss 2.6 -i "$U/$src/${cls}_${lang}_grund.mp4" -frames:v 1 -vf scale=1280:-1 -q:v 4 "$out/poster_$lang.jpg"
     cp "$U/$src/${name}_${lang}.pdf" "$out/"
   done
+  # where each narrated line starts in each version, for the self-test's "watch the video from here" links
+  ~/code/personal/venv/bin/python ~/projects/manim-studio/line_times_page.py "$U/$src" "$cls" "$voice" "$out/times.json"
   echo "synced $page (staged)"
 done

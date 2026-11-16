@@ -1,0 +1,32 @@
+/* Self-test (selftest.js): uses the page's own colour variables, with fallbacks for both page styles. */
+.st-title { margin: 0 0 6px; }
+.st-intro { margin: 0 0 4px; }
+.st-privacy { margin: 0 0 16px; font-size: 13px; color: var(--muted); }
+.st-q { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin: 0 0 12px; }
+.st-q h4 { margin: 0 0 10px; font-size: 15px; line-height: 1.45; }
+.st-q h4 small { color: var(--amber, var(--accent)); font-family: ui-monospace, monospace; margin-right: 6px; }
+.st-opts { display: grid; gap: 6px; }
+.st-opt { text-align: left; background: rgba(255,255,255,.03); border: 1px solid var(--line); border-radius: 8px;
+  color: var(--fg, var(--text)); font: inherit; font-size: 14px; padding: 8px 12px; cursor: pointer; }
+.st-opt:hover:not(:disabled) { border-color: var(--amber, var(--accent)); }
+.st-opt:focus-visible { outline: 2px solid var(--amber, var(--accent)); outline-offset: 2px; }
+.st-opt:disabled { cursor: default; }
+.st-opt.right { border-color: #56d68a; background: rgba(86,214,138,.12); }
+.st-opt.wrong { border-color: #e2685f; background: rgba(226,104,95,.12); }
+.st-why { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
+.st-why b { color: var(--fg, var(--text)); }
+.st-result { border: 1px solid var(--amber, var(--accent)); border-radius: 10px; padding: 14px 16px; margin-top: 16px; }
+.st-result h3 { margin: 0 0 6px; }
+.st-result p { margin: 0 0 8px; }
+.st-none { color: var(--muted); }
+.st-list { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; }
+.st-list li { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--line); }
+.st-c { font-weight: 600; }
+.st-n { font-family: ui-monospace, monospace; color: var(--muted); }
+.st-tag { font-size: 12px; border-radius: 999px; padding: 1px 8px; border: 1px solid currentColor; }
+.st-list li.good .st-tag { color: #56d68a; }
+.st-list li.weak .st-tag { color: #e2a35f; }
+.st-go { font-size: 14px; color: var(--fg, var(--text)); border: 1px solid var(--line); border-radius: 8px; padding: 3px 10px; text-decoration: none; }
+.st-go:hover { border-color: var(--amber, var(--accent)); }
+.st-restart { background: none; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font: inherit; font-size: 13px;
+  padding: 4px 12px; cursor: pointer; }
