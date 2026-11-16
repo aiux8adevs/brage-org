@@ -1,0 +1,35 @@
+/* Ultrasound glossary and self-test pages: on top of the site's styles.css and learn.css. */
+.tools { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin: 0 0 1.5rem; }
+.tools input[type=search] { flex: 1 1 260px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  color: var(--text); font: inherit; padding: .6rem .8rem; }
+.tools input[type=search]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.chip { background: none; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font: inherit; font-size: .85rem;
+  padding: .35rem .8rem; cursor: pointer; }
+.chip[aria-pressed=true] { border-color: var(--accent); color: var(--text); background: rgba(86,214,189,.08); }
+.gl-group { margin: 0 0 2rem; }
+.gl-group h3 { margin: 0 0 .6rem; font-size: 1.05rem; }
+.gl-group h3 small { color: var(--accent); font-family: ui-monospace, monospace; margin-right: .5rem; }
+dl.gl { margin: 0; display: grid; grid-template-columns: minmax(150px, 230px) 1fr; border-top: 1px solid var(--line); }
+dl.gl dt, dl.gl dd { margin: 0; padding: .6rem .2rem; border-bottom: 1px solid var(--line); }
+dl.gl dt { font-weight: 700; }
+dl.gl dt span { display: block; color: var(--muted); font-weight: 400; font-size: .85rem; }
+dl.gl dd { color: var(--muted); }
+@media (max-width: 640px) { dl.gl { grid-template-columns: 1fr; } dl.gl dt { border-bottom: 0; padding-bottom: 0; } }
+.empty { color: var(--muted); }
+
+/* self-test */
+.q { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.1rem; margin: 0 0 1rem; }
+.q h4 { margin: 0 0 .7rem; font-size: 1rem; line-height: 1.45; }
+.q h4 small { color: var(--accent); font-family: ui-monospace, monospace; margin-right: .4rem; }
+.q .opts { display: grid; gap: .45rem; }
+.q button.opt { text-align: left; background: rgba(255,255,255,.03); border: 1px solid var(--line); border-radius: 8px; color: var(--text);
+  font: inherit; padding: .55rem .75rem; cursor: pointer; }
+.q button.opt:hover:not(:disabled) { border-color: var(--accent); }
+.q button.opt:disabled { cursor: default; }
+.q button.opt.right { border-color: #56d68a; background: rgba(86,214,138,.12); }
+.q button.opt.wrong { border-color: #e2685f; background: rgba(226,104,95,.12); }
+.q .why { margin: .7rem 0 0; color: var(--muted); }
+.q .why b { color: var(--text); }
+.score { position: sticky; bottom: 0; background: rgba(7,16,24,.94); border-top: 1px solid var(--line); padding: .7rem 0; margin-top: 1rem; }
+.score .container { display: flex; gap: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.back-link { display: inline-block; margin-bottom: 1rem; color: var(--muted); }

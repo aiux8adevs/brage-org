@@ -18,16 +18,23 @@ const TOPICS = [
   { n: "U6", path: "doppler", kinds: ["video", "simulator"], da: ["Doppler og sikkerhed", "Dopplereffekten, vinkel, farve-, power- og spektraldoppler, aliasing, kompression ved DVT, TI/MI og ALARA. Simulatoren: arterie og vene i lysken."],
              en: ["Doppler and safety", "The Doppler effect, angle, colour, power and spectral Doppler, aliasing, compression for DVT, TI/MI and ALARA. The simulator: artery and vein in the groin."] },
 ];
+// after the six topics: the glossary and the self-test, across all topics
+const EXTRA = [
+  { path: "glossary", da: ["Ordliste", "Ordene fra alle seks emner på dansk og engelsk, med en kort forklaring. Søg på begge sprog."],
+                      en: ["Glossary", "The words from all six topics in Danish and English, with a short explanation. Search in either language."] },
+  { path: "quiz", da: ["Test dig selv", "Seks spørgsmål pr. emne i klinisk sprog, med forklaring. Intet bliver gemt."],
+                  en: ["Test yourself", "Six questions per topic in clinical language, with explanations. Nothing is saved."] },
+];
 const TEXT = {
   da: { title: "Ultralyd | Oliver Brage", skip: "Spring til indhold", eyebrow: "Læring · forhåndsvisning", h1: "Ultralyd",
-        lead: "Fysikken bag ultralydsbilledet, så tiden i klassen kan gå til at skanne. Simulatorer og korte videoer på dansk og engelsk, i en grundversion og en fordybelse.",
-        topicsTitle: "Emner", topicsIntro: "Seks emner i kursets rækkefølge. Flere kommer til efterhånden.",
-        soon: "På vej", open: "Åbn →", kinds: { simulator: "Simulator", video: "Video" },
+        lead: "Fysikken bag ultralydsbilledet, så tiden i klassen kan gå til at skanne. Simulatorer og korte videoer på dansk og engelsk, i en grundversion og en fordybelse, plus en ordliste og en selvtest.",
+        topicsTitle: "Emner", topicsIntro: "Seks emner i kursets rækkefølge. Hvert emne har en video, en simulator med opgaver og et ordkort.",
+        soon: "På vej", open: "Åbn →", kinds: { simulator: "Simulator", video: "Video" }, all: "Alle emner",
         rights: "Alle rettigheder forbeholdes.", privacy: "Privatliv", profile: "Profil", projects: "Projekter", learn: "Læring" },
   en: { title: "Ultrasound | Oliver Brage", skip: "Skip to content", eyebrow: "Learn · preview", h1: "Ultrasound",
-        lead: "The physics behind the ultrasound image, so class time can go to scanning. Simulators and short videos in Danish and English, with a basic and a deeper level.",
-        topicsTitle: "Topics", topicsIntro: "Six topics in course order. More are added as they are ready.",
-        soon: "On the way", open: "Open →", kinds: { simulator: "Simulator", video: "Video" },
+        lead: "The physics behind the ultrasound image, so class time can go to scanning. Simulators and short videos in Danish and English, with a basic and a deeper level, plus a glossary and a self-test.",
+        topicsTitle: "Topics", topicsIntro: "Six topics in course order. Each topic has a video, a simulator with tasks and a glossary card.",
+        soon: "On the way", open: "Open →", kinds: { simulator: "Simulator", video: "Video" }, all: "All topics",
         rights: "All rights reserved.", privacy: "Privacy", profile: "Profile", projects: "Projects", learn: "Learn" },
 };
 function pickLang() {
@@ -47,7 +54,8 @@ function apply(lang) {
       ? `<a class="card sim-card" href="${p.path}/?lang=${lang}"><span class="kind">${p.n} · ${p.kinds.map(k => t.kinds[k]).join(" · ")}</span>
          <h3>${title}</h3><p class="muted">${text}</p><span class="go">${t.open}</span></a>`
       : `<div class="card sim-card soon"><span class="kind">${p.n} · ${t.soon}</span><h3>${title}</h3><p>${text}</p></div>`;
-  }).join("") + `</div>`;
+  }).join("") + EXTRA.map(p => `<a class="card sim-card" href="${p.path}/?lang=${lang}"><span class="kind">${t.all}</span>
+         <h3>${p[lang][0]}</h3><p class="muted">${p[lang][1]}</p><span class="go">${t.open}</span></a>`).join("") + `</div>`;
   history.replaceState(null, "", "?lang=" + lang);
 }
 document.querySelectorAll(".lang-switch button").forEach(b => { b.onclick = () => apply(b.dataset.lang); });

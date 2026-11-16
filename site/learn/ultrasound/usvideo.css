@@ -12,3 +12,10 @@
 [data-tab][hidden] { display: none !important; }
 #handout-box a.pdf { color: var(--fg); font-weight: 600; }
 #handout-box a { color: var(--muted); }
+/* previous / next at the bottom */
+.series { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+.series a { display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+            padding: 10px 14px; color: var(--fg); text-decoration: none; font-weight: 600; font-size: 14px; }
+.series a:hover { border-color: var(--amber); }
+.series a small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; }
+.series .next { text-align: right; grid-column: 2; }
