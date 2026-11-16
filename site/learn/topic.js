@@ -132,6 +132,9 @@ function openTask(key) {
 // ---- the self-test tab (live 2026-11-16, approved by the owner): loads selftest.js and the questions (../selftest.json, kept in
 // step with the videos and tasks by selftest/selftest.py) when first needed ----
 let TEST = null, TIMES = {};
+// the self-test links only into videos this page shows: none without a video tab, and not a part that is still a draft
+const shown = file => { const here = pages.find(p => p.path === document.body.dataset.topic);
+  return here.tabs.includes("video") && (!here.files || here.files.some(f => f[0] === file)); };
 function drawSelftest(here) {
   if (TEST) { TEST.draw(); return; }
   let box = document.getElementById("selftest-box");
@@ -146,12 +149,11 @@ function drawSelftest(here) {
       if (!data) return;
       TEST = SelfTest.mount(box, { lang, concepts: data.concepts, qs: data.qs, link: (c, kind) => {
         if (kind === "task") return c.task ? "#task:" + c.task : null;
-        // only videos this page shows: no tab, or a part that is still a draft, gives no link
-        if (!here.tabs.includes("video") || (here.files && !here.files.some(f => f[0] === c.file))) return null;
+        if (!shown(c.file)) return null;
         const t = TIMES[c.file]?.[`${lang()}_${level() ? "fordybelse" : "grund"}`]?.[c.line];
         return t === undefined ? null : `#video:${c.file}@${t}`;
       } });
-      for (const f of new Set(Object.values(data.concepts).map(c => c.file)))
+      for (const f of new Set(Object.values(data.concepts).map(c => c.file).filter(shown)))
         fetch(`video/times_${f}.json`).then(r => r.ok ? r.json() : null).then(j => { if (j) { TIMES[f] = j; TEST.draw(); } }).catch(() => {});
     }).catch(() => {});
   }
