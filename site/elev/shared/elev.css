@@ -107,3 +107,11 @@ canvas.pixel { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; 
 .howto { color: var(--muted); margin-top: 1rem; } .howto summary { cursor: pointer; color: var(--text); }
 .angle { font: inherit; font-size: 1.2rem; width: 5.5rem; padding: .4rem .6rem; border-radius: 10px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); }
 body.play main { padding-top: .8rem; } body.play h1 { font-size: 1.6rem; margin: 0 0 .6rem; }
+.friend { color: var(--muted); font-size: .88rem; display: inline-flex; gap: .4rem; align-items: center; margin-left: auto; }
+.topbox h2 { margin-top: 1rem; }
+.toplist { padding-left: 1.6rem; max-width: 420px; }
+.toplist li { padding: .2rem 0; } .toplist li span { display: inline-block; min-width: 9rem; font-weight: 700; }
+.toplist li b { color: var(--accent-2); display: inline-block; min-width: 4rem; } .toplist li small { color: var(--muted); }
+.toplist li.new span, .toplist li.new b { color: var(--mid); }
+.nick { display: flex; gap: .5rem; } .nick input { font: inherit; padding: .45rem .7rem; border-radius: 10px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); width: 12rem; }
+.note { color: var(--muted); font-size: .85rem; }

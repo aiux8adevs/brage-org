@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#071018">
   <title>Støvsugerkrigen | Elev</title>
-  <link rel="stylesheet" href="../../../shared/elev.css?v=3">
+  <link rel="stylesheet" href="../../../shared/elev.css?v=4">
 </head>
 <body class="play">
 <header class="top"><div class="wrap"><a class="brand" href="../../../">Elev</a><a class="crumb" href="../../">← Matematik</a><span class="sync" id="sync"></span></div></header>
@@ -19,16 +19,19 @@
     <button class="btn prime p5" data-p="5">5</button><button class="btn prime p7" data-p="7">7</button>
     <button class="btn primary" id="go">Start bølge</button>
     <button class="btn small" id="mute">Lyd: til</button>
+    <label class="friend"><input type="checkbox" id="friend"> En ven spiller (tæller ikke med i din træning)</label>
   </div>
+  <section class="topbox" id="top"></section>
   <details class="howto"><summary>Sådan spiller du</summary>
     <p>Robotstøvsugerne kører mod snackskålen. Tallet på ryggen er deres styrke. Peg på en robot med musen, og tryk på et primtal (tasterne 2, 3, 5, 7). Går primtallet op i tallet, bliver tallet delt: 84 skudt med 2 bliver til 42. Når tallet er 1, falder robotten fra hinanden. Går primtallet ikke op, preller skuddet af, og kanonen er låst et øjeblik.</p>
     <p>Mellem bølgerne kan du sætte kanoner i kurvene. Klik en kurv for at købe en kanon (40 mønter), og klik igen for at skifte dens primtal. En kanon deler selv de robotter i nærheden, som dens primtal går op i. Se på næste bølges tal, før du vælger.</p>
     <p>På en skærm uden tastatur: tryk på en robot for at sigte, og tryk på knapperne.</p>
   </details>
 </main>
-<script src="../../../shared/progress.js?v=2"></script>
+<script src="../../../shared/progress.js?v=3"></script>
 <script src="../../../shared/pixel.js?v=1"></script>
-<script src="game.js?v=1"></script>
+<script src="../../../shared/leader.js?v=1"></script>
+<script src="game.js?v=2"></script>
 <script src="../sync.js?v=1"></script>
 </body>
 </html>

@@ -15,6 +15,8 @@
   const ARENA = { x0: 6, y0: 14, x1: 314, y1: 174 };
   const R = 2, SPEED = 140, MAXB = 3, STAGES = 8;
   const GAME = "prelleskud";
+  // a friend's run is not logged in the pupil's progress (see shared/leader.js), and starts at level 2
+  const log = e => { if (!Leader.friend()) Progress.add(e); };
   const rad = d => d * Math.PI / 180, deg = r => r * 180 / Math.PI;
   const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 
@@ -103,7 +105,7 @@
   // ---------- state ----------
   function savedLevel() { const ev = Progress.events("spil").filter(e => e.s === GAME && e.mode === "niveau"); return ev.length ? ev[ev.length - 1].lv : 1; }
   let S;
-  function newRun() { S = { lv: savedLevel(), stage: 0, lives: 3, angle: 45, fx: [], ball: null, last: null, phase: "aim", score: 0 }; nextStage(); }
+  function newRun() { S = { lv: Leader.friend() ? 2 : savedLevel(), stage: 0, lives: 3, angle: 45, fx: [], ball: null, last: null, phase: "aim", score: 0 }; nextStage(); }
   function nextStage() {
     S.stage++; S.st = makeStage(S.lv); S.balls = S.st.enemies.length + 2; S.used = 0; S.last = null; S.phase = "aim";
     S.pigeon = Math.random() < 0.35 ? { x: -10, y: rnd(150, 168), dir: 1 } : null;
@@ -114,10 +116,10 @@
     const per = S.used / S.st.enemies.length, old = S.lv;
     if (won && per <= 1.5) S.lv = Math.min(5, S.lv + 1);
     else if (!won || per > 2.5) S.lv = Math.max(1, S.lv - 1);
-    Progress.add({ sub: "spil", s: GAME, lv: old, ok: won, mode: "bane", ms: S.used });
-    if (S.lv !== old) Progress.add({ sub: "spil", s: GAME, lv: S.lv, ok: S.lv > old, mode: "niveau", ms: 0 });
-    if (won) { S.score += Math.max(1, 3 - (S.used - S.st.enemies.length)); Pixel.sfx("win"); } else { S.lives--; Pixel.sfx("lose"); }
-    if (S.lives <= 0 || S.stage >= STAGES) { S.phase = "over"; S.won = S.lives > 0; Progress.add({ sub: "spil", s: GAME, lv: S.lv, ok: S.won, mode: "run", ms: S.score }); return; }
+    log({ sub: "spil", s: GAME, lv: old, ok: won, mode: "bane", ms: S.used });
+    if (S.lv !== old) log({ sub: "spil", s: GAME, lv: S.lv, ok: S.lv > old, mode: "niveau", ms: 0 });
+    if (won) { S.score += Math.max(1, 3 - (S.used - S.st.enemies.length)) * old; Pixel.sfx("win"); }   // weighs more at higher levels else { S.lives--; Pixel.sfx("lose"); }
+    if (S.lives <= 0 || S.stage >= STAGES) { S.phase = "over"; S.won = S.lives > 0; log({ sub: "spil", s: GAME, lv: S.lv, ok: S.won, mode: "run", ms: S.score }); Leader.offer(GAME, S.score, document.getElementById("top")); return; }
     S.phase = "between"; S.betweenT = 1.6; S.msg = won ? "BANEN ER RYDDET" : "IKKE FLERE BOLDE"; S.msgT = 1.6;
   }
   const say = (text, x, y, colour = C.text, t = 1.2) => S.fx.push({ kind: "text", text, x, y, colour, t, t0: t });
@@ -249,6 +251,7 @@
   }
 
   newRun();
-  Progress.ready.then(() => { if (S.stage === 1 && S.used === 0) { S.lv = savedLevel(); S.st = makeStage(S.lv); S.balls = S.st.enemies.length + 2; } });
+  Leader.render(document.getElementById("top"), GAME);
+  Progress.ready.then(() => { if (S.stage === 1 && S.used === 0 && !Leader.friend()) { S.lv = savedLevel(); S.st = makeStage(S.lv); S.balls = S.st.enemies.length + 2; } });
   Pixel.loop(update, draw);
 })();

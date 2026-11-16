@@ -2,7 +2,7 @@
 // Progress store for the private learning area (behind the area's password, see ../.htaccess).
 // One file per login: each family member has their own user name in the password file, and their progress is kept
 // in elevdata/<user>.json. GET returns {user, events}; POST {"events": [...]} adds the ones not seen before (by id)
-// and returns {user, added, count}.
+// and returns {user, added, count}. The guest login "gaest" is answered but never stored.
 // Events are only ever added, never changed, so syncing from several computers cannot lose anything.
 // The data lives outside public_html (/var/www/brage.org/elevdata/), so deploys never touch it
 // and it cannot be fetched as a file.
@@ -17,6 +17,12 @@ $auth = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'
 if ($user === '' && stripos($auth, 'basic ') === 0) $user = explode(':', base64_decode(substr($auth, 6)) ?: '', 2)[0];
 $user = strtolower(preg_replace('/[^A-Za-z0-9_-]/', '', $user));
 if ($user === '' || strlen($user) > 40) { http_response_code(401); exit('{"error":"no user"}'); }
+// the shared guest login (for classmates) is never stored: its progress stays in the guest's own browser
+const GUEST = 'gaest';
+if ($user === GUEST) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') { echo json_encode(['user' => $user, 'guest' => true, 'added' => 0, 'count' => 0]); exit; }
+    echo json_encode(['user' => $user, 'guest' => true, 'events' => []]); exit;
+}
 $file = $dir . '/' . $user . '.json';
 const MAX_POST = 1000;          // events in one request
 const MAX_FILE = 20000000;      // 20 MB, years of answers

@@ -32,6 +32,8 @@
 
   // ---------- level from earlier runs (shared progress), else 1 ----------
   const GAME = "stoevsuger";
+  // a friend's run is not logged in the pupil's progress (see shared/leader.js), and starts at level 2
+  const log = e => { if (!Leader.friend()) Progress.add(e); };
   function savedLevel() {
     const ev = Progress.events("spil").filter(e => e.s === GAME && e.mode === "niveau");
     return ev.length ? ev[ev.length - 1].lv : 1;
@@ -57,7 +59,7 @@
   // ---------- game state ----------
   let S;
   function newRun() {
-    S = { lv: savedLevel(), wave: 0, lives: 10, coins: 80, phase: "prep", robots: [], shots: [], fx: [], cannons: SLOTS.map(() => 0),
+    S = { lv: Leader.friend() ? 2 : savedLevel(), score: 0, wave: 0, lives: 10, coins: 80, phase: "prep", robots: [], shots: [], fx: [], cannons: SLOTS.map(() => 0),
           next: null, sel: null, cool: 0, lock: 0, help: false, upStreak: 0, slow: 1, golden: false,
           stats: { right: 0, wrong: 0 }, perPrime: Object.fromEntries(PRIMES.map(p => [p, [0, 0]])), msg: "Placer kanoner, og start bølgen", msgT: 99, dogWake: 0 };
     S.next = waveNumbers(S.lv, weakest());
@@ -89,12 +91,13 @@
   function endWave() {
     const n = S.waveRight + S.waveWrong, acc = n ? S.waveRight / n : 1, leakShare = S.leaks / PER_WAVE;
     const old = S.lv;
+    if (S.leaks === 0) S.score += 20 * old;
     if (S.leaks === 0 && acc >= 0.85) { S.upStreak++; S.lv = Math.min(5, S.lv + (S.upStreak >= 2 ? 2 : 1)); if (S.upStreak >= 2) S.upStreak = 0; S.help = false; }
     else if (leakShare >= 0.25 || acc < 0.6) { S.upStreak = 0; S.lv = Math.max(1, S.lv - 1); S.slow = 0.85; S.help = true; }
     else S.upStreak = 0;
     if (S.time < S.expected * 0.6) S.golden = true;                       // cleared fast: a golden robot next time
-    Progress.add({ sub: "spil", s: GAME, lv: old, ok: S.leaks === 0, mode: "bolge", ms: Math.round(S.time * 1000) });
-    if (S.lv !== old) Progress.add({ sub: "spil", s: GAME, lv: S.lv, ok: S.lv > old, mode: "niveau", ms: 0 });
+    log({ sub: "spil", s: GAME, lv: old, ok: S.leaks === 0, mode: "bolge", ms: Math.round(S.time * 1000) });
+    if (S.lv !== old) log({ sub: "spil", s: GAME, lv: S.lv, ok: S.lv > old, mode: "niveau", ms: 0 });
     if (S.wave >= WAVES) return finish(true);
     S.phase = "prep"; S.next = waveNumbers(S.lv, weakest());
     S.msg = S.leaks ? `${S.leaks} slap igennem. Flyt kanonerne?` : (S.golden ? "Hurtigt! En gylden robot er på vej" : "Bølgen er klaret"); S.msgT = 99;
@@ -102,7 +105,8 @@
   }
   function finish(won) {
     S.phase = "over"; S.won = won;
-    Progress.add({ sub: "spil", s: GAME, lv: S.lv, ok: won, mode: "run", ms: 0 });
+    log({ sub: "spil", s: GAME, lv: S.lv, ok: won, mode: "run", ms: S.score });
+    Leader.offer(GAME, S.score, document.getElementById("top"));
     Pixel.sfx(won ? "win" : "lose");
   }
 
@@ -124,7 +128,7 @@
     S.perPrime[s.p][1]++;
     if (ok) {
       S.perPrime[s.p][0]++; S.stats.right++; S.waveRight++;
-      r.n /= s.p; r.hit = .25; dust(x, y, C[s.p]);
+      r.n /= s.p; r.hit = .25; dust(x, y, C[s.p]); S.score += 5 * S.lv;     // points weigh more at higher levels
       say(r.n === 1 ? "POF!" : Math.random() < .3 ? "ATJU!" : `${r.n * s.p}:${s.p}=${r.n}`, x, y - 12, C[s.p]);
       if (r.n === 1) { S.coins += r.gold ? 30 : 10; Pixel.sfx("pop"); } else Pixel.sfx("hit");
     } else {
@@ -249,7 +253,8 @@
     Pixel.text(ctx, `BØLGE ${Math.min(S.wave + (S.phase === "prep" ? 1 : 0), WAVES)}/${WAVES}`, 3, 3, C.text);
     Pixel.text(ctx, `LIV ${S.lives}`, 110, 3, S.lives <= 3 ? C.bad : C.text);
     Pixel.text(ctx, `MØNTER ${S.coins}`, 160, 3, C.gold);
-    if (S.lock > 0) Pixel.text(ctx, "LÅST", W - 3, 3, C.bad, 1, "right");
+    Pixel.text(ctx, `POINT ${S.score}`, 236, 3, C.good);
+    if (S.lock > 0) Pixel.text(ctx, "LÅST", GUN[0] - 4, GUN[1] + 8, C.bad, 1, "center");
     if (S.phase === "prep") {
       px(0, H - 22, W, 22, "rgba(5,10,14,.9)");
       Pixel.text(ctx, "NÆSTE BØLGE: " + S.next.join(" ") + (S.wave + 1 === WAVES ? " + BOSS" : ""), 3, H - 19, C.text);
@@ -262,13 +267,15 @@
       Pixel.text(ctx, S.won ? "SEJR! SKÅLEN ER REDDET" : "SNACKSENE ER VÆK", W / 2, 52, S.won ? C.good : C.bad, 2, "center");
       Pixel.text(ctx, `BØLGER: ${S.won ? WAVES : S.wave - 1} AF ${WAVES}`, W / 2, 80, C.text, 1, "center");
       Pixel.text(ctx, `TRÆFSIKKERHED: ${n ? Math.round(100 * S.stats.right / n) : 0} %`, W / 2, 92, C.text, 1, "center");
+      Pixel.text(ctx, `POINT: ${S.score}`, W / 2, 104, C.good, 1, "center");
       Pixel.text(ctx, "SPIL IGEN: MELLEMRUM", W / 2, 120, C.warn, 1, "center");
     }
     document.getElementById("go").textContent = S.phase === "over" ? "Spil igen" : "Start bølge";
     document.getElementById("go").disabled = S.phase === "wave";
   }
 
-  Progress.ready.then(() => { if (S.phase === "prep" && S.wave === 0) { S.lv = savedLevel(); S.next = waveNumbers(S.lv, weakest()); } });
+  Progress.ready.then(() => { if (S.phase === "prep" && S.wave === 0 && !Leader.friend()) { S.lv = savedLevel(); S.next = waveNumbers(S.lv, weakest()); } });
   newRun();
+  Leader.render(document.getElementById("top"), GAME);
   Pixel.loop(update, draw);
 })();

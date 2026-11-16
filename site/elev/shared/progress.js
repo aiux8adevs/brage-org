@@ -6,6 +6,7 @@
 // and says who is logged in; this browser keeps a copy per user, so two people on one computer never mix answers.
 // New answers are saved here at once and sent to the server in the background; unsent ones wait in a queue and go
 // with the next sync. Progress.renderStatus(el) shows "Gemt online kl. …" or what is still waiting, with a button.
+// The shared guest login "gaest" (for classmates) is never stored on the server: a guest's answers stay here.
 //
 //   await Progress.ready             loaded from this browser, then merged with the server
 //   Progress.add({ sub, s, lv, ok, mode, ms })   one event: subject, skill or game id, level, right?, mode, ms
@@ -16,7 +17,7 @@ const Progress = (() => {
   const put = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* full or blocked: the server copy still counts */ } };
   const K = u => ({ ev: `elev.events.v2.${u}`, q: `elev.queue.v2.${u}`, saved: `elev.saved.v2.${u}` });
   let user = get("elev.user.v2", "") || "ukendt";                     // the last user seen in this browser
-  let all = get(K(user).ev, []), queue = get(K(user).q, []), state = "waiting", busy = null;
+  let all = get(K(user).ev, []), queue = get(K(user).q, []), state = "waiting", busy = null, guest = get("elev.guest.v2", false);
   const listeners = [];
   const tell = () => listeners.forEach(f => { try { f(); } catch { /* a listener must not stop the others */ } });
 
@@ -42,6 +43,8 @@ const Progress = (() => {
       const body = r.ok ? await r.json().catch(() => null) : null;
       if (!body || !Array.isArray(body.events) || !body.user) throw new Error("no answer");
       becomeUser(body.user);
+      guest = !!body.guest; put("elev.guest.v2", guest);
+      if (guest) { queue = []; put(K(user).q, queue); }       // a guest's answers stay in this browser only
       const changed = merge(body.events);
       if (queue.length) {
         const sending = queue.slice();
@@ -66,6 +69,7 @@ const Progress = (() => {
   function add(e) {
     const ev = { id: id(), t: Date.now(), ...e };
     merge([ev]);
+    if (guest) { tell(); return ev; }
     queue.push(ev); put(K(user).q, queue);
     state = "pending"; tell();
     sync();
@@ -75,6 +79,7 @@ const Progress = (() => {
   function renderStatus(el) {
     const draw = () => {
       const t = get(K(user).saved, 0), clock = t ? new Date(t).toLocaleTimeString("da-DK", { hour: "2-digit", minute: "2-digit" }) : null;
+      if (guest) { el.innerHTML = `<span class="okc">Gæst: gemmes kun på denne computer.</span>`; return; }
       const txt = queue.length ? `${queue.length} svar er kun gemt på denne computer${state === "offline" ? " (ingen forbindelse lige nu)" : ""}.`
         : clock ? `Gemt online kl. ${clock}.` : "Ikke gemt online endnu.";
       el.innerHTML = `<span class="${queue.length ? "warn" : "okc"}">${txt}</span> <button type="button" class="btn small">Gem nu</button>`;
