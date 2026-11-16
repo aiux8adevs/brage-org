@@ -2,3 +2,5 @@
 # deploy.sh aborts if a listed folder has no protecting .htaccess, and checks for HTTP 401 after --go.
 # Going live: delete the folder's .htaccess and its line here.
 learn/ultrasound
+# Private learning area: always behind its own password (not a preview; it never goes public)
+elev

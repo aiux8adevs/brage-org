@@ -1,0 +1,11 @@
+# Private learning area: password protected (its own password file, not the staging one).
+# The password file lives outside public_html; the owner creates it on the server.
+# deploy.sh refuses to upload while this file is missing (staged.list) and checks that /elev/ answers 401.
+AuthType Basic
+AuthName "brage.org elev"
+AuthUserFile /var/www/brage.org/.htpasswd-elev
+Require valid-user
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "noindex, nofollow"
+  Header always set Cache-Control "private, no-store"
+</IfModule>
