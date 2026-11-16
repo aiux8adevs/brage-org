@@ -21,6 +21,13 @@
 + /learn/radiography/scatter/video/podcast_spredt_en.mp3
 + /learn/radiography/scatter/video/raster3b_*
 + /learn/radiography/scatter/video/poster_raster3b_*
+# Self-test: where each line starts in the approved videos (questions on draft videos show only the task link)
++ /learn/radiography/detector/video/times_detektor.json
++ /learn/radiography/histogram/video/times_histogram.json
++ /learn/radiography/noise/video/times_stoej.json
++ /learn/radiography/shadow/video/times_uskarphed.json
++ /learn/radiography/scatter/video/times_spredt.json
++ /learn/radiography/scatter/video/times_raster3b.json
 - /learn/radiography/*/video/*
 
 # Approved topic pages
@@ -31,6 +38,7 @@
 + /learn/radiography/scatter/***
 + /learn/radiography/tube/***
 + /learn/radiography/tex.js
++ /learn/radiography/selftest.json
 - /learn/radiography/*
 
 # Staged subjects: uploaded, but password protected by their own .htaccess (see staged.list)

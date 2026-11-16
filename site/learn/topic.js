@@ -6,12 +6,12 @@
 const SERIES = [
   { da: "Det digitale billede", en: "The digital image", pages: [
     // simulator and podcast approved 2026-11-02
-    { path: "detector", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "detektor",
+    { path: "detector", tabs: ["video", "podcast", "simulator", "handout", "selftest"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "detektor",
       podcast: [["detektor", { title: "From photon to number", minutes: 9 }]],
       da: { title: "Fra foton til tal", text: "Hvordan røntgenfotonen bliver til et tal: scintillator, fill factor, udlæsning, ADC, bitdybde, matrix og pixel. Simulatoren: vælg detektor, lagtykkelse, pixelstørrelse og bit." },
       en: { title: "From photon to number", text: "How the X-ray photon becomes a number: scintillator, fill factor, readout, ADC, bit depth, matrix and pixel. The simulator: choose the detector, layer thickness, pixel size and bits." } },
     // podcast approved 2026-11-02
-    { path: "histogram", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "histogram",
+    { path: "histogram", tabs: ["video", "podcast", "simulator", "handout", "selftest"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "histogram",
       podcast: [["histogram", { title: "From number to image", minutes: 8 }]],
       da: { title: "Fra tal til billede", text: "Histogram, eksponeringsindeks (EI og REX), automatisk skalering, LUT og WW/WL. Simulatoren: skru på dosis og indblænding, og se hvorfor lysheden intet siger om dosis." },
       en: { title: "From number to image", text: "Histogram, exposure index (EI and REX), automatic rescaling, LUT and WW/WL. The simulator: change dose and collimation, and see why brightness says nothing about dose." } },
@@ -19,7 +19,7 @@ const SERIES = [
   { da: "Støj", en: "Noise", pages: [
     // simulator live 2026-11-02; video and handout live 2026-11-02 (owner approved the English basic version)
     // podcast approved 2026-11-02
-    { path: "noise", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "stoej",
+    { path: "noise", tabs: ["video", "podcast", "simulator", "handout", "selftest"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "stoej",
       podcast: [["stoej", { title: "Noise: when there are not enough photons", minutes: 7 }]],
       da: { title: "Støj, SNR og CNR", text: "Kvantestøj, SNR og CNR. Simulatoren: skru på dosis, kV, pixelstørrelse og detektor, og se hvilke detaljer der forsvinder i støjen." },
       en: { title: "Noise, SNR and CNR", text: "Quantum noise, SNR and CNR. The simulator: change dose, kV, pixel size and detector, and see which details disappear in the noise." } },
@@ -27,7 +27,7 @@ const SERIES = [
     soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
   { da: "Spredt stråling", en: "Scatter", pages: [
     // 3a with its podcast and 3b approved 2026-11-02; 3c stays a draft (draftFiles)
-    { path: "scatter", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"],
+    { path: "scatter", tabs: ["video", "podcast", "simulator", "handout", "selftest"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"],
       podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 9 }]],
       draftPodcast: [["spredt", { title: "3a Scatter: the fog over the image", minutes: 9 }], ["raster3b", { title: "3b The grid: how it works, and what it costs", minutes: 10 }],
                      ["tage3c", { title: "3c Other ways: virtual grid, air gap and compression", minutes: 9 }]],
@@ -41,7 +41,7 @@ const SERIES = [
   { da: "Skarphed", en: "Sharpness", pages: [
     // the video is added to tabs once it is approved
     // video and podcast approved 2026-11-02
-    { path: "shadow", tabs: ["video", "podcast", "simulator", "handout"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "uskarphed",
+    { path: "shadow", tabs: ["video", "podcast", "simulator", "handout", "selftest"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"], file: "uskarphed",
       podcast: [["uskarphed", { title: "Sharpness: five ways the shadow lies", minutes: 7 }]],
       da: { title: "Skarphed: fem måder skyggen snyder på", text: "Forstørrelse, formforvrængning, geometrisk uskarphed, bevægelsesuskarphed og overlejring. Flyt fokus, objekt og detektor." },
       en: { title: "Sharpness: five ways the shadow lies", text: "Magnification, shape distortion, focal spot blur, motion blur and superimposition. Move the focal spot, the object and the detector." } },
@@ -49,7 +49,7 @@ const SERIES = [
   { da: "Røntgenrøret", en: "The X-ray tube", pages: [
     // draft until the owner approves: shown only with ?draft=1
     // simulator live 2026-11-13; videos 5a/5b and their PDFs still drafts (draftTabs, ?draft=1)
-    { path: "tube", tabs: ["simulator"], draftTabs: ["video", "simulator", "handout", "selftest"],
+    { path: "tube", tabs: ["simulator", "selftest"], draftTabs: ["video", "simulator", "handout", "selftest"],
       files: [["roer5a", { da: "5a Røret og strålen", en: "5a The tube and the beam" }], ["aec5b", { da: "5b Automatisk eksponering", en: "5b Automatic exposure control" }]],
       da: { title: "Røntgenrøret", text: "Bremsestråling og karakteristisk stråling, spektret, heel-effekten, filtrering og automatisk eksponering (AEC). Simulatoren: skru på kV og filter, vend røret, og vælg ionkamre." },
       en: { title: "The X-ray tube", text: "Bremsstrahlung and characteristic radiation, the spectrum, the heel effect, filtration and automatic exposure control (AEC). The simulator: change kV and filter, turn the tube, and choose chambers." } },
@@ -129,7 +129,7 @@ function openTask(key) {
   d.open = true;
   setTimeout(() => (document.querySelector(`#task-list details[data-id="${key.replace(/["\\]/g, "")}"]`) || d).scrollIntoView({ block: "center" }), 50);
 }
-// ---- the self-test tab (draft only until approved): loads selftest.js and the questions (../selftest.json, kept in
+// ---- the self-test tab (live 2026-11-16, approved by the owner): loads selftest.js and the questions (../selftest.json, kept in
 // step with the videos and tasks by selftest/selftest.py) when first needed ----
 let TEST = null, TIMES = {};
 function drawSelftest(here) {
@@ -146,6 +146,8 @@ function drawSelftest(here) {
       if (!data) return;
       TEST = SelfTest.mount(box, { lang, concepts: data.concepts, qs: data.qs, link: (c, kind) => {
         if (kind === "task") return c.task ? "#task:" + c.task : null;
+        // only videos this page shows: no tab, or a part that is still a draft, gives no link
+        if (!here.tabs.includes("video") || (here.files && !here.files.some(f => f[0] === c.file))) return null;
         const t = TIMES[c.file]?.[`${lang()}_${level() ? "fordybelse" : "grund"}`]?.[c.line];
         return t === undefined ? null : `#video:${c.file}@${t}`;
       } });

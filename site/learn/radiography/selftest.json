@@ -1,5 +1,5 @@
 {
-  "_about": "Self-test questions for the radiography topic pages (see selftest/selftest.py). Draft only until approved.",
+  "_about": "Self-test questions for the radiography topic pages (see selftest/selftest.py). Live since 2026-11-16 (approved by the owner).",
   "pages": {
     "detector": {
       "videos": ["detektor"],
