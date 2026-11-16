@@ -96,7 +96,8 @@ svg.fig text.tick { fill: var(--muted); font-size: 11px; }
 @media (max-width: 600px) { body { font-size: 16px; } .tq { font-size: 1.15rem; } }
 
 /* games: the canvas is drawn at low resolution and scaled up without smoothing */
-canvas.pixel { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; image-rendering: pixelated; image-rendering: crisp-edges;
+/* the width is also held back by the window's height, so the buttons under the game stay on a small laptop screen */
+canvas.pixel { display: block; width: min(100%, max(300px, calc((100vh - 200px) * 16 / 9))); height: auto; aspect-ratio: 16 / 9; image-rendering: pixelated; image-rendering: crisp-edges;
   border: 2px solid var(--line); border-radius: 8px; background: #0b1217; touch-action: none; cursor: crosshair; }
 .pad { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: .8rem 0; }
 .pad .lbl { color: var(--muted); font-size: .9rem; }
@@ -115,3 +116,15 @@ body.play main { padding-top: .8rem; } body.play h1 { font-size: 1.6rem; margin:
 .toplist li.new span, .toplist li.new b { color: var(--mid); }
 .nick { display: flex; gap: .5rem; } .nick input { font: inherit; padding: .45rem .7rem; border-radius: 10px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); width: 12rem; }
 .note { color: var(--muted); font-size: .85rem; }
+.btn.prime:active, .pad .btn:active { transform: translateY(1px); }
+/* a phone held upright makes the game too small to read: say so there, and only there */
+.turn { display: none; color: var(--mid); font-size: .9rem; margin: 0 0 .5rem; }
+@media (max-width: 600px) and (orientation: portrait) { .turn { display: block; } .friend { margin-left: 0; } }
+/* a phone on its side: no heading, no sticky header, and the buttons beside the game instead of under it */
+@media (max-height: 520px) and (orientation: landscape) {
+  body.play h1 { display: none; } body.play .top { position: static; }
+  body.play main.wrap { display: grid; grid-template-columns: minmax(0, calc((100vh - 76px) * 16 / 9)) minmax(110px, 1fr); column-gap: .7rem; align-items: start; width: calc(100% - 16px); }
+  body.play main > * { grid-column: 1 / -1; }
+  body.play canvas.pixel { grid-column: 1; width: 100%; }
+  body.play .pad { grid-column: 2; margin: 0; } body.play .friend { margin-left: 0; }
+}

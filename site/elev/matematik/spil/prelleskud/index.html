@@ -6,12 +6,13 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#071018">
   <title>Prelleskud | Elev</title>
-  <link rel="stylesheet" href="../../../shared/elev.css?v=4">
+  <link rel="stylesheet" href="../../../shared/elev.css?v=5">
 </head>
 <body class="play">
 <header class="top"><div class="wrap"><a class="brand" href="../../../">Elev</a><a class="crumb" href="../../">← Matematik</a><span class="sync" id="sync"></span></div></header>
 <main class="wrap">
   <h1>Prelleskud</h1>
+  <p class="turn">Vend telefonen på langs, så bliver spillet større.</p>
   <canvas id="game" class="pixel" aria-label="Spillet Prelleskud"></canvas>
   <div class="pad">
     <span class="lbl">Vinkel</span>
@@ -26,13 +27,14 @@
   <details class="howto"><summary>Sådan spiller du</summary>
     <p>Ram papkasse-kampvognene med tennisbolde. De gemmer sig bag mure, så du må skyde via væggene. En bold preller af med samme vinkel, som den ramte med: vinklen ind er lig med vinklen ud.</p>
     <p>Vinklen måles i grader: 0° er lige til højre, 90° lige op, 180° til venstre og 270° lige ned. Skift vinkel med piletasterne (5° ad gangen, 1° med Shift eller pil op og ned), med musehjulet eller ved at skrive tallet og trykke Enter. Mellemrum skyder.</p>
-    <p>Efter hvert skud står vinklerne ved hvert prel på banen. Sigtelinjen viser mindre og mindre, jo bedre du bliver.</p>
+    <p>Du kan også sigte med musen: klik på banen, eller hold knappen nede og træk. Bolden kan prelle tre gange og flyver lige igennem en papkasse, så ét skud kan tage flere. Skud med prel giver flere point, og bolde til overs giver point, når banen er ryddet.</p>
+    <p>Ved hvert prel står vinklen på begge sider: den er den samme ind og ud. Sigtelinjen viser mindre og mindre, jo bedre du bliver.</p>
   </details>
 </main>
 <script src="../../../shared/progress.js?v=3"></script>
-<script src="../../../shared/pixel.js?v=1"></script>
-<script src="../../../shared/leader.js?v=1"></script>
-<script src="game.js?v=2"></script>
+<script src="../../../shared/pixel.js?v=2"></script>
+<script src="../../../shared/leader.js?v=2"></script>
+<script src="game.js?v=3"></script>
 <script src="../sync.js?v=1"></script>
 </body>
 </html>
