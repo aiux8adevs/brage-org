@@ -178,6 +178,15 @@ reload (seeded tasks). Progress: append-only events, browser copy + elev/api/pro
 PHP CLI: adds, ignores duplicates, drops invalid events, data folder 0700). Waiting: the owner creates
 /var/www/brage.org/.htpasswd-elev; the owner asks the school about textbook system and current topics.
 
+**Built 2026-11-16 (step 2, commit 5b02d50, deployed, 401):** owner "Ja til alt": progress per login (one Basic Auth
+user per family member, elevdata/<user>.json, browser copy per user, header "Gemt online kl. …" + save-now button;
+tested on the server with PHP CLI incl. a header-only login and a path trick). Games in pixel style (owner: not
+everything about dogs; likes low-poly or pixel games), shared kit shared/pixel.js (own 3×5 font, fixed-step loop,
+Web Audio blips): Støvsugerkrigen (primes split numbered robot vacuums; Fable's adaptation rule) and Prelleskud (tank
+bank shots by angle in degrees; aim line shortens with level; bounce angles drawn after each shot; 750 generated
+stages all solvable, none with an open straight shot). Login test with the owner waits for the password file
+(owner: "så laver vi login i morgen").
+
 **Game ideas (Fable, 2026-11-16, on the owner's "Vil du bede fable se på muligheder"):** nine concepts with a shared
 adaptation rule (separate dials for maths and action, aim for 75–85 % success, invisible adjustment, 70 % at level and
 30 % on the weakest topic). Fable's ranking: (1) vacuum-robot tower defense where dogs bite numbers apart by prime
