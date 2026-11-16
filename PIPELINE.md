@@ -187,6 +187,14 @@ bank shots by angle in degrees; aim line shortens with level; bounce angles draw
 stages all solvable, none with an open straight shot). Login test with the owner waits for the password file
 (owner: "så laver vi login i morgen").
 
+**Step 3 (2026-11-16):** guest login "gaest" never stored online, local top 10 per game with nicknames, "En ven
+spiller" box keeps a friend's run out of the pupil's progress (dc6ab7a). Then Fable reviewed and fixed both games on
+the owner's "Lad fable reviewe og rette spillet til" (commit after dc6ab7a): Prelleskud lives bug, nickname box
+stealing game keys, readable robot numbers, cannons no longer win alone, separate maths and pace dials, aim shows
+bounce angles, lost stages show a hitting angle, new point scale (old local top-list entries end at the bottom).
+Fable's next ideas: left-hand keys, 11/13 robots or endless mode for strong players, Prelleskud slanted walls and a
+typed-angle bonus shot, portrait phones.
+
 **Game ideas (Fable, 2026-11-16, on the owner's "Vil du bede fable se på muligheder"):** nine concepts with a shared
 adaptation rule (separate dials for maths and action, aim for 75–85 % success, invisible adjustment, 70 % at level and
 30 % on the weakest topic). Fable's ranking: (1) vacuum-robot tower defense where dogs bite numbers apart by prime
