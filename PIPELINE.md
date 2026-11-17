@@ -195,6 +195,18 @@ bounce angles, lost stages show a hitting angle, new point scale (old local top-
 Fable's next ideas: left-hand keys, 11/13 robots or endless mode for strong players, Prelleskud slanted walls and a
 typed-angle bonus shot, portrait phones.
 
+**STATUS 2026-11-17 00:40 (work in progress, owner said "ja" to the restated plan):**
+- DONE+deployed: Enter no longer skips answer feedback (574e874). Login works (.htpasswd-elev: users m, gaest).
+- IN PROGRESS (committed, not deployed, not wired in yet): rules.js (a rule + example per topic) and in skills.js
+  `ans` (shown correct answer for expression tasks) and `traps` ([value, hint] for typical mistakes).
+- NEXT: app.js feedback UI: big ✓/✗ verdict, "Det rigtige svar er …" (num: show as fraction if rational, ≈ for π
+  tolerance; else t.ans), "Du skrev …" + matching trap hint, "Her er hvorfor" (sol split into steps), "Regel" box
+  from MathRules; load rules.js in index.html; same in the timed test's review; test and deploy.
+- NEXT: Prelleskud more learning: no mouse/drag aiming above level 2 (typed angle), a bonus shot per stage whose
+  angle must be calculated from numbers on the board; owner reports "grafik fejl i boksene på siden" (unclear which
+  boxes: check game pages and cards at several widths).
+- Fable job at 02:00 (cron, session-only): build one flashy calculation-forcing geometry game + 4 concepts.
+
 **Game ideas (Fable, 2026-11-16, on the owner's "Vil du bede fable se på muligheder"):** nine concepts with a shared
 adaptation rule (separate dials for maths and action, aim for 75–85 % success, invisible adjustment, 70 % at level and
 30 % on the weakest topic). Fable's ranking: (1) vacuum-robot tower defense where dogs bite numbers apart by prime
