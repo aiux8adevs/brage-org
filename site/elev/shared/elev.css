@@ -128,3 +128,15 @@ body.play main { padding-top: .8rem; } body.play h1 { font-size: 1.6rem; margin:
   body.play canvas.pixel { grid-column: 1; width: 100%; }
   body.play .pad { grid-column: 2; margin: 0; } body.play .friend { margin-left: 0; }
 }
+
+/* trainer feedback: a big verdict, then short blocks in a fixed order (answer, your answer, typical mistake, why, rule) */
+.verdict { font-size: 1.6rem; font-weight: 800; margin: 1rem 0 .4rem; }
+.verdict.ok { color: var(--good); } .verdict.no { color: var(--weak); }
+.task.is-ok input { border-color: var(--good); background: rgba(86,214,160,.12); }
+.task.is-no input { border-color: var(--weak); background: rgba(240,122,106,.12); }
+.right-ans { font-size: 1.15rem; margin: .2rem 0; } .right-ans b { color: var(--accent-2); }
+.you { color: var(--muted); margin: .1rem 0; }
+.trap { background: rgba(232,195,90,.12); border-left: 4px solid var(--mid); padding: .5rem .8rem; border-radius: 8px; margin: .6rem 0; }
+.why { margin-top: .6rem; } .why ol { margin: .3rem 0 0; padding-left: 1.4rem; line-height: 1.9; }
+.rule { margin-top: .8rem; background: rgba(86,214,189,.08); border: 1px solid rgba(86,214,189,.4); border-radius: 10px; padding: .6rem .9rem; line-height: 1.6; }
+.rule b { color: var(--accent); margin-right: .3rem; }

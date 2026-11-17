@@ -8,6 +8,45 @@
   const SUB = "matematik", main = document.getElementById("app");
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
+  // ---------- feedback after an answer: verdict, the right answer, what went wrong, why, and the rule ----------
+  // Made to be easy to take in at a glance: a big ✓ or ✗, then short blocks, the same order every time.
+  const Fs = (a, b) => `<span class="fr"><span>${dk(a)}</span><span>${dk(b)}</span></span>`;
+  function answerText(t) {
+    if (t.ans) return t.ans;
+    if (t.spec.kind !== "num") return "";
+    const v = t.spec.v;
+    if (t.spec.tol > 1e-6) {                                       // answers with π: show "9π ≈ 28,27"
+      const k = v / Math.PI, kr = Math.round(k * 2) / 2;
+      return (Math.abs(k - kr) < 1e-9 ? `${dk(kr)}π ≈ ` : "≈ ") + dk(Math.round(v * 100) / 100);
+    }
+    for (let d = 1; d <= 100; d++) {                                // a fraction when the value is one, else the number
+      const n = Math.round(v * d);
+      if (Math.abs(v * d - n) < 1e-9) {
+        if (d === 1) return dk(n);
+        const short = Math.abs(v * 1000 - Math.round(v * 1000)) < 1e-9;
+        return Fs(n, d) + (short ? ` = ${dk(v)}` : "");
+      }
+    }
+    return dk(Math.round(v * 1000) / 1000);
+  }
+  function trapHint(t, r) {
+    if (r.ok || r.value === undefined || !t.traps) return "";
+    const tol = Math.max(1e-9, (t.spec.tol || 1e-9) * Math.abs(t.spec.v));
+    const hit = t.traps.find(([v]) => Math.abs(v - t.spec.v) > tol && Math.abs(r.value - v) <= Math.max(1e-9, (t.spec.tol || 1e-9) * Math.abs(v)));
+    return hit ? hit[1] : "";
+  }
+  function feedbackHTML(t, r, given, skillId) {
+    const steps = String(t.sol).split(/(?<=\.)\s+(?=[A-ZÆØÅ0-9(√−])/).filter(Boolean);
+    const rule = (typeof MathRules !== "undefined" && MathRules[skillId]) || "";
+    const ans = answerText(t), trap = trapHint(t, r);
+    return `<div class="verdict ${r.ok ? "ok" : "no"}">${r.ok ? "✓ Rigtigt" : r.empty ? "Ikke besvaret" : "✗ Ikke helt"}</div>` +
+      (ans ? `<p class="right-ans">Det rigtige svar er <b>${ans}</b></p>` : "") +
+      (!r.ok && !r.empty ? `<p class="you">Du skrev ${esc(given)}</p>` : "") +
+      (trap ? `<p class="trap">${trap}</p>` : "") +
+      `<div class="why"><b>Her er hvorfor</b><ol>${steps.map(x => `<li>${x}</li>`).join("")}</ol></div>` +
+      (rule ? `<div class="rule"><b>Regel</b> ${rule}</div>` : "");
+  }
+
   // ---------- skill states from the events ----------
   function states() {
     const st = Object.fromEntries(SKILLS.map(s => [s.id, { lv: 1, streak: 0, wrongs: 0, n: 0, recent: [], last: 0 }]));
@@ -99,7 +138,7 @@
         Progress.add({ sub: SUB, s: skill.id, lv, ok: r.ok, mode, ms: Date.now() - t0 });
         if (r.ok) right++;
         done.push([skill, r.ok]);
-        fb.innerHTML = `<p class="${r.ok ? "ok" : "no"}">${r.ok ? "Rigtigt." : "Ikke rigtigt."}</p><div class="sol"><b>Sådan:</b> ${t.sol}</div>`;
+        fb.innerHTML = feedbackHTML(t, r, inp.value, skill.id);
         box.classList.add(r.ok ? "is-ok" : "is-no");
         go.textContent = i + 1 >= total ? "Se resultatet" : "Næste";
         go.focus();
@@ -161,7 +200,7 @@
         if (!r.empty) Progress.add({ sub: SUB, s: s.id, lv, ok: r.ok, mode: "proeve", ms: 0 });
         box.querySelector("input").readOnly = true;
         box.classList.add(r.ok ? "is-ok" : "is-no");
-        box.querySelector(".fb").innerHTML = `<p class="${r.ok ? "ok" : "no"}">${r.ok ? "Rigtigt." : r.empty ? "Ikke besvaret." : "Ikke rigtigt."}</p><div class="sol"><b>Sådan:</b> ${t.sol}</div>`;
+        box.querySelector(".fb").innerHTML = feedbackHTML(t, r, saved.answers[k] || "", s.id);
       });
       const used = Math.min(MINUTES, Math.round((Date.now() - saved.start) / 60e3));
       localStorage.removeItem(EXAM);
