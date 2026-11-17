@@ -6,15 +6,15 @@
 //   Pixel.loop(update(dt), draw())                 update at 60 steps a second, draw every frame
 //   Pixel.sfx("hit" | "miss" | "pop" | "zap" | "lose" | "win" | "click" | "tick" | "boom" | "bonus")   short sounds; Pixel.muted toggles them
 const Pixel = (() => {
-  // ---- the font: each glyph is 3 wide and 5 high, rows top to bottom as 3-bit numbers ----
-  // Two Danish letters need more room to be read: Æ is 5 wide (5-bit rows), and Å is an A with a ring one pixel
-  // above the line (ABOVE), so "GÅR" does not read as "GAR".
+  // ---- the font: each glyph is 3 wide (a few are 5 wide) and 5 high, rows top to bottom as bit patterns ----
+  // Some letters need more room to be read: Æ and M are 5 wide (5-bit rows; a 3-wide M reads as an N, so "OMKREDS"
+  // looked like "ONKREDS"), and Å is an A with a ring one pixel above the line (ABOVE), so "GÅR" does not read as "GAR".
   const G = {
     "0": [7, 5, 5, 5, 7], "1": [2, 6, 2, 2, 7], "2": [7, 1, 7, 4, 7], "3": [7, 1, 3, 1, 7], "4": [5, 5, 7, 1, 1],
     "5": [7, 4, 7, 1, 7], "6": [7, 4, 7, 5, 7], "7": [7, 1, 2, 2, 2], "8": [7, 5, 7, 5, 7], "9": [7, 5, 7, 1, 7],
     A: [2, 5, 7, 5, 5], B: [6, 5, 6, 5, 6], C: [3, 4, 4, 4, 3], D: [6, 5, 5, 5, 6], E: [7, 4, 6, 4, 7], F: [7, 4, 6, 4, 4],
     G: [3, 4, 5, 5, 3], H: [5, 5, 7, 5, 5], I: [7, 2, 2, 2, 7], J: [1, 1, 1, 5, 2], K: [5, 5, 6, 5, 5], L: [4, 4, 4, 4, 7],
-    M: [5, 7, 7, 5, 5], N: [6, 5, 5, 5, 5], O: [2, 5, 5, 5, 2], P: [6, 5, 6, 4, 4], Q: [2, 5, 5, 6, 3], R: [6, 5, 6, 5, 5],
+    M: [17, 27, 21, 17, 17], N: [6, 5, 5, 5, 5], O: [2, 5, 5, 5, 2], P: [6, 5, 6, 4, 4], Q: [2, 5, 5, 6, 3], R: [6, 5, 6, 5, 5],
     S: [3, 4, 2, 1, 6], T: [7, 2, 2, 2, 2], U: [5, 5, 5, 5, 7], V: [5, 5, 5, 5, 2], W: [5, 5, 7, 7, 5], X: [5, 5, 2, 5, 5],
     Y: [5, 5, 2, 2, 2], Z: [7, 1, 2, 4, 7], "Æ": [15, 20, 30, 20, 23], "Ø": [3, 5, 7, 5, 6], "Å": [2, 5, 7, 5, 5],
     ":": [0, 2, 0, 2, 0], ".": [0, 0, 0, 0, 2], ",": [0, 0, 0, 2, 4], "!": [2, 2, 2, 0, 2], "?": [6, 1, 2, 0, 2],
@@ -24,7 +24,7 @@ const Pixel = (() => {
     // for the geometry games: pi (stored under the capital letter, since all text is upper-cased), squared and root
     "Π": [31, 10, 10, 10, 9], "²": [6, 1, 2, 7, 0], "√": [7, 4, 4, 20, 8],
   };
-  const WIDE = { "Æ": 5, "Π": 5, "√": 5 }, ABOVE = { "Å": 2 };
+  const WIDE = { "Æ": 5, M: 5, "Π": 5, "√": 5 }, ABOVE = { "Å": 2 };
   const width = (s, size = 1) => { let w = 0; for (const ch of String(s).toUpperCase()) w += (WIDE[ch] || 3) + 1; return w * size - size; };
   function text(ctx, s, x, y, colour, size = 1, align = "left") {
     s = String(s).toUpperCase();

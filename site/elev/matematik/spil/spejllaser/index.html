@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#071018">
+  <title>Spejllaser | Elev</title>
+  <link rel="stylesheet" href="../../../shared/elev.css?v=5">
+  <link rel="stylesheet" href="game.css?v=1">
+</head>
+<body class="play">
+<header class="top"><div class="wrap"><a class="brand" href="../../../">Elev</a><a class="crumb" href="../../">← Matematik</a><span class="sync" id="sync"></span></div></header>
+<main class="wrap">
+  <h1>Spejllaser</h1>
+  <p class="turn">Vend telefonen på langs, så bliver spillet større.</p>
+  <canvas id="game" class="pixel" aria-label="Spillet Spejllaser"></canvas>
+  <div class="pad">
+    <div class="keys" aria-label="Taltaster">
+      <button class="btn" data-k="1">1</button><button class="btn" data-k="2">2</button><button class="btn" data-k="3">3</button>
+      <button class="btn" data-k="4">4</button><button class="btn" data-k="5">5</button><button class="btn" data-k="6">6</button>
+      <button class="btn" data-k="7">7</button><button class="btn" data-k="8">8</button><button class="btn" data-k="9">9</button>
+      <button class="btn" data-k="0">0</button><button class="btn" data-k="del">Slet</button><button class="btn" id="next" aria-label="Skift drejeskive">Skift</button>
+    </div>
+    <button class="btn primary" id="fire">Start</button>
+    <button class="btn small" id="mute">Lyd: til</button>
+    <label class="friend"><input type="checkbox" id="friend"> En ven spiller (tæller ikke med i din træning)</label>
+  </div>
+  <section class="topbox" id="top"></section>
+  <details class="howto"><summary>Sådan spiller du</summary>
+    <p>Skrot er på vej mod hunden Vaks' tårn på månen, og tårnets kanon mangler strøm. Strømmen kommer fra en laser, som skal ledes gennem spejle og skinner hen til krystallen. Ved nogle af spejlene sidder en drejeskive med et bogstav (A eller B). Skiven skal stilles på præcis den vinkel, bogstavet står i. Regn vinklen ud fra de vinkler, der står på tegningen, så find papir og blyant.</p>
+    <p>Skriv tallet med taltasterne, og tryk Enter eller mellemrum. Er der to drejeskiver, hopper Enter videre til den næste. Du kan også skifte med piletasterne, Tab, knappen Skift eller ved at klikke på en skive. Når alle skiver har et tal, tænder Enter laseren. Passer alle vinkler, når strålen krystallen, og kanonen skyder skrottet ned. Er en skive forkert, brænder strålen af ved det spejl.</p>
+    <p>Tegningen er en skitse, ligesom i prøven: vinklerne er ikke tegnet i rigtig størrelse, så du kan ikke måle eller gætte dig frem. Det er tallene og reglerne, der gælder: nabovinkler giver 180° tilsammen, topvinkler er lige store, ensliggende vinkler ved parallelle linjer er lige store, vinklerne i en trekant giver 180°, og vinklerne i en firkant giver 360°.</p>
+    <p>Tegnene på tegningen: skinner med gule pile (&gt;&gt;) er parallelle. En lille firkant i et hjørne er en ret vinkel på 90°. To sider med en lille tværstreg er lige lange. En stiplet linje er en forlængelse af en linje.</p>
+    <p>Øverst på skærmen flyver skrottet mod tårnet: når det er helt henne til højre, er tiden gået. Du har to forsøg pr. bane. Efter første fejl står reglen over månen, og de skiver, strålen kom forbi, er låst som rigtige. Efter anden fejl, eller hvis skrottet når frem til tårnet, mister tårnet et skjold, og hele udregningen bliver vist, mens tiden står stille. Tårnet har tre skjolde. En runde er ni baner, og den sidste har to spejlfelter efter hinanden.</p>
+    <p>Rigtige svar i første forsøg i træk giver flere point, hurtige svar giver lidt ekstra, og sværere baner giver mest.</p>
+    <p>På en skærm uden tastatur: brug talknapperne under spillet, og tryk på en drejeskive for at vælge den.</p>
+  </details>
+</main>
+<script src="../../../shared/progress.js?v=3"></script>
+<script src="../../../shared/pixel.js?v=4"></script>
+<script src="../../../shared/leader.js?v=2"></script>
+<script src="game.js?v=1"></script>
+<script src="../sync.js?v=1"></script>
+</body>
+</html>

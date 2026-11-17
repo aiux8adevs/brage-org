@@ -108,6 +108,7 @@
       `<p class="legend"><span class="good">sidder</span> <span class="mid">på vej</span> <span class="weak">øv mere</span> · prikkerne er niveau 1–3 · tallet er de seneste svar. Klik et emne for at øve netop det.</p>` + rows +
       `<h2>Spil</h2><div class="actions"><a class="big game" href="spil/stoevsuger/"><b>Støvsugerkrigen</b><span>Robotstøvsugere med tal på ryggen. Skyd dem i stykker med primtal.</span></a>` +
       `<a class="big game" href="spil/skrotregn/"><b>Skrotregn</b><span>Rumskrot med figurer på. Laseren skyder kun, når du har regnet rigtigt.</span></a>` +
+      `<a class="big game" href="spil/spejllaser/"><b>Spejllaser</b><span>Led laseren gennem spejlene: regn vinklerne ud, stil drejeskiverne, og tænd. Gæt brænder strålen af.</span></a>` +
       `<a class="big game" href="spil/prelleskud/"><b>Prelleskud</b><span>Kampvogne og bandeskud. Ram om hjørner med vinkler.</span></a></div>`;
   }
 

@@ -1,0 +1,10 @@
+/* Spejllaser: the number keys under the game. Six in a row on a wide screen, four beside the game on a phone on its side. */
+.keys { display: grid; grid-template-columns: repeat(6, minmax(2.8rem, auto)); gap: .35rem; }
+.keys .btn { padding: .45rem .5rem; font-size: 1.05rem; min-width: 0; }
+.keys #next, .keys [data-k="del"] { font-size: .85rem; white-space: nowrap; }
+@media (max-width: 600px) and (orientation: portrait) { .keys { grid-template-columns: repeat(4, 1fr); width: 100%; } }
+@media (max-height: 520px) and (orientation: landscape) {
+  .keys { grid-template-columns: repeat(4, 1fr); width: 100%; gap: .3rem; }
+  .keys .btn { padding: .3rem .2rem; }
+  body.play .pad #fire { flex: 1 1 100%; }
+}
