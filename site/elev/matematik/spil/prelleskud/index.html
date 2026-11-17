@@ -20,6 +20,7 @@
     <input class="angle" id="angle" type="number" min="0" max="359" step="1" aria-label="Vinkel i grader">
     <button class="btn" data-d="1">+1°</button><button class="btn" data-d="5">+5°</button>
     <button class="btn primary" id="fire">Skyd</button>
+    <button class="btn" id="bonus">Bonusskud</button>
     <button class="btn small" id="mute">Lyd: til</button>
     <label class="friend"><input type="checkbox" id="friend"> En ven spiller (tæller ikke med i din træning)</label>
   </div>
@@ -29,12 +30,14 @@
     <p>Vinklen måles i grader: 0° er lige til højre, 90° lige op, 180° til venstre og 270° lige ned. Skift vinkel med piletasterne (5° ad gangen, 1° med Shift eller pil op og ned), med musehjulet eller ved at skrive tallet og trykke Enter. Mellemrum skyder.</p>
     <p>Du kan også sigte med musen: klik på banen, eller hold knappen nede og træk. Bolden kan prelle tre gange og flyver lige igennem en papkasse, så ét skud kan tage flere. Skud med prel giver flere point, og bolde til overs giver point, når banen er ryddet.</p>
     <p>Ved hvert prel står vinklen på begge sider: den er den samme ind og ud. Sigtelinjen viser mindre og mindre, jo bedre du bliver.</p>
+  <p><b>Bonusskud</b> (tasten B): en stjerne sidder på en væg, og der står, hvilken vinkel bolden skal danne med væggen. Sigtelinjen er væk, så du må regne kanonens vinkel ud. Eksempel: højre væg, opad, 35° med væggen giver 90 − 35 = 55°. Rammer du, får du point og en bold mere. Bonusskuddet koster ingen bold.</p>
+    <p>Fra niveau 3 sigter musen ikke længere: vinklen skal skrives eller sættes med tasterne.</p>
   </details>
 </main>
 <script src="../../../shared/progress.js?v=3"></script>
 <script src="../../../shared/pixel.js?v=3"></script>
 <script src="../../../shared/leader.js?v=2"></script>
-<script src="game.js?v=3"></script>
+<script src="game.js?v=4"></script>
 <script src="../sync.js?v=1"></script>
 </body>
 </html>

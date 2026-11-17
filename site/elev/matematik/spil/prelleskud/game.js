@@ -116,6 +116,27 @@
     return { tank: [40, 100], blocks: [{ x: 150, y: 60, w: 8, h: 60 }], enemies: [{ x: 260, y: 100, a: 30, need: 1, alive: true, pop: 0 }] };
   }
 
+  // ---------- the bonus shot: a star on a wall. The board says the angle between the ball's path and that wall;
+  // the gun's angle must be worked out from it (e.g. right wall, upwards: 90 − 35 = 55°). No aim line, no mouse.
+  function makeStar(st) {
+    const [x0, y0] = st.tank;
+    for (let k = 0; k < 300; k++) {
+      const th = rnd(1, 71) * 5; if (th % 90 < 15 || th % 90 > 75) continue;
+      const p = trace(st, x0, y0, th, 0, 900), [ex, ey] = p.end, vx = Math.cos(rad(th)), vy = -Math.sin(rad(th));
+      const wall = ey <= ARENA.y0 + R + 2 ? "top" : ey >= ARENA.y1 - R - 2 ? "bottom" : ex <= ARENA.x0 + R + 2 ? "left" : ex >= ARENA.x1 - R - 2 ? "right" : null;
+      if (!wall || Math.hypot(ex - x0, ey - y0) < 60) continue;            // it must reach the arena's own wall, not a block
+      if (st.enemies.some(e => Math.hypot(e.x - ex, e.y - ey) < 16)) continue;
+      const horiz = wall === "top" || wall === "bottom";
+      const phi = Math.round(deg(horiz ? Math.atan2(Math.abs(vy), Math.abs(vx)) : Math.atan2(Math.abs(vx), Math.abs(vy))));
+      if (phi < 15 || phi > 75) continue;
+      // the reasoning from the wall's angle to the gun's angle (0° right, counter-clockwise)
+      const how = { top: vx > 0 ? `SAMME VINKEL: ${th}°` : `180 − ${phi} = ${th}°`, bottom: vx > 0 ? `360 − ${phi} = ${th}°` : `180 + ${phi} = ${th}°`,
+                    right: vy < 0 ? `90 − ${phi} = ${th}°` : `270 + ${phi} = ${th}°`, left: vy < 0 ? `90 + ${phi} = ${th}°` : `270 − ${phi} = ${th}°` }[wall];
+      return { x: ex, y: ey, wall, phi, th, how };
+    }
+    return null;
+  }
+
   // ---------- state ----------
   function savedLevel() { const ev = Progress.events("spil").filter(e => e.s === GAME && e.mode === "niveau"); return ev.length ? clamp(ev[ev.length - 1].lv, 1, 5) : 1; }
   let S;
@@ -126,6 +147,7 @@
   }
   function nextStage() {
     S.stage++; S.st = makeStage(S.lv); S.balls = S.st.enemies.length + 2; S.used = 0; S.last = null; S.phase = "aim"; S.view = null; S.solution = null;
+    S.star = makeStar(S.st); S.bonus = false;
     S.pigeon = Math.random() < 0.4 ? { x: -10, y: rnd(150, 168), vx: 14, vy: 0 } : null;
     const n = S.st.enemies.length;
     S.msg = `BANE ${S.stage}: ${n} ${n === 1 ? "PAPKASSE" : "PAPKASSER"}, ${S.balls} BOLDE`; S.msgT = 2.5;
@@ -161,10 +183,11 @@
   function setAngle(a) { S.angle = ((Math.round(a) % 360) + 360) % 360; sync(); }
   function sync() { if (document.activeElement !== input) input.value = S.angle; }
   function fire() {
-    if (S.phase !== "aim" || S.balls <= 0) return;
-    S.balls--; S.used++; S.shots++; S.taught = true;
+    if (S.phase !== "aim" || (S.balls <= 0 && !S.bonus)) return;
+    if (!S.bonus) { S.balls--; S.used++; S.shots++; }
+    S.taught = true;
     const a = rad(S.angle);
-    S.ball = { x: S.st.tank[0] + Math.cos(a) * 8, y: S.st.tank[1] - Math.sin(a) * 8, vx: Math.cos(a), vy: -Math.sin(a), bounces: [], pts: [[S.st.tank[0], S.st.tank[1]]], t: 0, hits: 0 };
+    S.ball = { x: S.st.tank[0] + Math.cos(a) * 8, y: S.st.tank[1] - Math.sin(a) * 8, vx: Math.cos(a), vy: -Math.sin(a), bounces: [], pts: [[S.st.tank[0], S.st.tank[1]]], t: 0, hits: 0, bonus: S.bonus };
     S.phase = "flying"; S.recoil = .12; Pixel.sfx("zap");
   }
   const again = () => { newRun(); Leader.render(document.getElementById("top"), GAME); };
@@ -176,11 +199,22 @@
     if (e.key === "ArrowUp") { setAngle(S.angle + 1); e.preventDefault(); }
     if (e.key === "ArrowDown") { setAngle(S.angle - 1); e.preventDefault(); }
     if (e.key === " " || e.key === "Enter") { if (!e.repeat) { if (S.phase === "over") again(); else fire(); } e.preventDefault(); }
+    if (e.key === "b" || e.key === "B") { toggleBonus(); e.preventDefault(); }
   });
   input.addEventListener("change", () => setAngle(+input.value || 0));
   g.onWheel(d => setAngle(S.angle - d));
-  const aimAt = (x, y) => { if (S.phase === "aim" && Math.hypot(x - S.st.tank[0], y - S.st.tank[1]) > 4) setAngle(deg(Math.atan2(-(y - S.st.tank[1]), x - S.st.tank[0]))); };
+  // the mouse aims only at levels 1–2 and never on the bonus shot: from level 3 the angle is set by number
+  const mouseAims = () => S.lv <= 2 && !S.bonus;
+  function toggleBonus() {
+    if (S.phase !== "aim" || !S.star) return;
+    S.bonus = !S.bonus; S.view = null;
+    S.msg = S.bonus ? `BONUS: BANEN DANNER ${S.star.phi}° MED VÆGGEN VED STJERNEN. SKRIV VINKLEN` : "BONUSSKUD AFLYST"; S.msgT = S.bonus ? 99 : 1.2;
+    Pixel.sfx("click");
+  }
+  const aimAt = (x, y) => { if (S.phase === "aim" && mouseAims() && Math.hypot(x - S.st.tank[0], y - S.st.tank[1]) > 4) setAngle(deg(Math.atan2(-(y - S.st.tank[1]), x - S.st.tank[0]))); };
   g.onClick(aimAt);                                              // click to aim, or hold the button down and drag
+  const bonusBtn = document.getElementById("bonus");
+  if (bonusBtn) bonusBtn.onclick = () => { toggleBonus(); bonusBtn.blur(); };
   const fireBtn = document.getElementById("fire");
   fireBtn.onclick = () => { if (S.phase === "over") again(); else fire(); fireBtn.blur(); };
   document.querySelectorAll("[data-d]").forEach(b => b.onclick = () => { setAngle(S.angle + +b.dataset.d); b.blur(); });
@@ -198,12 +232,21 @@
     for (const e of S.st.enemies) if (e.pop > 0) e.pop -= dt;
     if (S.pigeon) { S.pigeon.x += S.pigeon.vx * dt; S.pigeon.y += S.pigeon.vy * dt; if (S.pigeon.x > W + 10 || S.pigeon.y < -10) S.pigeon = null; }
     if (S.phase === "aim" && mouse.down && mouse.inside) aimAt(mouse.x, mouse.y);
+    if (S.ball && S.ball.bonus && S.ball.dead === undefined && S.ball.t > 8) S.ball.dead = true;
     if (S.phase === "between") { S.betweenT -= dt; if (S.betweenT <= 0) nextStage(); return; }
     if (S.phase !== "flying") return;
     const b = S.ball, walls = rects(S.st);
     b.t += dt;
     for (let k = 0; k < SPEED * dt / 0.5; k++) {
       const nx = b.x + b.vx * 0.5, ny = b.y + b.vy * 0.5, hit = walls.find(r => inside(nx, ny, r, R));
+      if (hit && b.bonus) {
+        const st = S.star, ok = Math.hypot(b.x - st.x, b.y - st.y) <= 5;
+        b.dead = true; S.star = null; S.bonus = false; S.msgT = 0;
+        if (ok) { const pts = 200 * S.lv; S.score += pts; S.balls++; S.shake = .25; burst(b.x, b.y, 18, [C.warn, "#fff"], 90);
+          say(`STJERNE! +${pts} OG +1 BOLD`, b.x, b.y - 12, C.good, 2); Pixel.sfx("bonus"); }
+        else { S.msg = `FORBI. ${st.phi}° MED VÆGGEN GIVER ${st.how}`; S.msgT = 4; Pixel.sfx("miss"); }
+        break;
+      }
       if (hit) {
         if (b.bounces.length >= MAXB) { b.dead = true; burst(b.x, b.y, 5, [C.ball], 40); break; }
         const vertical = !inside(b.x, ny, hit, R);
@@ -235,6 +278,7 @@
     if (b.dead) {
       b.pts.push([b.x, b.y]); S.last = b; S.ball = null; S.view = null;
       const left = S.st.enemies.filter(e => e.alive).length;
+      if (b.bonus && left) { S.phase = "aim"; return; }              // the bonus shot never costs the stage
       if (!left) return stageOver(true);
       if (S.balls <= 0) return stageOver(false);
       if (!b.hits) say(pick(MISS), S.st.tank[0], S.st.tank[1] - 26, C.dim);
@@ -282,7 +326,12 @@
     for (const r of rects(S.st)) { px(r.x, r.y, r.w, r.h, C.wall); px(r.x, r.y, r.w, 2, C.wallTop); }
     // the last shot stays as a faint line to adjust from; its angles are hidden while a new ball is in the air
     if (S.last) { line(S.last.pts, "rgba(255,255,255,.3)"); if (S.phase !== "flying") S.last.bounces.forEach(bn => bounceAngles(bn, "#c9b98a")); }
-    if (S.phase === "aim") {
+    if (S.star) {                                                   // the bonus star on its wall, with the angle to work from
+      const { x, y } = S.star, c = S.bonus ? C.warn : "#d8c25a";
+      px(x - 1, y - 4, 3, 9, c); px(x - 4, y - 1, 9, 3, c); px(x - 2, y - 2, 5, 5, c);
+      if (S.bonus) label(`${S.star.phi}°`, clamp(x, ARENA.x0 + 10, ARENA.x1 - 10), clamp(y + (S.star.wall === "top" ? 8 : -12), ARENA.y0 + 1, ARENA.y1 - 8), C.warn);
+    }
+    if (S.phase === "aim" && !S.bonus) {
       const { path } = preview();
       line(path.pts.concat([path.end]), "rgba(216,242,90,.8)", [3, 3]);
       path.bounces.forEach(bn => bounceAngles(bn));
@@ -325,7 +374,10 @@
     Pixel.text(ctx, `LIV`, 150, 3, S.lives <= 1 ? C.bad : C.text);
     for (let k = 0; k < S.lives; k++) px(165 + k * 7, 3, 5, 5, C.tank);
     Pixel.text(ctx, `POINT ${S.score}`, W - 3, 3, C.good, 1, "right");
-    if (S.msgT > 0 && S.phase !== "over") { const m = S.msg; px(W / 2 - Pixel.width(m) / 2 - 4, 16, Pixel.width(m) + 8, 10, "rgba(5,10,14,.85)"); Pixel.text(ctx, m, W / 2, 19, C.warn, 1, "center"); }
+    if (S.msgT > 0 && S.phase !== "over") {                         // on the bonus shot the message sits on the side away from the star
+      const m = S.msg, my = S.bonus && S.star && S.star.y < H / 2 ? H - 13 : 16;
+      px(W / 2 - Pixel.width(m) / 2 - 4, my, Pixel.width(m) + 8, 10, "rgba(5,10,14,.85)"); Pixel.text(ctx, m, W / 2, my + 3, C.warn, 1, "center"); }
+    if (S.star && S.phase === "aim" && S.taught && !S.bonus) Pixel.text(ctx, "B: BONUSSKUD", 3, H - 8, C.dim);
     if (!S.taught && S.phase === "aim") {                            // first stage, before the first shot: how to play
       const m = "SIGT: KLIK ELLER TRÆK MED MUSEN, ELLER BRUG PILETASTERNE. SKYD: MELLEMRUM";
       px(0, H - 11, W, 11, "rgba(5,10,14,.9)"); Pixel.text(ctx, m, W / 2, H - 8, C.text, 1, "center");
