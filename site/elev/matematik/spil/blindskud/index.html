@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#071018">
+  <title>Blindskud | Elev</title>
+  <link rel="stylesheet" href="../../../shared/elev.css?v=5">
+  <link rel="stylesheet" href="game.css?v=1">
+</head>
+<body class="play">
+<header class="top"><div class="wrap"><a class="brand" href="../../../">Elev</a><a class="crumb" href="../../">← Matematik</a><span class="sync" id="sync"></span></div></header>
+<main class="wrap">
+  <h1>Blindskud</h1>
+  <p class="turn">Vend telefonen på langs, så bliver spillet større.</p>
+  <canvas id="game" class="pixel" aria-label="Spillet Blindskud"></canvas>
+  <div class="pad">
+    <div class="keys" aria-label="Taltaster">
+      <button class="btn" data-k="1">1</button><button class="btn" data-k="2">2</button><button class="btn" data-k="3">3</button>
+      <button class="btn" data-k="4">4</button><button class="btn" data-k="5">5</button><button class="btn" data-k="6">6</button>
+      <button class="btn" data-k="7">7</button><button class="btn" data-k="8">8</button><button class="btn" data-k="9">9</button>
+      <button class="btn" data-k="0">0</button><button class="btn" data-k="del">Slet</button>
+    </div>
+    <button class="btn primary" id="fire">Start</button>
+    <button class="btn small" id="mute">Lyd: til</button>
+    <label class="friend"><input type="checkbox" id="friend"> En ven spiller (tæller ikke med i din træning)</label>
+  </div>
+  <section class="topbox" id="top"></section>
+  <details class="howto"><summary>Sådan spiller du</summary>
+    <p>Hunden Vaks holder med sin kampvogn i tæt tåge. Skrotrobotternes kampvogn er et sted derude, men den kan ikke ses. Radaren til højre giver kun tal: dit eget punkt og fjendens punkt i koordinatsystemet. Regn afstanden mellem de to punkter ud, skriv den, og skyd. Granaten flyver præcis så langt, som du skriver, og kun den helt rigtige afstand rammer. Find papir og blyant.</p>
+    <p>Skriv tallet med taltasterne, og tryk Enter eller mellemrum for at skyde. Slet med Backspace. På en skærm uden tastatur bruger du talknapperne og knappen Skyd under spillet.</p>
+    <p>Du har to skud pr. mål. Efter et skud forbi får du kun at vide, om det var for kort eller for langt, ikke hvor meget. Så står reglen under kortet. Efter to skud forbi skyder fjenden igen, og kampvognen mister en panserplade. Det samme sker, hvis bjælken "Fjenden sigter" bliver fuld. Bagefter letter tågen over fjenden, og hele udregningen bliver vist med trekanten tegnet på kortet, mens tiden står stille. Du har tre panserplader. En runde er otte mål. Det sidste er kommandovognen: den flygter, når den bliver ramt, og skal findes og rammes en gang til.</p>
+    <p>Sådan regner du afstanden. Står I på samme vandrette eller lodrette linje, er afstanden forskellen mellem de to tal: fra −3 til 5 er der 8. Ellers tegner du en retvinklet trekant mellem de to punkter. Find den vandrette afstand (forskellen mellem x-tallene) og den lodrette afstand (forskellen mellem y-tallene), og brug Pythagoras: afstand² = vandret² + lodret². Fra (1,2) til (4,6) er der 3 vandret og 4 lodret: 9 + 16 = 25, og √25 = 5.</p>
+    <p>Afstanden er altid et helt tal. Gode kvadrattal at kende: 13² = 169, 15² = 225, 17² = 289, 20² = 400, 25² = 625, 26² = 676. Et trick til store tal: gør trekanten mindre først. 18 og 24 er 6 gange 3 og 4, og trekanten 3-4-5 kender du, så afstanden er 6 gange 5 = 30.</p>
+    <p>Senere giver radaren ikke fjendens punkt direkte. Fjenden kan være kørt videre: til højre og venstre ændrer x, op og ned ændrer y. Den kan stå midt mellem to master: midtpunktet finder du ved at lægge de to x-tal sammen og dele med 2, og det samme med y-tallene. Eller radaren kan vise et spejlbillede: spejlet i y-aksen skifter x fortegn, spejlet i x-aksen skifter y fortegn, og spejlet i en linje som x = 2 ligger punktet lige langt fra linjen på den anden side.</p>
+    <p>Træffere med første skud i træk giver flere point, hurtige svar giver lidt ekstra, og sværere mål giver mest.</p>
+  </details>
+</main>
+<script src="../../../shared/progress.js?v=3"></script>
+<script src="../../../shared/pixel.js?v=4"></script>
+<script src="../../../shared/leader.js?v=2"></script>
+<script src="game.js?v=2"></script>
+<script src="../sync.js?v=1"></script>
+</body>
+</html>
