@@ -21,8 +21,10 @@ const Pixel = (() => {
     "-": [0, 0, 7, 0, 0], "+": [0, 2, 7, 2, 0], "·": [0, 0, 2, 0, 0], "×": [0, 5, 2, 5, 0], "/": [1, 1, 2, 4, 4],
     "%": [5, 1, 2, 4, 5], "°": [7, 5, 7, 0, 0], "(": [1, 2, 2, 2, 1], ")": [4, 2, 2, 2, 4], "=": [0, 7, 0, 7, 0],
     "<": [1, 2, 4, 2, 1], ">": [4, 2, 1, 2, 4], "'": [2, 2, 0, 0, 0], " ": [0, 0, 0, 0, 0],
+    // for the geometry games: pi (stored under the capital letter, since all text is upper-cased), squared and root
+    "Π": [31, 10, 10, 10, 9], "²": [6, 1, 2, 7, 0], "√": [7, 4, 4, 20, 8],
   };
-  const WIDE = { "Æ": 5 }, ABOVE = { "Å": 2 };
+  const WIDE = { "Æ": 5, "Π": 5, "√": 5 }, ABOVE = { "Å": 2 };
   const width = (s, size = 1) => { let w = 0; for (const ch of String(s).toUpperCase()) w += (WIDE[ch] || 3) + 1; return w * size - size; };
   function text(ctx, s, x, y, colour, size = 1, align = "left") {
     s = String(s).toUpperCase();

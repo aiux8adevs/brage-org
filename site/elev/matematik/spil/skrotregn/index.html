@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#071018">
+  <title>Skrotregn | Elev</title>
+  <link rel="stylesheet" href="../../../shared/elev.css?v=5">
+  <link rel="stylesheet" href="game.css?v=1">
+</head>
+<body class="play">
+<header class="top"><div class="wrap"><a class="brand" href="../../../">Elev</a><a class="crumb" href="../../">← Matematik</a><span class="sync" id="sync"></span></div></header>
+<main class="wrap">
+  <h1>Skrotregn</h1>
+  <p class="turn">Vend telefonen på langs, så bliver spillet større.</p>
+  <canvas id="game" class="pixel" aria-label="Spillet Skrotregn"></canvas>
+  <div class="pad">
+    <div class="keys" aria-label="Taltaster">
+      <button class="btn" data-k="1">1</button><button class="btn" data-k="2">2</button><button class="btn" data-k="3">3</button>
+      <button class="btn" data-k="4">4</button><button class="btn" data-k="5">5</button><button class="btn" data-k="6">6</button>
+      <button class="btn" data-k="7">7</button><button class="btn" data-k="8">8</button><button class="btn" data-k="9">9</button>
+      <button class="btn" data-k="0">0</button><button class="btn" data-k="del">Slet</button><button class="btn" id="next">Skift mål</button>
+    </div>
+    <button class="btn primary" id="fire">Start</button>
+    <button class="btn small" id="mute">Lyd: til</button>
+    <label class="friend"><input type="checkbox" id="friend"> En ven spiller (tæller ikke med i din træning)</label>
+  </div>
+  <section class="topbox" id="top"></section>
+  <details class="howto"><summary>Sådan spiller du</summary>
+    <p>Rumskrot falder mod hunden Vaks' hus på månen. På hvert stykke skrot sidder en figur med mål på og et spørgsmål: areal, omkreds, en manglende side, en vinkel eller et rumfang. Laseren skyder kun, når du skriver det rigtige tal. Du kan ikke sigte dig frem, så find papir og blyant.</p>
+    <p>Skriv svaret med taltasterne, og tryk Enter eller mellemrum for at skyde. Slet med Backspace. Er der flere stykker skrot på vej, sigter kanonen på det nederste. Skift mål med piletasterne, Tab eller ved at klikke på et stykke. Det gule mærke viser, hvilket spørgsmål du svarer på.</p>
+    <p>Du har to forsøg pr. stykke. Efter første fejl står reglen for figuren over månen. Efter anden fejl, eller hvis skrottet lander, mister du et skjold, og hele udregningen bliver vist, mens tiden står stille. Læs den, så har du den næste gang.</p>
+    <p>Ved cirkler og cylindre skriver du kun tallet foran π: er omkredsen 2·π·5, er svaret 10. Figurerne er skitser, så du kan ikke måle på skærmen. Det er tallene, der gælder.</p>
+    <p>Rigtige svar i første forsøg i træk giver flere point, hurtige svar giver lidt ekstra, og sværere figurer giver mest. En bølge uden tab giver et skjold tilbage. Efter fem bølger kommer Moderskrottet med tre spørgsmål.</p>
+    <p>På en skærm uden tastatur: brug talknapperne under spillet, og tryk på et stykke skrot for at sigte på det.</p>
+  </details>
+</main>
+<script src="../../../shared/progress.js?v=3"></script>
+<script src="../../../shared/pixel.js?v=3"></script>
+<script src="../../../shared/leader.js?v=2"></script>
+<script src="game.js?v=1"></script>
+<script src="../sync.js?v=1"></script>
+</body>
+</html>
