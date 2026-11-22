@@ -56,13 +56,22 @@ const T = {
       base: "Udgangspunktet: 900 fotoner pr. pixel giver SNR 30, og 10 af 16 skiver kan ses. Prøv at ændre mAs.",
     },
     curveLbl: { x: "mAs", y: "SNR", double: "dobbelt dosis: SNR × 1,41", saved: "gemt" },
+    view: { snr: "SNR og dosis", rex: "Fra REX til støj" },
+    curveRex: "Støjen i billedet og REX",
+    curveNoteRex: "Kurven viser støjen, som du ser den i billedet, i forhold til din start-REX (100 %). Hver lodret streg er dobbelt dosis til detektoren, og hver fordobling fjerner kun 29 % af støjen. For at halvere støjen skal REX fire gange så højt op. Det gælder, uanset om du skruer på mAs eller kV: samme REX giver samme støj. Forskellen på de to veje er patientdosis og kontrast (se tabellen). Den orange prik er dine indstillinger. Vælger du GOS eller en anden pixelstørrelse, viser en grå kurve udgangspunktet (CsI, 150 µm), for REX måler dosis til detektoren, ikke hvor mange fotoner den udnytter.",
+    rexLbl: { x: "REX (hver streg: dobbelt dosis)", y: "støj", start: "start", half: "halv støj", low: "for meget støj", high: "for høj dosis" },
+    plan: { from: "Jeg har REX", to: "Jeg vil op på", use: "Brug REX fra simulatoren",
+            factor: "Detektoren skal have <b>×{f}</b> dosis. Støjen bliver <b>{n} %</b> af før ({d}).",
+            route: ["", "via mAs", "via kV"], how: "Sådan", noise: "Støj", dose: "Patientdosis", contrast: "Kontrast", cnr: "CNR",
+            out: "uden for 50–120 kV", kvNote: "kV-vejen regnes fra din kV ({kv} kV) med samme mAs." },
     dec: ",",
     modelText: `<p><b>Fotoner.</b> Strålingen ved detektoren, i forhold til udgangspunktet (10 mAs, 70 kV): $$X = \\frac{\\text{mAs}}{10} \\cdot \\left(\\frac{kV}{70}\\right)^2 \\cdot e^{-(\\mu - \\mu_{70}) \\cdot 20}$$ Rørets udbytte følger cirka kV i anden, og strålen dæmpes gennem 20 cm væv med $\\mu = 0,2 \\cdot (70/kV)^{0,6}$ pr. cm. Fotoner pr. pixel, som detektoren udnytter: $$N = 900 \\cdot X \\cdot \\left(\\frac{a}{150}\\right)^2 \\cdot \\frac{\\text{DQE}}{0,65}$$ hvor $a$ er pixlens sidelængde i µm. DQE er sat til 0,65 for CsI og 0,35 for GOS (typiske værdier). Strengt taget er $N$ det antal fotoner, en perfekt detektor skulle bruge for at give den samme støj.</p>
 <p><b>Støj.</b> Antallet i hver pixel er tilfældigt (Poisson-fordelt) og svinger typisk med $\\sigma = \\sqrt{N}$, så $\\text{SNR} = N/\\sigma = \\sqrt{N}$. I billedet er støjen trukket fra en normalfordeling med samme $\\sigma$. Det passer godt, når $N$ er over cirka 20.</p>
 <p><b>Kontrast og CNR.</b> En skive fjerner andelen $C = C_{70} \\cdot (70/kV)^{0,8}$ af fotonerne, hvor $C_{70}$ er 8, 4, 2 og 1 % ved 70 kV. Forskellen er altså $C \\cdot N$ fotoner, og $\\text{CNR} = C \\cdot N/\\sigma = C \\cdot \\sqrt{N}$ pr. pixel.</p>
-<p><b>Synlig eller ej.</b> Rose-kriteriet: en skive regnes som synlig, når $C \\cdot \\sqrt{N_{skive}} \\ge 5$, hvor $N_{skive}$ er alle fotoner over skivens areal. Desuden skal skiven være mindst 3 pixel bred (5 med støjfilter). Det er en tommelfingerregel; dit øje kan se lidt mere eller lidt mindre.</p>
+<p><b>Synlig eller ej.</b> Rose-kriteriet: en skive regnes som synlig, når $C \\cdot \\sqrt{N_{skive}} \\ge 5$, hvor $N_{skive}$ er alle fotoner over skivens areal. Desuden skal skiven være mindst 3 pixel bred (5 med støjfilter). Det er en tommelfingerregel; dit øje kan se lidt mere eller lidt mindre. Tre skiver på skrå (4 % og 0,5 mm, 2 % og 1 mm, 1 % og 2 mm) har præcis samme Rose-tal, fordi tallet følger kontrast gange diameter. Derfor dukker de op og forsvinder sammen.</p>
 <p><b>Billedet.</b> Fantomet er 6 × 6 cm og vises med detektorens egne pixel. Gråtonerne skaleres efter signalet, som på et DR-anlæg: vinduet dækker 16 % til hver side af baggrunden og bliver bredere, når støjen er større end det. Støjfilteret er et gennemsnit over 3 × 3 pixel. Ny optagelse trækker nye tilfældige tal.</p>
 <p><b>Dosis og REX.</b> Patientdosis er indgangsdosis i forhold til udgangspunktet: $(\\text{mAs}/10) \\cdot (kV/70)^2$. REX følger strålingen ved detektoren: $220 \\cdot X$. Grænserne 125 og 400 er undervisningens tommelfingerregler for Canon-anlæg, ikke fabrikantens tal.</p>
+<p><b>Fra REX til støj.</b> Med samme detektor og pixelstørrelse er $N$ proportional med REX, så støjen i billedet, $\\sigma/N = 1/\\sqrt{N}$, følger $1/\\sqrt{\\text{REX}}$, uanset om REX er nået med mAs eller kV. Det er det, visningen Fra REX til støj viser. kV-vejen i tabellen finder med modellen ovenfor den kV, der giver detektoren den ønskede dosis ved samme mAs. Huskereglen om 15 % indgår ikke i regningen; modellen giver 16–20 %, mest ved høj kV.</p>
 <p><b>Det er ikke med.</b> Modellen har kun kvantestøj. Elektronisk støj (ses kun ved meget lav dosis) og strukturstøj (rettes væk ved kalibrering) er udeladt. Spredt stråling er heller ikke med. Den er ikke støj, men rigtige fotoner, der lander det forkerte sted og sænker kontrasten, og den har sin egen simulator. Detektoren regnes som helt skarp, strålen har én energi ad gangen i stedet for et spektrum, og DQE er den samme for alle detaljestørrelser og alle kV.</p>
 <p>Kilder: Bushong, Radiologic Science for Technologists (kvantestøj, SNR, CNR, DQE, eksponeringsindeks). Rose, Vision: Human and Electronic (1973), om Rose-kriteriet. Bushberg m.fl., The Essential Physics of Medical Imaging (Poisson-statistik, Rose-kriteriet, DQE). IEC 62494-1 om eksponeringsindeks.</p>`,
     groups: [
@@ -96,11 +105,21 @@ const T = {
         ["For høj dosis", "Find den mAs, hvor REX kommer over 400. Advarer billedet dig?", "Ved 18,5 mAs er REX 407. Billedet ser bare lidt roligere ud, og der er stadig 10 synlige skiver. Patienten har fået næsten dobbelt dosis, uden at du kan se mere."],
         ["Dosis-krybning", "Sammenlign 20 og 40 mAs. Kan du se forskel på billederne? Hvad betyder det for vanerne på en afdeling?", "Næsten ingen forskel: 13 synlige skiver begge steder, men dobbelt dosis. Fordi et overeksponeret billede ser godt ud, kan doserne snige sig op over tid, uden at nogen opdager det. Derfor skal REX følges.", { deep: true }],
       ]],
+      ["Fra REX til støj", [
+        ["Fra 66 til 125", "Sæt mAs til 3, så REX er 66. Vælg Fra REX til støj over grafen, og skriv 66 og 125 i felterne. Hvor meget mere dosis skal detektoren have, og hvor meget mindre bliver støjen?", "Detektoren skal have ×1,89 dosis, altså næsten det dobbelte. Men støjen bliver kun 73 % af før, ikke det halve, fordi støjen følger kvadratroden af dosis."],
+        ["Via mAs", "Hvilken mAs skal du op på fra 3 mAs, for at REX kommer over 125? Hvad sker der med patientdosis?", "3 × 1,89 = 5,7 mAs. 5,5 mAs giver REX 121, lige under grænsen, så du skal op på 6 mAs (REX 132). mAs er ligefrem proportional med dosis, så patientdosis fordobles også, fra ×0,30 til ×0,60."],
+        ["Via kV", "Gå tilbage til 3 mAs og 70 kV, og skru kV op i stedet. Hvor mange kV skal der til, før REX er over 125? Hvor mange procent mere er det?", "82 kV (REX 130; 81 kV giver 124). Tabellen siger 81,2 kV, altså 16 % mere, og 82 kV er 17 % mere. Patientdosis stiger kun fra ×0,30 til ×0,41, fordi strålen trænger bedre igennem patienten, så en større del af den når detektoren."],
+        ["Samme REX, samme støj?", "Tryk Gem tallene ved 6 mAs og 70 kV. Gå så til 3 mAs og 82 kV. Sammenlign fotoner pr. pixel, CNR og patientdosis.", "Fotonerne er næsten de samme (540 og 532), fordi REX er næsten den samme, og så er støjen også den samme. Men CNR er faldet fra 0,93 til 0,81, fordi kontrasten falder med kV. Til gengæld er patientdosis ×0,41 i stedet for ×0,60. kV sparer dosis, mAs bevarer kontrasten."],
+        ["Halv støj", "Hvor højt skal REX op fra 66, for at støjen bliver halveret? Find det i grafen, og prøv både med mAs og med kV.", "Fire gange så højt: REX 264. Det er to fordoblinger, og hver fjerner kun 29 % af støjen. Med mAs er det 12 mAs og fire gange patientdosis (×1,20). Med kV er det cirka 98 kV: patientdosis ×0,59, men kontrasten er faldet til 76 %."],
+        ["GOS og REX", "Gå tilbage til 10 mAs og 70 kV, og skift til GOS. Ændrer REX sig? Hvad sker der med kurverne i Fra REX til støj?", "REX er stadig 220, for REX måler dosis til detektoren. Men GOS udnytter færre af fotonerne, så den cyan kurve ligger 36 % over den grå (CsI) ved samme REX. En god REX betyder altså ikke lige lidt støj på alle detektorer."],
+        ["15 %-reglen", "Huskereglen siger, at 15 % mere kV fordobler dosis til detektoren. Skriv 110 og 220 i felterne, og sæt kV til 60, 70, 80 og 100. Hvor mange procent siger tabellen hver gang, og hvorfor bliver tallet større?", "16,6 %, 17,5 %, 18,4 % og 19,8 %. Rørets udbytte stiger med kV i anden, og strålen trænger bedre igennem patienten. Den sidste gevinst bliver mindre, jo højere kV du starter fra, for strålen trænger allerede godt igennem. 15 % er en huskeregel. Fysikken giver et tal, der afhænger af kV og af patientens tykkelse.", { deep: true }],
+      ]],
       ["Formler", [
         ["SNR og CNR i hånden", "Ved 10 mAs er $N = 900$. Regn støjen, SNR og CNR for skiverne med 4 % ud.", "$\\sigma = \\sqrt{900} = 30$, $\\text{SNR} = \\frac{900}{30} = 30$ og $\\text{CNR} = 0,04 \\cdot 30 = 1,2$ pr. pixel."],
         ["Rose", "Den store skive er 4 mm i diameter, og pixlen er 150 µm. Hvor mange pixel dækker skiven? Er skiven med 1 % synlig ved 10 mAs? Tjek med tallet under skiven.", "Arealet er $\\pi \\cdot 2^2 \\approx 12,6$ mm², og en pixel er $0,15^2 = 0,0225$ mm², altså cirka 560 pixel og $560 \\cdot 900 \\approx 500\\,000$ fotoner. $0,01 \\cdot \\sqrt{500\\,000} \\approx 7,1 \\ge 5$: synlig."],
         ["DQE og dosis", "CsI har DQE 0,65 og GOS 0,35. Hvor mange mAs skal GOS have for at give samme SNR som CsI ved 10 mAs?", "$N$ skal være den samme, så $\\text{mAs} = 10 \\cdot \\frac{0,65}{0,35} \\approx 18,6$. Næsten dobbelt dosis for det samme billede."],
         ["Hvor meget dosis kræver en skive?", "Skiven på 1 mm med 2 % kontrast dækker cirka 35 pixel. Hvor mange fotoner pr. pixel skal der til, før den er synlig efter Rose? Hvilken mAs svarer det til?", "$0,02 \\cdot \\sqrt{35 \\cdot N} \\ge 5$ giver $N \\ge \\frac{(5/0,02)^2}{35} \\approx 1790$. Med 90 fotoner pr. mAs er det 20 mAs. Tjek i simulatoren: ved 19,5 mAs er skiven ikke synlig."],
+        ["Støj og REX", "Vis, at støjen i billedet følger $1/\\sqrt{\\text{REX}}$ med samme detektor, og regn ud, hvor meget støjen falder fra REX 66 til 125.", "Den relative støj er $\\sigma/N = 1/\\sqrt{N}$, og $N$ er proportional med REX. Altså $\\sqrt{66}/\\sqrt{125} \\approx 0,73$: støjen falder 27 %. For at halvere den skal $\\sqrt{\\text{REX}}$ fordobles, altså REX gange 4."],
       ], "deep"],
     ],
   },
@@ -141,13 +160,22 @@ const T = {
       base: "The starting point: 900 photons per pixel give SNR 30, and 10 of 16 disks can be seen. Try changing the mAs.",
     },
     curveLbl: { x: "mAs", y: "SNR", double: "double the dose: SNR × 1.41", saved: "saved" },
+    view: { snr: "SNR and dose", rex: "From REX to noise" },
+    curveRex: "The noise in the image and REX",
+    curveNoteRex: "The curve shows the noise as you see it in the image, relative to your starting REX (100 %). Each vertical line is double the dose to the detector, and each doubling removes only 29 % of the noise. To halve the noise, REX must go four times as high. That holds whether you turn the mAs or the kV: the same REX gives the same noise. What separates the two routes is the patient dose and the contrast (see the table). The orange dot is your settings. If you choose GOS or another pixel size, a grey curve shows the starting point (CsI, 150 µm), because REX measures the dose to the detector, not how many photons it uses.",
+    rexLbl: { x: "REX (each line: double the dose)", y: "noise", start: "start", half: "half the noise", low: "too noisy", high: "dose too high" },
+    plan: { from: "I have REX", to: "I want to reach", use: "Use the REX from the simulator",
+            factor: "The detector needs <b>×{f}</b> the dose. The noise becomes <b>{n} %</b> of before ({d}).",
+            route: ["", "via mAs", "via kV"], how: "How", noise: "Noise", dose: "Patient dose", contrast: "Contrast", cnr: "CNR",
+            out: "outside 50–120 kV", kvNote: "The kV route starts from your kV ({kv} kV) at the same mAs." },
     dec: ".",
     modelText: `<p><b>Photons.</b> The radiation at the detector, relative to the starting point (10 mAs, 70 kV): $$X = \\frac{\\text{mAs}}{10} \\cdot \\left(\\frac{kV}{70}\\right)^2 \\cdot e^{-(\\mu - \\mu_{70}) \\cdot 20}$$ The tube's output follows roughly kV squared, and the beam is attenuated through 20 cm of tissue with $\\mu = 0.2 \\cdot (70/kV)^{0.6}$ per cm. Photons per pixel that the detector uses: $$N = 900 \\cdot X \\cdot \\left(\\frac{a}{150}\\right)^2 \\cdot \\frac{\\text{DQE}}{0.65}$$ where $a$ is the side of the pixel in µm. DQE is set to 0.65 for CsI and 0.35 for GOS (typical values). Strictly speaking, $N$ is the number of photons a perfect detector would need to give the same noise.</p>
 <p><b>Noise.</b> The count in each pixel is random (Poisson distributed) and typically varies by $\\sigma = \\sqrt{N}$, so $\\text{SNR} = N/\\sigma = \\sqrt{N}$. In the image the noise is drawn from a normal distribution with the same $\\sigma$. That fits well when $N$ is above about 20.</p>
 <p><b>Contrast and CNR.</b> A disk removes the fraction $C = C_{70} \\cdot (70/kV)^{0.8}$ of the photons, where $C_{70}$ is 8, 4, 2 and 1 % at 70 kV. So the difference is $C \\cdot N$ photons, and $\\text{CNR} = C \\cdot N/\\sigma = C \\cdot \\sqrt{N}$ per pixel.</p>
-<p><b>Visible or not.</b> The Rose criterion: a disk counts as visible when $C \\cdot \\sqrt{N_{disk}} \\ge 5$, where $N_{disk}$ is all photons over the disk's area. The disk must also be at least 3 pixels wide (5 with the noise filter). It is a rule of thumb; your eye may see a little more or a little less.</p>
+<p><b>Visible or not.</b> The Rose criterion: a disk counts as visible when $C \\cdot \\sqrt{N_{disk}} \\ge 5$, where $N_{disk}$ is all photons over the disk's area. The disk must also be at least 3 pixels wide (5 with the noise filter). It is a rule of thumb; your eye may see a little more or a little less. Three disks on the diagonal (4 % and 0.5 mm, 2 % and 1 mm, 1 % and 2 mm) have exactly the same Rose number, because the number follows contrast times diameter. That is why they appear and disappear together.</p>
 <p><b>The image.</b> The phantom is 6 × 6 cm and is shown with the detector's own pixels. The grey scale follows the signal, as on a DR system: the window covers 16 % to each side of the background and gets wider when the noise is larger than that. The noise filter is an average over 3 × 3 pixels. New exposure draws new random numbers.</p>
 <p><b>Dose and REX.</b> Patient dose is the entrance dose relative to the starting point: $(\\text{mAs}/10) \\cdot (kV/70)^2$. REX follows the radiation at the detector: $220 \\cdot X$. The limits 125 and 400 are the course's rules of thumb for Canon systems, not the manufacturer's figures.</p>
+<p><b>From REX to noise.</b> With the same detector and pixel size, $N$ is proportional to REX, so the noise in the image, $\\sigma/N = 1/\\sqrt{N}$, follows $1/\\sqrt{\\text{REX}}$, whether REX was reached with mAs or kV. That is what the view From REX to noise shows. The kV route in the table uses the model above to find the kV that gives the detector the wanted dose at the same mAs. The 15 % rule of thumb is not part of the calculation; the model gives 16–20 %, most at high kV.</p>
 <p><b>What is left out.</b> The model has quantum noise only. Electronic noise (seen only at very low dose) and structure noise (removed by calibration) are left out. Scatter is not included either. It is not noise, but real photons that land in the wrong place and lower the contrast, and it has its own simulator. The detector is taken to be perfectly sharp, the beam has one energy at a time instead of a spectrum, and DQE is the same for all detail sizes and all kV.</p>
 <p>Sources: Bushong, Radiologic Science for Technologists (quantum noise, SNR, CNR, DQE, exposure index). Rose, Vision: Human and Electronic (1973), on the Rose criterion. Bushberg et al., The Essential Physics of Medical Imaging (Poisson statistics, the Rose criterion, DQE). IEC 62494-1 on the exposure index.</p>`,
     groups: [
@@ -181,11 +209,21 @@ const T = {
         ["Too high a dose", "Find the mAs where REX rises above 400. Does the image warn you?", "At 18.5 mAs REX is 407. The image just looks a little calmer, and there are still 10 visible disks. The patient has had almost twice the dose, and you cannot see any more."],
         ["Dose creep", "Compare 20 and 40 mAs. Can you see a difference between the images? What does that mean for the habits of a department?", "Hardly any difference: 13 visible disks in both, but twice the dose. Because an overexposed image looks good, doses can creep up over time without anyone noticing. That is why REX must be followed.", { deep: true }],
       ]],
+      ["From REX to noise", [
+        ["From 66 to 125", "Set the mAs to 3, so REX is 66. Choose From REX to noise above the graph, and type 66 and 125 in the boxes. How much more dose does the detector need, and how much less noise do you get?", "The detector needs ×1.89 the dose, almost double. But the noise only becomes 73 % of before, not half, because the noise follows the square root of the dose."],
+        ["Via mAs", "Which mAs must you reach from 3 mAs for REX to get above 125? What happens to the patient dose?", "3 × 1.89 = 5.7 mAs. 5.5 mAs gives REX 121, just below the limit, so you need 6 mAs (REX 132). The mAs is directly proportional to the dose, so the patient dose doubles too, from ×0.30 to ×0.60."],
+        ["Via kV", "Go back to 3 mAs and 70 kV, and turn up the kV instead. How many kV does it take before REX is above 125? How many per cent more is that?", "82 kV (REX 130; 81 kV gives 124). The table says 81.2 kV, which is 16 % more, and 82 kV is 17 % more. The patient dose only rises from ×0.30 to ×0.41, because the beam gets through the patient better, so a larger part of it reaches the detector."],
+        ["Same REX, same noise?", "Press Save the numbers at 6 mAs and 70 kV. Then go to 3 mAs and 82 kV. Compare the photons per pixel, the CNR and the patient dose.", "The photons are almost the same (540 and 532), because REX is almost the same, and so the noise is the same too. But the CNR has fallen from 0.93 to 0.81, because the contrast falls with kV. In return the patient dose is ×0.41 instead of ×0.60. kV saves dose, mAs keeps the contrast."],
+        ["Half the noise", "How high must REX go from 66 for the noise to be halved? Find it in the graph, and try with both mAs and kV.", "Four times as high: REX 264. That is two doublings, and each removes only 29 % of the noise. With mAs it is 12 mAs and four times the patient dose (×1.20). With kV it is about 98 kV: patient dose ×0.59, but the contrast has fallen to 76 %."],
+        ["GOS and REX", "Go back to 10 mAs and 70 kV, and switch to GOS. Does REX change? What happens to the curves in From REX to noise?", "REX is still 220, because REX measures the dose to the detector. But GOS uses fewer of the photons, so the cyan curve lies 36 % above the grey one (CsI) at the same REX. A good REX does not mean equally little noise on every detector."],
+        ["The 15 % rule", "The rule of thumb says that 15 % more kV doubles the dose to the detector. Type 110 and 220 in the boxes, and set the kV to 60, 70, 80 and 100. How many per cent does the table say each time, and why does the number grow?", "16.6 %, 17.5 %, 18.4 % and 19.8 %. The tube's output rises with kV squared, and the beam gets through the patient better. That last gain gets smaller the higher the kV you start from, because the beam already gets through well. 15 % is a rule of thumb. Physics gives a number that depends on the kV and on the patient's thickness.", { deep: true }],
+      ]],
       ["Formulas", [
         ["SNR and CNR by hand", "At 10 mAs, $N = 900$. Work out the noise, the SNR and the CNR for the 4 % disks.", "$\\sigma = \\sqrt{900} = 30$, $\\text{SNR} = \\frac{900}{30} = 30$ and $\\text{CNR} = 0.04 \\cdot 30 = 1.2$ per pixel."],
         ["Rose", "The large disk is 4 mm across, and the pixel is 150 µm. How many pixels does the disk cover? Is the 1 % disk visible at 10 mAs? Check with the number below the disk.", "The area is $\\pi \\cdot 2^2 \\approx 12.6$ mm², and a pixel is $0.15^2 = 0.0225$ mm², so about 560 pixels and $560 \\cdot 900 \\approx 500\\,000$ photons. $0.01 \\cdot \\sqrt{500\\,000} \\approx 7.1 \\ge 5$: visible."],
         ["DQE and dose", "CsI has DQE 0.65 and GOS 0.35. How many mAs does GOS need to give the same SNR as CsI at 10 mAs?", "$N$ must be the same, so $\\text{mAs} = 10 \\cdot \\frac{0.65}{0.35} \\approx 18.6$. Almost twice the dose for the same image."],
         ["How much dose does a disk need?", "The 1 mm disk with 2 % contrast covers about 35 pixels. How many photons per pixel does it take before it is visible by Rose? Which mAs is that?", "$0.02 \\cdot \\sqrt{35 \\cdot N} \\ge 5$ gives $N \\ge \\frac{(5/0.02)^2}{35} \\approx 1790$. With 90 photons per mAs that is 20 mAs. Check in the simulator: at 19.5 mAs the disk is not visible."],
+        ["Noise and REX", "Show that the noise in the image follows $1/\\sqrt{\\text{REX}}$ with the same detector, and work out how much the noise falls from REX 66 to 125.", "The relative noise is $\\sigma/N = 1/\\sqrt{N}$, and $N$ is proportional to REX. So $\\sqrt{66}/\\sqrt{125} \\approx 0.73$: the noise falls by 27 %. To halve it, $\\sqrt{\\text{REX}}$ must double, so REX times 4."],
       ], "deep"],
     ],
   },
@@ -193,9 +231,18 @@ const T = {
 
 // ---- the model ---------------------------------------------------------------------
 const mu = kv => 0.2 * Math.pow(70 / kv, 0.6);
+// radiation at the detector relative to 70 kV at the same mAs: tube output (kV²) times what gets through 20 cm
+const kvGain = kv => Math.pow(kv / 70, 2) * Math.exp(-(mu(kv) - mu(70)) * 20);
+// the kV that gives the detector f times the radiation, at the same mAs; null outside the slider's 50–120 kV
+function kvFor(kv0, f) {
+  const want = kvGain(kv0) * f;
+  if (want > kvGain(120) * (1 + 1e-9) || want < kvGain(50) * (1 - 1e-9)) return null;
+  let lo = 50, hi = 120;                                                   // kvGain rises with kV, so halve the interval
+  for (let i = 0; i < 50; i++) { const m = (lo + hi) / 2; if (kvGain(m) < want) lo = m; else hi = m; }
+  return (lo + hi) / 2;
+}
 function model(s) {
-  const trans = Math.exp(-(mu(s.kv) - mu(70)) * 20);
-  const exposure = (s.mas / 10) * Math.pow(s.kv / 70, 2) * trans;          // radiation at the detector, relative
+  const exposure = (s.mas / 10) * kvGain(s.kv);                          // radiation at the detector, relative
   const N = 900 * exposure * Math.pow(s.px / 150, 2) * DQE[s.det] / 0.65;
   const cScale = Math.pow(70 / s.kv, 0.8);
   const pxmm = s.px / 1000;
@@ -212,7 +259,8 @@ function model(s) {
 
 // ---- the page (everything below needs a browser) -------------------------------------
 const START = { mas: 10, kv: 70, px: 150, det: "csi", filter: "off" };
-const S = { lang: "da", level: "grund", ...START };
+const S = { lang: "da", level: "grund", view: "snr", ...START };   // view: which graph, SNR and dose or From REX to noise
+const PLAN = { from: 66, to: 125 };                                     // the planner's two REX values
 const $ = id => document.getElementById(id);
 let M = model(S);
 let PIN = null;    // the numbers saved with the compare button
@@ -388,14 +436,103 @@ function drawCurve() {
     text(ctx, L.saved, X(PIN.mas) + 8, Y(PIN.snr) + 14, css("--fg"), X(PIN.mas) > W * 0.8 ? "right" : "left", 11);
   }
   // the current setting, and what doubling it would give
-  const s = Math.sqrt(per * S.mas), d = Math.min(40, 2 * S.mas), sd = Math.sqrt(per * d);
-  ctx.setLineDash([4, 4]); ctx.strokeStyle = css("--amber");
-  ctx.beginPath(); ctx.moveTo(X(S.mas), Y(s)); ctx.lineTo(X(d), Y(s)); ctx.lineTo(X(d), Y(sd)); ctx.stroke(); ctx.setLineDash([]);
+  const s = Math.sqrt(per * S.mas), d = 2 * S.mas, sd = Math.sqrt(per * d);
+  if (d <= 40) {                                                          // above 20 mAs a doubling no longer fits: no step
+    ctx.setLineDash([4, 4]); ctx.strokeStyle = css("--amber");
+    ctx.beginPath(); ctx.moveTo(X(S.mas), Y(s)); ctx.lineTo(X(d), Y(s)); ctx.lineTo(X(d), Y(sd)); ctx.stroke(); ctx.setLineDash([]);
+  }
   ctx.fillStyle = css("--amber"); ctx.beginPath(); ctx.arc(X(S.mas), Y(s), 5, 0, 7); ctx.fill();
   const lbl = `SNR ${fmt(s, 0)}`, left = X(S.mas) - 8 - ctx.measureText(lbl).width > x0 + 4;
   text(ctx, lbl, X(S.mas) + (left ? -8 : 8), Y(s) + (left ? -8 : 17), css("--amber"), left ? "right" : "left", 11);   // no room on the left: below the dot, clear of the step
-  if (2 * S.mas <= 40) text(ctx, L.double, X(d) + (X(d) > W * 0.6 ? -6 : 6), (Y(s) + Y(sd)) / 2 + 4, css("--amber"), X(d) > W * 0.6 ? "right" : "left", 11);
+  if (d <= 40) text(ctx, L.double, X(d) + (X(d) > W * 0.6 ? -6 : 6), (Y(s) + Y(sd)) / 2 + 4, css("--amber"), X(d) > W * 0.6 ? "right" : "left", 11);
 }
+
+// ---- the REX view: noise as seen in the image against REX, on an axis where each step is double the dose ----
+const RX0 = 20, RX1 = 1000;
+const clampRex = v => Math.min(RX1, Math.max(RX0, Math.round(+v) || RX0));
+function drawRex() {
+  const [ctx, W, H] = fit($("curve"));
+  if (W < 10) return;
+  const L = T[S.lang].rexLbl, x0 = 40, y0 = H - 26, x1 = W - 10, y1 = 22;
+  // photons per REX with this detector and pixel, and at the starting point (CsI, 150 µm): REX says nothing about either
+  const per = M.N / M.rex, perRef = 900 / 220, from = PLAN.from, to = PLAN.to;
+  const noise = r => 100 * Math.sqrt(from / r);                          // relative noise 1/√N, 100 % at the starting REX
+  const noiseRef = r => noise(r) * Math.sqrt(per / perRef);
+  const showRef = Math.abs(per / perRef - 1) > 0.01;
+  const ymax = Math.min(300, Math.max(150, noise(RX0), showRef ? noiseRef(RX0) : 0)) * 1.06;
+  const X = r => x0 + Math.log(r / RX0) / Math.log(RX1 / RX0) * (x1 - x0), Y = n => y0 - (n / ymax) * (y0 - y1);
+  const cx = r => Math.min(x1, Math.max(x0, X(r))), cy = n => Math.max(y1 - 6, Y(n));
+  // the course's REX limits as tinted bands
+  ctx.fillStyle = "rgba(255,77,109,.08)"; ctx.fillRect(x0, y1 - 6, X(REX_LOW) - x0, y0 - y1 + 6);
+  ctx.fillStyle = "rgba(245,166,35,.08)"; ctx.fillRect(X(REX_HIGH), y1 - 6, x1 - X(REX_HIGH), y0 - y1 + 6);
+  text(ctx, L.low, x0 + 4, y1 + 6, css("--hot"), "left", 10); text(ctx, L.high, x1 - 2, y1 + 6, css("--amber"), "right", 10);
+  // a faint vertical line for every doubling, and the axes
+  ctx.strokeStyle = css("--line");
+  for (const r of [27.5, 55, 110, 220, 440, 880]) {
+    ctx.globalAlpha = 0.55; ctx.beginPath(); ctx.moveTo(X(r), y1 - 6); ctx.lineTo(X(r), y0); ctx.stroke(); ctx.globalAlpha = 1;
+    text(ctx, String(Math.round(r)), X(r), y0 + 14, css("--muted"), "center", 10);
+  }
+  ctx.beginPath(); ctx.moveTo(x0, y1 - 6); ctx.lineTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
+  // the curve is high on the left, so the axis name sits bottom left, clear of it
+  text(ctx, L.x, x0 + 6, y0 - 6, css("--muted"), "left", 11); text(ctx, `${L.y} %`, 4, 11, css("--muted"), "left", 11);
+  const step = ymax > 220 ? 100 : 50;
+  for (let v = step; v < ymax; v += step) text(ctx, String(v), x0 - 5, Y(v) + 3, css("--muted"), "right", 10);
+  // half the noise: the dashed line at 50 %, reached at four times the starting REX
+  ctx.setLineDash([4, 4]); ctx.strokeStyle = css("--muted");
+  ctx.beginPath(); ctx.moveTo(x0, Y(50)); ctx.lineTo(x1, Y(50)); ctx.stroke(); ctx.setLineDash([]);
+  text(ctx, L.half, x0 + 4, Y(50) - 5, css("--muted"), "left", 10);
+  // the curves, clipped to the plot
+  ctx.save(); ctx.beginPath(); ctx.rect(x0, y1 - 6, x1 - x0, y0 - y1 + 6); ctx.clip();
+  const curve = f => { ctx.beginPath(); for (let t = 0; t <= 100; t++) { const r = RX0 * Math.pow(RX1 / RX0, t / 100); t ? ctx.lineTo(X(r), Y(f(r))) : ctx.moveTo(X(r), Y(f(r))); } ctx.stroke(); };
+  if (showRef) { ctx.strokeStyle = css("--muted"); ctx.globalAlpha = 0.6; ctx.lineWidth = 1.5; curve(noiseRef); ctx.globalAlpha = 1; }
+  ctx.strokeStyle = css("--signal"); ctx.lineWidth = 2; curve(noise); ctx.lineWidth = 1;
+  ctx.restore();
+  // the target: a dashed line up to the curve, with how much the noise changes
+  const nt = noise(to), dn = Math.round(nt - 100);
+  ctx.setLineDash([2, 3]); ctx.strokeStyle = css("--fg");
+  ctx.beginPath(); ctx.moveTo(X(to), y0); ctx.lineTo(X(to), cy(nt)); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = css("--fg"); ctx.beginPath(); ctx.arc(X(to), cy(nt), 3, 0, 7); ctx.fill();
+  text(ctx, `${dn > 0 ? "+" : dn < 0 ? "−" : "±"}${Math.abs(dn)} %`, X(to) + 6, cy(nt) - 6, css("--fg"), X(to) > W * 0.8 ? "right" : "left", 11);
+  // the starting REX: an open ring at 100 %, and four times it on the 50 % line
+  ctx.strokeStyle = css("--fg"); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(X(from), Y(100), 5, 0, 7); ctx.stroke(); ctx.lineWidth = 1;
+  // when the current setting sits on the start, one label says both, so the two do not overlap
+  const near = Math.abs(cx(M.rex) - X(from)) < 60 && Math.abs(cy(noise(M.rex)) - Y(100)) < 24;
+  if (!near) text(ctx, `${L.start} ${from}`, X(from) + (X(from) > W * 0.8 ? -8 : 8), Y(100) - 8, css("--fg"), X(from) > W * 0.8 ? "right" : "left", 11);
+  if (4 * from <= RX1) { ctx.fillStyle = css("--muted"); ctx.beginPath(); ctx.arc(X(4 * from), Y(50), 3, 0, 7); ctx.fill();
+    text(ctx, `×4 = ${4 * from}`, X(4 * from), Y(50) + 15, css("--muted"), "center", 10); }
+  // the saved setting, and the current one
+  if (PIN) { const pn = 100 * Math.sqrt(per * from / PIN.N);
+    ctx.strokeStyle = css("--fg"); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(cx(PIN.rex), cy(pn), 5, 0, 7); ctx.stroke(); ctx.lineWidth = 1;
+    text(ctx, T[S.lang].curveLbl.saved, cx(PIN.rex) + 8, cy(pn) + 14, css("--fg"), cx(PIN.rex) > W * 0.8 ? "right" : "left", 11); }
+  const nn = noise(M.rex);
+  ctx.fillStyle = css("--amber"); ctx.beginPath(); ctx.arc(cx(M.rex), cy(nn), 5, 0, 7); ctx.fill();
+  const lbl = `REX ${Math.round(M.rex)}${near ? ` · ${L.start}` : ""}`, left = cx(M.rex) - 8 - ctx.measureText(lbl).width > x0 + 4;
+  text(ctx, lbl, cx(M.rex) + (left ? -8 : 8), cy(nn) + (left ? -8 : 17), css("--amber"), left ? "right" : "left", 11);
+}
+// the planner: how much more dose the detector needs, and what the mAs route and the kV route each cost
+function planner() {
+  const L = T[S.lang].plan, f = PLAN.to / PLAN.from, n = 100 * Math.sqrt(1 / f), dn = Math.round(n - 100);
+  const pct = v => `${v > 0 ? "+" : v < 0 ? "−" : "±"}${fmt(Math.abs(v), 0)} %`;
+  const kv1 = kvFor(S.kv, f), c = kv1 ? Math.pow(S.kv / kv1, 0.8) : null;
+  const row = (h, a, b) => `<tr><th>${h}</th><td>${a}</td><td>${b}</td></tr>`;
+  const kvCell = v => kv1 ? v : "–";
+  $("plan-out").innerHTML =
+    `<p class="plan-f">${L.factor.replace("{f}", fmt(f, 2)).replace("{n}", fmt(n, 0)).replace("{d}", pct(dn))}</p>` +
+    `<table class="plan"><thead><tr>${L.route.map(r => `<th>${r}</th>`).join("")}</tr></thead><tbody>` +
+    row(L.how, `mAs × ${fmt(f, 2)}`, kv1 ? `${S.kv} → ${fmt(kv1, 1)} kV (${kv1 >= S.kv ? "+" : "−"}${fmt(Math.abs(kv1 / S.kv - 1) * 100, 1)} %)` : L.out) +
+    row(L.noise, pct(dn), kvCell(pct(dn))) +
+    row(L.dose, `×${fmt(f, 2)}`, kvCell(`×${fmt(Math.pow(kv1 / S.kv, 2), 2)}`)) +
+    row(L.contrast, "100 %", kvCell(`${fmt(100 * c, 0)} %`)) +
+    row(L.cnr, `×${fmt(Math.sqrt(f), 2)}`, kvCell(`×${fmt(Math.sqrt(f) * c, 2)}`)) +
+    `</tbody></table><p class="note">${L.kvNote.replace("{kv}", S.kv)}</p>`;
+}
+for (const k of ["from", "to"]) {
+  const el = $(`p-${k}`);
+  el.addEventListener("input", () => { if (el.value !== "") { PLAN[k] = clampRex(el.value); render(); } });
+  el.addEventListener("change", () => { el.value = PLAN[k] = clampRex(el.value); render(); });   // leaving the box shows the value used
+}
+$("p-use").onclick = () => { PLAN.from = clampRex(M.rex); $("p-from").value = PLAN.from; render(); };
+for (const v of ["snr", "rex"]) $(`view-${v}`).onclick = () => { S.view = v; buildText(); setPressed(); render(); };
 
 // ---- the numbers, what you can see, and the saved numbers ----
 function metrics() {
@@ -424,12 +561,12 @@ function readouts() {
   $("pin").textContent = pinned ? L.unpin : L.pin;
 }
 $("pin").onclick = () => {
-  PIN = PIN ? null : { vals: Object.fromEntries(metrics().map(([, key, value]) => [key, value])), mas: S.mas, snr: M.snr };
+  PIN = PIN ? null : { vals: Object.fromEntries(metrics().map(([, key, value]) => [key, value])), mas: S.mas, snr: M.snr, N: M.N, rex: M.rex };
   render();
 };
 
 // ---- controls, text, tasks ----------------------------------------------------------
-const SLIDERS = [["mas", 1, 40, 0.5, v => `${fmt(v, v % 1 ? 1 : 0)} mAs`], ["kv", 50, 120, 5, v => `${v} kV`]];
+const SLIDERS = [["mas", 1, 40, 0.5, v => `${fmt(v, v % 1 ? 1 : 0)} mAs`], ["kv", 50, 120, 1, v => `${v} kV`]];
 function buildControls() {
   const L = T[S.lang].ctl, box = $("controls");
   const help = k => S.level === "grund" ? `<p class="help">${T[S.lang].help[k]}</p>` : "";
@@ -493,7 +630,11 @@ function buildText() {
   document.documentElement.lang = S.lang;
   document.title = L.title + " | Oliver Brage";
   for (const k of ["title", "sub", "curve", "prof", "image", "tasks", "model", "foot", "privacy"]) set("t-" + k, L[k]);
-  set("t-back", L.back); set("t-simtitle", L.simTitle); set("t-profnote", L.profNote); set("t-curvenote", L.curveNote);
+  if (S.view === "rex") set("t-curve", L.curveRex);
+  const rex = S.view === "rex";
+  set("t-back", L.back); set("t-simtitle", L.simTitle); set("t-profnote", L.profNote); set("t-curvenote", rex ? L.curveNoteRex : L.curveNote);
+  set("view-snr", L.view.snr); set("view-rex", L.view.rex); set("t-pfrom", L.plan.from); set("t-pto", L.plan.to); set("p-use", L.plan.use);
+  $("planner").hidden = !rex;
   set("t-imgnote", S.level === "deep" ? L.imgNoteDeep : L.imgNote);
   $("t-back").href = "../../?lang=" + S.lang;
   set("lvl-grund", L.grund); set("lvl-deep", L.deep);
@@ -511,13 +652,15 @@ function buildText() {
 }
 function setPressed() {
   for (const [id, on] of [["lang-da", S.lang === "da"], ["lang-en", S.lang === "en"],
-                          ["lvl-grund", S.level === "grund"], ["lvl-deep", S.level === "deep"]])
+                          ["lvl-grund", S.level === "grund"], ["lvl-deep", S.level === "deep"],
+                          ["view-snr", S.view === "snr"], ["view-rex", S.view === "rex"]])
     $(id).setAttribute("aria-pressed", on);
 }
 function render() {
   readouts();
   if (!$("curve").getClientRects().length) return;            // another tab is showing: nothing to draw
-  drawCurve(); drawProf(); drawImg();
+  if (S.view === "rex") { drawRex(); planner(); } else drawCurve();
+  drawProf(); drawImg();
 }
 function update() { M = model(S); makeImage(); render(); }
 // while a slider is dragged it fires many events; redraw at most once per screen frame so the thumb keeps up

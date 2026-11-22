@@ -34,3 +34,25 @@
 section.tasks + section.model { margin-top: 28px; }
 /* a long formula may not push the page wider than the phone */
 #model-text math[display="block"] { max-width: 100%; }
+/* the two views of the curve: the title and the switch share a line */
+.curvehead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-bottom: 8px; }
+.curvehead h2 { margin: 0; }
+.curvehead .seg button { font-size: 12px; }
+/* the REX planner: two numbers in, the two routes side by side out */
+.planner { margin-top: 4px; }
+.plan-in { display: flex; flex-wrap: wrap; align-items: end; gap: 8px 14px; }
+.plan-in label { display: grid; gap: 2px; font-size: 12px; color: var(--muted); }
+.plan-in input { width: 6.5em; background: var(--bg); color: var(--amber); border: 1px solid var(--line); border-radius: 6px;
+  padding: 4px 8px; font: 500 15px var(--mono); font-variant-numeric: tabular-nums; }
+.plan-in input:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.plan-f { margin: 10px 0 6px; }
+.plan-f b { color: var(--signal); font-weight: 600; }
+table.plan { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.plan th, table.plan td { text-align: left; padding: 4px 8px 4px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.plan thead th { color: var(--muted); font-weight: 600; font-size: 12px; }
+table.plan tbody th { color: var(--muted); font-weight: 400; }
+table.plan td { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.planner { margin-bottom: 18px; }
+.planner .reset { background: transparent; color: var(--muted); border: 1px solid var(--line); border-radius: 6px;
+  padding: 6px 12px; font: 500 13px var(--body); cursor: pointer; }
+.planner .reset:hover { color: var(--fg); }

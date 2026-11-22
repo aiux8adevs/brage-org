@@ -8,7 +8,7 @@
   <title>Noise | Oliver Brage</title>
   <link rel="stylesheet" href="../histogram/histogram.css">
   <link rel="stylesheet" href="../../topic.css?v=3">
-  <link rel="stylesheet" href="noise.css?v=4">
+  <link rel="stylesheet" href="noise.css?v=5">
 </head>
 <body data-topic="noise">
 <div class="wrap">
@@ -45,9 +45,20 @@
       <div id="taskcard" class="taskcard"></div>
     </div>
     <div class="box">
-      <h2 id="t-curve"></h2>
+      <div class="curvehead">
+        <h2 id="t-curve"></h2>
+        <div class="seg" role="group" id="view-group"><button id="view-snr" aria-pressed="true"></button><button id="view-rex" aria-pressed="false"></button></div>
+      </div>
       <canvas id="curve"></canvas>
       <p class="note" id="t-curvenote"></p>
+      <div id="planner" class="planner" hidden>
+        <div class="plan-in">
+          <label><span id="t-pfrom"></span><input type="number" id="p-from" min="20" max="1000" step="1" value="66"></label>
+          <label><span id="t-pto"></span><input type="number" id="p-to" min="20" max="1000" step="1" value="125"></label>
+          <button class="reset" id="p-use"></button>
+        </div>
+        <div id="plan-out"></div>
+      </div>
       <h2 id="t-prof" class="mt"></h2>
       <canvas id="prof"></canvas>
       <p class="note" id="t-profnote"></p>
@@ -79,7 +90,7 @@
   <footer><span id="t-foot"></span> · <a id="t-privacy" href="/privacy.html"></a></footer>
 </div>
 <script src="../tex.js"></script>
-<script src="noise.js?v=7"></script>
+<script src="noise.js?v=8"></script>
 <script src="../../topic.js?v=16"></script>
 </body>
 </html>

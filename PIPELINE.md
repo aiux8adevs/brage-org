@@ -30,6 +30,7 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 4 Skarphed: video (4) + PDF | 2026-11-02 |
 | 5 Røntgenrøret: simulator (reworked, 19 tasks + formula group); page shows the simulator tab only | 2026-11-13 |
 | 2 Støj: simulator, reworked version (ed956be) | 2026-11-13 |
+| 2 Støj: simulator view "Fra REX til støj" with planner, 7 new tasks + 1 formula task | 2026-11-23 |
 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
