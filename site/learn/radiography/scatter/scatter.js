@@ -363,7 +363,7 @@ function buildControls() {
 // ---- text, tasks, video -----------------------------------------------------------
 const PART_FILES = ["spredt", "raster3b", "tage3c"];
 // the parts the owner has approved; with ?draft=1 all of them are shown
-const LIVE_PARTS = 2;
+const LIVE_PARTS = 3;   // 3c approved 2026-11-23
 const nParts = () => new URLSearchParams(location.search).get("draft") === "1" ? PART_FILES.length : LIVE_PARTS;
 const groups = () => T[S.lang].groups.map((g, gi) => [g[0], g[1], g[2], gi]).filter(g => g[2] !== "deep" || S.level === "deep");
 let task = 0;

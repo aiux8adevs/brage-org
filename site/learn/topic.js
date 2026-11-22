@@ -26,13 +26,11 @@ const SERIES = [
   ],
     soon: { da: "Støj, SNR og CNR. Under produktion.", en: "Noise, SNR and CNR. In production." } },
   { da: "Spredt stråling", en: "Scatter", pages: [
-    // 3a with its podcast and 3b approved 2026-11-02; 3c stays a draft (draftFiles)
+    // 3a with its podcast and 3b approved 2026-11-02; 3c and the 3b/3c podcasts approved 2026-11-23
     { path: "scatter", tabs: ["video", "podcast", "simulator", "handout", "selftest"], draftTabs: ["video", "podcast", "simulator", "handout", "selftest"],
-      podcast: [["spredt", { title: "Scatter: the fog over the image", minutes: 9 }]],
-      draftPodcast: [["spredt", { title: "3a Scatter: the fog over the image", minutes: 9 }], ["raster3b", { title: "3b The grid: how it works, and what it costs", minutes: 10 }],
+      podcast: [["spredt", { title: "3a Scatter: the fog over the image", minutes: 9 }], ["raster3b", { title: "3b The grid: how it works, and what it costs", minutes: 10 }],
                      ["tage3c", { title: "3c Other ways: virtual grid, air gap and compression", minutes: 9 }]],
-      files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }]],
-      draftFiles: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }],
+      files: [["spredt", { da: "3a Spredt stråling", en: "3a Scatter" }], ["raster3b", { da: "3b Rasteret", en: "3b The grid" }],
               ["tage3c", { da: "3c Andre veje", en: "3c Other ways" }]],
       da: { title: "Spredt stråling", text: "Tågen over billedet: Compton-spredning, SPR, indblænding, raster og Bucky-faktor, luftspalte, kompression og virtuelt raster. Simulatoren: skru selv på felt, tykkelse, kV og raster." },
       en: { title: "Scatter", text: "The fog over the image: Compton scatter, SPR, collimation, grids and the Bucky factor, air gap, compression and virtual grids. The simulator: change field, thickness, kV and grid yourself." } },

@@ -21,6 +21,10 @@
 + /learn/radiography/scatter/video/podcast_spredt_en.mp3
 + /learn/radiography/scatter/video/raster3b_*
 + /learn/radiography/scatter/video/poster_raster3b_*
++ /learn/radiography/scatter/video/tage3c_*
++ /learn/radiography/scatter/video/poster_tage3c_*
++ /learn/radiography/scatter/video/podcast_raster3b_en.mp3
++ /learn/radiography/scatter/video/podcast_tage3c_en.mp3
 + /learn/radiography/tube/video/roer5a_*
 + /learn/radiography/tube/video/aec5b_*
 + /learn/radiography/tube/video/poster_*
@@ -31,6 +35,7 @@
 + /learn/radiography/shadow/video/times_uskarphed.json
 + /learn/radiography/scatter/video/times_spredt.json
 + /learn/radiography/scatter/video/times_raster3b.json
++ /learn/radiography/scatter/video/times_tage3c.json
 + /learn/radiography/tube/video/times_roer5a.json
 + /learn/radiography/tube/video/times_aec5b.json
 - /learn/radiography/*/video/*

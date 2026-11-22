@@ -15,13 +15,12 @@ R=~/projects/manim-studio/media/brage-org/radiografi   # one folder per topic: v
 live=(
   "learn/radiography/detector|1a-fra-foton-til-tal:Detektor:detektor:podcast|"
   "learn/radiography/histogram|1b-fra-tal-til-billede:Histogram:histogram:podcast|"
-  "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt:podcast,3b-rasteret:Raster3b:raster3b|parts"
+  "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt:podcast,3b-rasteret:Raster3b:raster3b:podcast,3c-andre-veje:Tage3c:tage3c:podcast|parts"
   "learn/radiography/noise|2-stoej:Stoej:stoej:podcast|"
   "learn/radiography/shadow|4-skarphed:Uskarphed:uskarphed:podcast|"
   "learn/radiography/tube|5a-roentgenroeret:Roer5a:roer5a,5b-automatisk-eksponering:Aec5b:aec5b|parts"
 )
 drafts=(
-  "learn/radiography/scatter|3a-spredt-straaling:SpredtStraaling:spredt:podcast,3b-rasteret:Raster3b:raster3b:podcast,3c-andre-veje:Tage3c:tage3c:podcast|parts"
 )
 pages=("${live[@]}")
 [[ "${1:-}" == "--drafts" ]] && pages+=("${drafts[@]}")

@@ -32,15 +32,14 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 2 Støj: simulator, reworked version (ed956be) | 2026-11-13 |
 | 2 Støj: simulator view "Fra REX til støj" with planner, 7 new tasks + 1 formula task | 2026-11-23 |
 | 5a Røret og strålen + 5b Automatisk eksponering: videos (4 each) + PDFs, self-test line times | 2026-11-23 |
+| 3c Andre veje: video (4) + PDF, also as part 3 in the scatter simulator | 2026-11-23 |
+| 3b and 3c: podcasts (EN) | 2026-11-23 |
+| Radiography review items closed by the owner: six [tjek] numbers (3b storyboard), Danish TTS 3a | 2026-11-23 |
 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
 |---|---|---|---|
-| 3 | Video 3c Andre veje (4) | radiografi/3c-andre-veje | listen: c2_raster (heard "reststof") |
-| 7 | Six [tjek] numbers | manim-studio storyboards/spredt_straaling_raster/03_draft.md | Bucky 2–6, 25–45 lines/cm, >10 cm and >60 kV, ... |
-| 8 | Danish TTS, 3a | 3a da | s1_opslug (heard "Knorren"); s3_tre re-taken, now "300 mod 250" |
 | 9 | ML folder grouping | manim-studio organize_media.py, CATALOG | my guess at course order |
-| 10 | Podcasts 3b, 3c (EN) | each topic page ?draft=1#podcast; radiografi/<topic>/podcast_en.mp3 | 6–9 min each, all chunks pass Whisper |
 
 ## Open decisions
 - How "Brage" should sound: episode uses "Brah-eh"; samples Brah-eh / Braa-uh / Brawa in manim-studio media/podcast/prove/brage/ for the owner to pick.
@@ -56,10 +55,8 @@ podcast), the files and page added to the whitelist in `publish.rules`, the topi
 and unapproved media local, and `--checksum` skips files whose contents have not changed.
 
 ## In production (deadline)
-- Note for the 3c review: c2 now says the scattered photons "bring their own quantum noise" (checked 2026-11-13); confirm when you listen.
 
 ## In production
-- 3c video re-rendered with fog / quantum noise from the scattered photons: waiting for the owner's review.
 
 ## Ultrasound module, 5th semester (plan approved 2026-11-13, not started)
 **Purpose:** the site *replaces* the physics teaching. About 12 lessons in all, at most 3 for physics; the students
