@@ -31,6 +31,7 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 5 Røntgenrøret: simulator (reworked, 19 tasks + formula group); page shows the simulator tab only | 2026-11-13 |
 | 2 Støj: simulator, reworked version (ed956be) | 2026-11-13 |
 | 2 Støj: simulator view "Fra REX til støj" with planner, 7 new tasks + 1 formula task | 2026-11-23 |
+| 5a Røret og strålen + 5b Automatisk eksponering: videos (4 each) + PDFs, self-test line times | 2026-11-23 |
 
 ## Waiting for the owner's review
 | # | Element | Where | Notes |
@@ -40,7 +41,6 @@ Local test of drafts: `cd ~/projects/obrage-site/site && python3 -m http.server 
 | 8 | Danish TTS, 3a | 3a da | s1_opslug (heard "Knorren"); s3_tre re-taken, now "300 mod 250" |
 | 9 | ML folder grouping | manim-studio organize_media.py, CATALOG | my guess at course order |
 | 10 | Podcasts 3b, 3c (EN) | each topic page ?draft=1#podcast; radiografi/<topic>/podcast_en.mp3 | 6–9 min each, all chunks pass Whisper |
-| 11 | UV5 Røntgenrøret: videos 5a + 5b (4 each) + PDFs (simulator already live) | tube/?draft=1 (synced to site/, local only) | rendered 2026-11-13, audio QA passed. 5b da listen by ear: a4_rex (Whisper heard "vaks"), a3_placering ("AI" for AEC), a4_1b, a5_F_kv. Same spelling of REX/AEC as the approved 1b |
 
 ## Open decisions
 - How "Brage" should sound: episode uses "Brah-eh"; samples Brah-eh / Braa-uh / Brawa in manim-studio media/podcast/prove/brage/ for the owner to pick.
